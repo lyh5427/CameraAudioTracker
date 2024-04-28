@@ -4,8 +4,10 @@
 
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.CAMERA" />
+
     <uses-feature android:name="android.hardware.camera" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
     <application
         android:allowBackup="true"
@@ -19,14 +21,21 @@
         android:theme="@style/Theme.King"
         tools:targetApi="33">
         <activity
+            android:name=".PermActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".presentation.ui.base.BaseActivity"
             android:exported="true">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
-
-        <activity android:name=".presentation.ui.intro.IntroActivity"
+        <activity
+            android:name=".presentation.ui.intro.IntroActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -34,7 +43,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".presentation.ui.main.MainActivity"
             android:exported="true">
@@ -43,10 +51,9 @@
                 android:value="" />
         </activity>
 
-        <service android:name=".presentation.service.MainService"
-            android:exported="true">
-
-        </service>
+        <service
+            android:name=".presentation.service.MainService"
+            android:exported="true"></service>
     </application>
 
 </manifest>
