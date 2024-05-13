@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">King</string>
+
+    <!--Service-->
+    <string name="service_is_running">CADefender가 동작중입니다.</string>
+
+    <!--Base-->
+    <string name="not_fount_app_name">앱 이름 추출 불가</string>
+
+
 </resources>

@@ -9,6 +9,7 @@ import android.os.Build
 import android.os.IBinder
 import android.util.Log
 import androidx.core.app.NotificationCompat
+import com.yunho.king.Const
 import com.yunho.king.GlobalApplication
 import com.yunho.king.R
 
@@ -54,8 +55,9 @@ class MainService: Service() {
             channel.lockscreenVisibility = Notification.VISIBILITY_PRIVATE
             manager.createNotificationChannel(channel)
         }
-        val builder = NotificationCompat.Builder(this, "com.yunho.king")
-        builder.setContentTitle(StringBuilder(resources.getString(R.string.app_name)).append(" service is running").toString())
+        val builder = NotificationCompat.Builder(this, Const.CHANNEL_NAME)
+        builder.setContentTitle(StringBuilder(resources.getString(R.string.app_name))
+            .append(getString(R.string.service_is_running)).toString())
             .setTicker(StringBuilder(resources.getString(R.string.app_name)).append("service is running").toString())
             .setContentText("Touch to open") //                    , swipe down for more options.
             .setSmallIcon(R.drawable.ic_launcher_foreground)
