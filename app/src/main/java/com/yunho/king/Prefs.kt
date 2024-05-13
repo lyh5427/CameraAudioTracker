@@ -10,7 +10,7 @@ class Prefs (context : Context) {
         Context.MODE_PRIVATE
     )
 
-    var firstPermissionCheck: Boolean
+    var firstOpenApp: Boolean
         get() = prefs.getBoolean("firstPermissionCheck", true)
         set(value) = prefs.edit().putBoolean("firstPermissionCheck", value).apply()
 }

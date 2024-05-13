@@ -34,8 +34,6 @@ class PermActivity : BaseActivity() {
 
         firstPermissionLauncher =
             registerForActivityResult(ActivityResultContracts.RequestPermission()) {
-                binding.btnPermStart.text = "13241"
-
                 if (permIndex >= permManager.permSize()) {
                     if (permManager.isRuntimePermAllow()) {
                         moveToOverlayPerm()
@@ -100,15 +98,7 @@ class PermActivity : BaseActivity() {
     }
 
     fun registOnclickListener() = with(binding) {
-        btnPermStart.setOnClickListener {
-//            txt.text = "bbbb"
-            startPermAllow()
-        }
 
-        cccc.setOnClickListener {
-            txt.text = "cccc"
-//            startPermAllow()
-        }
     }
 
     fun startPermAllow() {
