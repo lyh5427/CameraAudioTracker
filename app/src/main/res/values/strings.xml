@@ -10,5 +10,5 @@
     <!--popup-->
     <string name="suspicion_popup_camera_title">카메라 사용이 감지되었습니다</string>
     <string name="suspicion_popup_audio_title">마이크 사용이 감지되었습니다</string>
-
+    <string name="suspocion_content">현재 CAD에서 카메라를 탈취중입니다.\n본인이 사용한게 아니라면 설정으로 이동하여 \n강제 종료해주세요.</string>
 </resources>
