@@ -9,6 +9,7 @@ import android.provider.Settings
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import com.yunho.king.Utils.PermManager
+import com.yunho.king.Utils.singleClickListener
 import com.yunho.king.databinding.ActivityPermBinding
 import com.yunho.king.presentation.ui.base.BaseActivity
 import com.yunho.king.presentation.ui.intro.IntroActivity
@@ -21,17 +22,29 @@ class PermActivity : BaseActivity() {
     lateinit var permissionSettingLauncher: ActivityResultLauncher<Intent>
     lateinit var overlayLauncher: ActivityResultLauncher<Intent>
     lateinit var usagesPermLauncher: ActivityResultLauncher<Intent>
+
     lateinit var permManager: PermManager
 
     var permIndex = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         binding = ActivityPermBinding.inflate(layoutInflater)
 
         permManager = PermManager(this)
 
+        setLauncher()
+        registOnclickListener()
+        setContentView(binding.root)
+    }
+
+    fun registOnclickListener() = with(binding) {
+        startPerm.singleClickListener {
+            startPermAllow()
+        }
+    }
+
+    fun setLauncher() {
         firstPermissionLauncher =
             registerForActivityResult(ActivityResultContracts.RequestPermission()) {
                 if (permIndex >= permManager.permSize()) {
@@ -93,12 +106,6 @@ class PermActivity : BaseActivity() {
                     moveToUsagesPerm()
                 }
             }
-        registOnclickListener()
-        setContentView(binding.root)
-    }
-
-    fun registOnclickListener() = with(binding) {
-
     }
 
     fun startPermAllow() {

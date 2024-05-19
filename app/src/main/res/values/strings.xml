@@ -11,4 +11,19 @@
     <string name="suspicion_popup_camera_title">카메라 사용이 감지되었습니다</string>
     <string name="suspicion_popup_audio_title">마이크 사용이 감지되었습니다</string>
     <string name="suspocion_content">현재 CAD에서 카메라를 탈취중입니다.\n본인이 사용한게 아니라면 설정으로 이동하여 \n강제 종료해주세요.</string>
+
+    <!--perm-->
+    <string name="perm_start_text">설정 시작</string>
+    <string name="perm_title">권한 설정</string>
+    <string name="alim_title">알림</string>
+    <string name="alim_content">각종 알림을 보내기 위해 필요합니다.</string>
+    <string name="camera_title">카메라</string>
+    <string name="camera_content">타 앱의 카메라 사용을 감지하기 위해 필요합니다.</string>
+    <string name="mic_title">마이크</string>
+    <string name="mic_content">타 앱의 마이크 사용을 감지하기 위해 필요합니다.</string>
+    <string name="overlay_title">다른 앱 위에 그리기</string>
+    <string name="overlay_content">앱이 사용중이 아니어도 팝업을 띄우기 위해 필요합니다.</string>
+    <string name="usage_title">사용 정보</string>
+    <string name="usage_content">다른 앱의 사용정보를 가져오기위해 필요합니다.</string>
+
 </resources>

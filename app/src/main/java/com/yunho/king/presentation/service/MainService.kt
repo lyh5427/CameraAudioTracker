@@ -15,7 +15,7 @@ import com.yunho.king.R
 
 class MainService: Service() {
 
-    lateinit var cameraService: CameraService
+    lateinit var cameraService: CameraTrackingManager
     lateinit var channel: NotificationChannel
 
     override fun onCreate() {
@@ -36,7 +36,7 @@ class MainService: Service() {
         super.onStartCommand(intent, flags, startId)
         Log.d(GlobalApplication.TagName, "Checking Service StartCommand")
 
-        cameraService = CameraService(this)
+        cameraService = CameraTrackingManager(this)
         cameraService.start()
         return START_STICKY
     }
