@@ -7,11 +7,107 @@
     android:padding="20dp">
 
     <TextView
+        android:id="@+id/cameraPopupTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/suspicion_popup_camera_title"
+        style="@style/Text.body10"
+        android:textColor="@color/main_red"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"/>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layoutCameraApp"
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/cameraPopupTitle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <ImageView
+            android:id="@+id/appImg"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:src="@drawable/ic_launcher_background"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <TextView
+            android:id="@+id/appName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="앱이름"
+            style="@style/Text.description4"
+            android:layout_marginStart="10dp"
+            app:layout_constraintStart_toEndOf="@id/appImg"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layoutCamera"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        app:layout_constraintTop_toBottomOf="@id/layoutCameraApp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <androidx.camera.view.PreviewView
+            android:id="@+id/cameraPreview"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            style="@style/Text.description5"
+            android:text="@string/suspocion_content"
+            app:layout_constraintStart_toEndOf="@id/cameraPreview"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnPopupCancel"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/btn_type_stroke"
+        android:text="닫기"
+        android:minHeight="0dp"
+        android:minWidth="0dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        style="@style/Text.description3"
+        android:textColor="@drawable/text_color_cancel"
+        app:layout_constraintTop_toBottomOf="@id/layoutCamera"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/btnPopupOk"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnPopupOk"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="이동하기"
+        android:background="@drawable/btn_type_solid"
+        android:includeFontPadding="false"
+        android:layout_marginStart="10dp"
+        android:minHeight="0dp"
+        android:minWidth="0dp"
+        android:textColor="@color/white"
+        style="@style/Text.description3"
+        app:layout_constraintTop_toBottomOf="@id/layoutCamera"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/btnPopupCancel"/>
     
 </androidx.constraintlayout.widget.ConstraintLayout>

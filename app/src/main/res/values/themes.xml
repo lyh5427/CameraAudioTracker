@@ -19,7 +19,7 @@
         <item name="android:textStyle">bold</item>
         <item name="android:textSize">22dp</item>
         <item name="android:textColor">@color/black</item>
-        <item name="android:fontFamily">@font/notosanskr_black</item>
+        <item name="android:fontFamily">@font/notosanskr_bold</item>
         <item name="android:includeFontPadding">false</item>
     </style>
 
@@ -27,7 +27,7 @@
         <item name="android:textStyle">bold</item>
         <item name="android:textSize">27dp</item>
         <item name="android:textColor">@color/black</item>
-        <item name="android:fontFamily">@font/notosanskr_black</item>
+        <item name="android:fontFamily">@font/notosanskr_bold</item>
         <item name="android:includeFontPadding">false</item>
     </style>
 
@@ -35,7 +35,7 @@
         <item name="android:textStyle">bold</item>
         <item name="android:textSize">24dp</item>
         <item name="android:textColor">@color/black</item>
-        <item name="android:fontFamily">@font/notosanskr_black</item>
+        <item name="android:fontFamily">@font/notosanskr_bold</item>
         <item name="android:includeFontPadding">false</item>
     </style>
 
@@ -43,7 +43,7 @@
         <item name="android:textStyle">normal</item>
         <item name="android:textSize">16dp</item>
         <item name="android:textColor">@color/black</item>
-        <item name="android:fontFamily">@font/notosanskr_black</item>
+        <item name="android:fontFamily">@font/notosanskr_regular</item>
         <item name="android:includeFontPadding">false</item>
     </style>
 
@@ -51,7 +51,7 @@
         <item name="android:textStyle">normal</item>
         <item name="android:textSize">14dp</item>
         <item name="android:textColor">@color/black</item>
-        <item name="android:fontFamily">@font/notosanskr_black</item>
+        <item name="android:fontFamily">@font/notosanskr_regular</item>
         <item name="android:includeFontPadding">false</item>
     </style>
 
@@ -59,7 +59,7 @@
         <item name="android:textStyle">normal</item>
         <item name="android:textSize">13dp</item>
         <item name="android:textColor">@color/black</item>
-        <item name="android:fontFamily">@font/notosanskr_black</item>
+        <item name="android:fontFamily">@font/notosanskr_regular</item>
         <item name="android:includeFontPadding">false</item>
     </style>
 
@@ -67,7 +67,7 @@
         <item name="android:textStyle">bold</item>
         <item name="android:textSize">11dp</item>
         <item name="android:textColor">@color/black</item>
-        <item name="android:fontFamily">@font/notosanskr_black</item>
+        <item name="android:fontFamily">@font/notosanskr_bold</item>
         <item name="android:includeFontPadding">false</item>
     </style>
 
@@ -75,7 +75,7 @@
         <item name="android:textStyle">normal</item>
         <item name="android:textSize">9dp</item>
         <item name="android:textColor">@color/black</item>
-        <item name="android:fontFamily">@font/notosanskr_black</item>
+        <item name="android:fontFamily">@font/notosanskr_regular</item>
         <item name="android:includeFontPadding">false</item>
     </style>
 
@@ -83,7 +83,7 @@
         <item name="android:textStyle">bold</item>
         <item name="android:textSize">21dp</item>
         <item name="android:textColor">@color/black</item>
-        <item name="android:fontFamily">@font/notosanskr_black</item>
+        <item name="android:fontFamily">@font/notosanskr_bold</item>
         <item name="android:includeFontPadding">false</item>
     </style>
 
@@ -91,7 +91,7 @@
         <item name="android:textStyle">normal</item>
         <item name="android:textSize">21dp</item>
         <item name="android:textColor">@color/black</item>
-        <item name="android:fontFamily">@font/notosanskr_black</item>
+        <item name="android:fontFamily">@font/notosanskr_medium</item>
         <item name="android:includeFontPadding">false</item>
     </style>
 
@@ -99,15 +99,15 @@
         <item name="android:textStyle">normal</item>
         <item name="android:textSize">21dp</item>
         <item name="android:textColor">@color/black</item>
-        <item name="android:fontFamily">@font/notosanskr_black</item>
+        <item name="android:fontFamily">@font/notosanskr_regular</item>
         <item name="android:includeFontPadding">false</item>
     </style>
 
-    <style name="Text.body4" parent="android:TextAppearance"><!--여기만 좀더 줄여봄-->
+    <style name="Text.body4" parent="android:TextAppearance">
         <item name="android:textStyle">bold</item>
         <item name="android:textSize">18dp</item>
         <item name="android:textColor">@color/black</item>
-        <item name="android:fontFamily">@font/notosanskr_black</item>
+        <item name="android:fontFamily">@font/notosanskr_bold</item>
         <item name="android:includeFontPadding">false</item>
     </style>
 
@@ -115,7 +115,7 @@
         <item name="android:textStyle">normal</item>
         <item name="android:textSize">19dp</item>
         <item name="android:textColor">@color/black</item>
-        <item name="android:fontFamily">@font/notosanskr_black</item>
+        <item name="android:fontFamily">@font/notosanskr_medium</item>
         <item name="android:includeFontPadding">false</item>
     </style>
 
@@ -123,7 +123,7 @@
         <item name="android:textStyle">normal</item>
         <item name="android:textSize">19dp</item>
         <item name="android:textColor">@color/black</item>
-        <item name="android:fontFamily">@font/notosanskr_black</item>
+        <item name="android:fontFamily">@font/notosanskr_regular</item>
         <item name="android:includeFontPadding">false</item>
     </style>
 
@@ -131,7 +131,7 @@
         <item name="android:textStyle">bold</item>
         <item name="android:textSize">16dp</item>
         <item name="android:textColor">@color/black</item>
-        <item name="android:fontFamily">@font/notosanskr_black</item>
+        <item name="android:fontFamily">@font/notosanskr_bold</item>
         <item name="android:includeFontPadding">false</item>
     </style>
 
@@ -139,7 +139,7 @@
         <item name="android:textStyle">normal</item>
         <item name="android:textSize">16dp</item>
         <item name="android:textColor">@color/black</item>
-        <item name="android:fontFamily">@font/notosanskr_black</item>
+        <item name="android:fontFamily">@font/notosanskr_medium</item>
         <item name="android:includeFontPadding">false</item>
     </style>
 
@@ -147,7 +147,7 @@
         <item name="android:textStyle">normal</item>
         <item name="android:textSize">16dp</item>
         <item name="android:textColor">@color/black</item>
-        <item name="android:fontFamily">@font/notosanskr_black</item>
+        <item name="android:fontFamily">@font/notosanskr_regular</item>
         <item name="android:includeFontPadding">false</item>
     </style>
 
@@ -155,7 +155,7 @@
         <item name="android:textStyle">bold</item>
         <item name="android:textSize">14dp</item>
         <item name="android:textColor">@color/black</item>
-        <item name="android:fontFamily">@font/notosanskr_black</item>
+        <item name="android:fontFamily">@font/notosanskr_bold</item>
         <item name="android:includeFontPadding">false</item>
     </style>
 
@@ -163,7 +163,7 @@
         <item name="android:textStyle">normal</item>
         <item name="android:textSize">14dp</item>
         <item name="android:textColor">@color/black</item>
-        <item name="android:fontFamily">@font/notosanskr_black</item>
+        <item name="android:fontFamily">@font/notosanskr_medium</item>
         <item name="android:includeFontPadding">false</item>
     </style>
 
@@ -171,7 +171,7 @@
         <item name="android:textStyle">normal</item>
         <item name="android:textSize">14dp</item>
         <item name="android:textColor">@color/black</item>
-        <item name="android:fontFamily">@font/notosanskr_black</item>
+        <item name="android:fontFamily">@font/notosanskr_regular</item>
         <item name="android:includeFontPadding">false</item>
     </style>
 </resources>
