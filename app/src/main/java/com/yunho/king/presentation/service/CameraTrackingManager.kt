@@ -1,8 +1,14 @@
 package com.yunho.king.presentation.service
 
+import android.app.usage.UsageStats
+import android.app.usage.UsageStatsManager
 import android.content.Context
 import android.content.Intent
+import android.content.pm.ApplicationInfo
+import android.content.pm.PackageManager
+import android.graphics.Bitmap
 import android.graphics.PixelFormat
+import android.graphics.drawable.Drawable
 import android.hardware.camera2.CameraAccessException
 import android.hardware.camera2.CameraDevice
 import android.hardware.camera2.CameraManager
@@ -12,6 +18,7 @@ import android.os.Looper
 import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
+import android.view.PointerIcon
 import android.view.Window
 import android.view.WindowManager
 import androidx.camera.core.CameraProvider
@@ -22,6 +29,7 @@ import androidx.core.content.getSystemService
 import com.google.common.util.concurrent.ListenableFuture
 import com.yunho.king.GlobalApplication
 import com.yunho.king.databinding.PopupSuspicionBinding
+import java.util.Calendar
 
 class CameraTrackingManager(context: Context) {
 
@@ -32,12 +40,20 @@ class CameraTrackingManager(context: Context) {
     lateinit var popupSuspicionBinding: PopupSuspicionBinding
     lateinit var cameraProviderFuture: ListenableFuture<ProcessCameraProvider!>
     lateinit var cameraProvider: ProcessCameraProvider
+    lateinit var stateManager: UsageStatsManager
+    lateinit var packageManager: PackageManager
+    lateinit var packageName: String
+    lateinit var appName: String
+    lateinit var appIcon: Drawable
+    lateinit var appInfo: ApplicationInfo
 
     var canOpenCamra: Boolean = false
 
     fun setCameraTracker() {
         cameraProviderFuture = ProcessCameraProvider.getInstance(mContext)
         cameraManager = mContext.getSystemService(Context.CAMERA_SERVICE) as CameraManager
+        stateManager = mContext.getSystemService(Context.USAGE_STATS_SERVICE) as UsageStatsManager
+        packageManager = mContext.packageManager
         cameraIds = cameraManager.cameraIdList
 
         cameraManager.registerAvailabilityCallback(object: CameraManager.AvailabilityCallback() {
@@ -49,6 +65,8 @@ class CameraTrackingManager(context: Context) {
                 super.onCameraAvailable(cameraId)
                 Log.d(GlobalApplication.TagName, "Checking onCameraAvailable : ${canOpenCamra}")
                 canOpenCamra = true
+
+
             }
 
             override fun onCameraUnavailable(cameraId: String) {
@@ -99,4 +117,36 @@ class CameraTrackingManager(context: Context) {
         },
         ContextCompat.getMainExecutor(mContext))
     }
+
+    fun getRecentlyCameraUserPackage() {
+
+        val cal = Calendar.getInstance()
+        cal.add(Calendar.SECOND, -10)
+
+        val lastUsagePackageList = stateManager.queryUsageStats(
+            UsageStatsManager.INTERVAL_BEST, cal.timeInMillis, System.currentTimeMillis())
+
+        for (pkg in lastUsagePackageList) {
+            Log.d(GlobalApplication.TagName,
+                "AppName: ${pkg.packageName}\n" +
+                    "LastTimeUse : ${pkg.lastTimeUsed}")
+        }
+    }
+
+    fun setAppInfo() {
+        appInfo = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            packageManager.getApplicationInfo(packageName, PackageManager.ApplicationInfoFlags.of(0))
+        } else {
+            packageManager.getApplicationInfo(packageName, PackageManager.GET_META_DATA)
+        }
+    }
+
+    fun getAppName() {
+        appName = packageManager.getApplicationLabel(appInfo).toString()
+    }
+
+    fun getAppIcon() {
+        appIcon = packageManager.getApplicationIcon(appInfo)
+    }
+    
 }
