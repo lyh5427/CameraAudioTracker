@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.animation.AnimationUtils
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.activity.result.contract.ActivityResultContracts
@@ -23,7 +24,12 @@ class IntroActivity : BaseActivity() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_intro)
         binding.lifecycleOwner = this
 
+        setSplashAnimation()
     }
 
+    fun setSplashAnimation() = with(binding) {
+        val anim = AnimationUtils.loadAnimation(this@IntroActivity, R.anim.anim_appear)
 
+        binding.splash.startAnimation(anim)
+    }
 }

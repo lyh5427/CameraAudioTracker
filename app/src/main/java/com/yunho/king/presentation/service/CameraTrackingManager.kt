@@ -38,7 +38,7 @@ class CameraTrackingManager(context: Context) {
     lateinit var cameraManager: CameraManager
     lateinit var cameraIds: Array<String>
     lateinit var popupSuspicionBinding: PopupSuspicionBinding
-    lateinit var cameraProviderFuture: ListenableFuture<ProcessCameraProvider!>
+    lateinit var cameraProviderFuture: ListenableFuture<ProcessCameraProvider>
     lateinit var cameraProvider: ProcessCameraProvider
     lateinit var stateManager: UsageStatsManager
     lateinit var packageManager: PackageManager

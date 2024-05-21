@@ -7,5 +7,16 @@
         android:layout_height="match_parent"
         tools:context=".presentation.ui.intro.IntroActivity">
 
+        <ImageView
+            android:id="@+id/splash"
+            android:layout_width="300dp"
+            android:layout_height="300dp"
+            android:src="@drawable/img_splash"
+            android:alpha="0.1"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
