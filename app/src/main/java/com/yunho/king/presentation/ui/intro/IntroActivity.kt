@@ -35,7 +35,7 @@ class IntroActivity : BaseActivity() {
         startIntro()
     }
 
-    fun setSplashAnimation() = with(binding) {
+    private fun setSplashAnimation() = with(binding) {
         val anim = AnimationUtils.loadAnimation(this@IntroActivity, R.anim.anim_appear)
 
         binding.splash.startAnimation(anim)
