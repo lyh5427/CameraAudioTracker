@@ -1,22 +1,17 @@
 package com.yunho.king.presentation.ui.intro
 
 import android.content.Intent
-import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.animation.AnimationUtils
-import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContract
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.databinding.DataBindingUtil
-import com.yunho.king.BuildConfig
 import com.yunho.king.R
 import com.yunho.king.Utils.PermManager
 import com.yunho.king.databinding.ActivityIntroBinding
 import com.yunho.king.presentation.ui.base.BaseActivity
 import com.yunho.king.presentation.ui.main.MainActivity
 import com.yunho.king.presentation.ui.perm.PermActivity
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class IntroActivity : BaseActivity() {
 
     lateinit var binding: ActivityIntroBinding
@@ -24,8 +19,7 @@ class IntroActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_intro)
-        binding.lifecycleOwner = this
+        binding = ActivityIntroBinding.inflate(layoutInflater, null, false)
 
         setSplashAnimation()
     }
