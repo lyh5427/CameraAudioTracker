@@ -10,12 +10,12 @@ plugins {
 
 android {
     namespace 'com.yunho.king'
-    compileSdk 33
+    compileSdk 34
 
     defaultConfig {
         applicationId "com.yunho.king"
         minSdk 24
-        targetSdk 33
+        targetSdk 34
         versionCode 1
         versionName "1.0"
 
@@ -31,9 +31,6 @@ android {
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
-    }
-    dataBinding{
-        enabled = true
     }
 
     viewBinding {
@@ -88,8 +85,7 @@ dependencies {
     implementation "com.google.dagger:hilt-android:$hilt_version"
     kapt "com.google.dagger:hilt-android-compiler:$hilt_version"
     //hilt ViewModel 추가
-    implementation 'androidx.hilt:hilt-lifecycle-viewmodel:1.0.0-alpha03'
-    kapt 'androidx.hilt:hilt-compiler:1.0.0'
+    kapt 'androidx.hilt:hilt-compiler:1.2.0'
 
 
     //하단네비

@@ -42,7 +42,7 @@
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:padding="10dp"
-                    android:src="@drawable/icon_alrim"
+                    android:src="@mipmap/icon_alrim"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toStartOf="parent"/>
 
@@ -82,7 +82,7 @@
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:padding="10dp"
-                    android:src="@drawable/icon_camera"
+                    android:src="@mipmap/icon_camera"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toStartOf="parent"/>
 
@@ -122,7 +122,7 @@
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:padding="10dp"
-                    android:src="@drawable/icon_mic"
+                    android:src="@mipmap/icon_mic"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toStartOf="parent"/>
 
@@ -162,7 +162,7 @@
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:padding="10dp"
-                    android:src="@drawable/icon_overlay"
+                    android:src="@mipmap/icon_overlay"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toStartOf="parent"/>
 
@@ -202,7 +202,7 @@
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:padding="10dp"
-                    android:src="@drawable/icon_alrim"
+                    android:src="@mipmap/icon_alrim"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toStartOf="parent"/>
 

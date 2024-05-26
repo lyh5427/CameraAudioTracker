@@ -37,7 +37,6 @@ class MainService: Service() {
         Log.d(GlobalApplication.TagName, "Checking Service StartCommand")
 
         cameraService = CameraTrackingManager(this)
-        cameraService.start()
         return START_STICKY
     }
 
@@ -47,15 +46,15 @@ class MainService: Service() {
                 NotificationManager::class.java
             )
             channel = NotificationChannel(
-                "com.yunho.king",
-                "camera",
+                Const.CAMERA_CHANNEL_ID,
+                Const.CAMERA_CHANNEL_NAME,
                 NotificationManager.IMPORTANCE_NONE
             )
             channel.setShowBadge(false)
             channel.lockscreenVisibility = Notification.VISIBILITY_PRIVATE
             manager.createNotificationChannel(channel)
         }
-        val builder = NotificationCompat.Builder(this, Const.CHANNEL_NAME)
+        val builder = NotificationCompat.Builder(this, Const.CAMERA_CHANNEL_NAME)
         builder.setContentTitle(StringBuilder(resources.getString(R.string.app_name))
             .append(getString(R.string.service_is_running)).toString())
             .setTicker(StringBuilder(resources.getString(R.string.app_name)).append("service is running").toString())

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">King</string>
+    <string name="app_name">CADefender</string>
 
     <!--Service-->
     <string name="service_is_running">CADefender가 동작중입니다.</string>
@@ -8,6 +8,10 @@
     <string name="not_fount_app_name">앱 이름 추출 불가</string>
 
     <!--popup-->
+    <string name="ok">확인</string>
+    <string name="setting">설정하기</string>
+    <string name="move">이동하기</string>
+    <string name="cancel">닫기</string>
     <string name="suspicion_popup_camera_title">카메라 사용이 감지되었습니다</string>
     <string name="suspicion_popup_audio_title">마이크 사용이 감지되었습니다</string>
     <string name="suspocion_content">현재 CAD에서 카메라를 탈취중입니다.\n본인이 사용한게 아니라면 설정으로 이동하여 \n강제 종료해주세요.</string>
@@ -24,6 +28,18 @@
     <string name="overlay_title">다른 앱 위에 그리기</string>
     <string name="overlay_content">앱이 사용중이 아니어도 팝업을 띄우기 위해 필요합니다.</string>
     <string name="usage_title">사용 정보</string>
-    <string name="usage_content">다른 앱의 사용정보를 가져오기위해 필요합니다.</string>
+    <string name="usage_content">다른 앱의 사용정보를 가져오기 위해 필요합니다.</string>
+
+    <string name="perm_denied_title">권한 설정 필요</string>
+    <string name="perm_denied_content">권한 설정이 완료되지 않았습니다.\n \"설정->권한\"목록의 모든 권한을 허용해주세요.</string>
+
+    <string name="perm_denied_overlay_title">다른 앱 위에 그리기 필요</string>
+    <string name="perm_denied_overlay_content">앱이 사용중이 아닐 때에도 팝업을 띄우기 위해 해당 권한이 필요합니다.\n 설정으로 이동하여 권한을 허용해주세요.</string>
+
+    <string name="perm_usage_title">사용 정보 권한 필요</string>
+    <string name="perm_usage_content">앱이 사용중이 아닐 때에도 디바이스의 카메라, 마이크를 사용하는 어플리케이션을 특정하기 위해 필요합니다.\n 설정으로 이동하여 권한을 허용해주세요.</string>
+
+    <string name="perm_denied_usage_title">사용 정보 권한 미설정</string>
+    <string name="perm_denied_usage_content">사용 정보 권한 설정을 하지 않으셨습니다. 어플리케이션 기능 사용에 제한이 됩니다.</string>
 
 </resources>
