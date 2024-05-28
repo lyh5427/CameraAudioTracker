@@ -2,12 +2,9 @@ package com.yunho.king.presentation.ui.main
 
 import android.content.Intent
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.MenuItem
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
-import androidx.lifecycle.ViewModel
 import com.google.android.material.navigation.NavigationBarView
 import com.yunho.king.R
 import com.yunho.king.databinding.ActivityMainBinding
@@ -15,7 +12,7 @@ import com.yunho.king.presentation.service.MainService
 import com.yunho.king.presentation.ui.base.BaseActivity
 import com.yunho.king.presentation.ui.main.fragment.ExceptFragment
 import com.yunho.king.presentation.ui.main.fragment.HoleFragment
-import com.yunho.king.presentation.ui.main.fragment.UsageFragment
+import com.yunho.king.presentation.ui.main.fragment.usage.UsageFragment
 
 class MainActivity : BaseActivity() {
 
