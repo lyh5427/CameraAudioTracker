@@ -1,4 +1,4 @@
-package com.yunho.king.data
+package com.yunho.king.data.db
 
 import androidx.room.Dao
 import androidx.room.Insert
@@ -8,12 +8,6 @@ import com.yunho.king.domain.dto.AudioAppData
 
 @Dao
 interface AudioDao {
-    @Insert
-    fun insert(data: AudioAppData)
-
-    @Query("DELETE FROM AudioAppData")
-    fun deleteAll()
-
     @Query("SELECT * FROM AudioAppData WHERE appPackageName = :appPackageName")
     fun getAudioAppData(appPackageName: String): AudioAppData
 
@@ -28,4 +22,11 @@ interface AudioDao {
 
     @Query("SELECT * FROM AudioAppData WHERE appPackageName = :packageName")
     fun isExistAppData(packageName: String): AudioAppData?
+
+    @Insert
+    fun insert(data: AudioAppData)
+
+    @Query("DELETE FROM AudioAppData")
+    fun deleteAll()
+
 }

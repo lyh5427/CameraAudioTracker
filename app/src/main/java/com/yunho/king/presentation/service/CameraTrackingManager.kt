@@ -29,9 +29,13 @@ import androidx.core.content.getSystemService
 import com.google.common.util.concurrent.ListenableFuture
 import com.yunho.king.GlobalApplication
 import com.yunho.king.databinding.PopupSuspicionBinding
+import com.yunho.king.domain.di.RepositorySource
 import java.util.Calendar
+import javax.inject.Inject
 
 class CameraTrackingManager(context: Context) {
+
+    @Inject lateinit var repo: RepositorySource
 
     var mContext: Context = context
 
@@ -61,20 +65,48 @@ class CameraTrackingManager(context: Context) {
                 super.onCameraAccessPrioritiesChanged()
             }
 
-            override fun onCameraAvailable(cameraId: String) {
+            override fun onCameraAvailable(cameraId: String) { // 카메라 사용 가능 할 때
                 super.onCameraAvailable(cameraId)
-                Log.d(GlobalApplication.TagName, "Checking onCameraAvailable : ${canOpenCamra}")
-                canOpenCamra = true
-
 
             }
 
-            override fun onCameraUnavailable(cameraId: String) {
+            override fun onCameraUnavailable(cameraId: String) { // 카메라 사용이 불가능 할 때!
                 super.onCameraUnavailable(cameraId)
-                Log.d(GlobalApplication.TagName, "Checking onCameraUnavailable : ${canOpenCamra}")
-                canOpenCamra = false
+                getRecentlyCameraUserPackage()
+
             }
         }, Handler(Looper.getMainLooper()))
+    }
+
+    fun getRecentlyCameraUserPackage() {
+
+        val cal = Calendar.getInstance()
+        cal.add(Calendar.SECOND, -1)
+
+        val lastUsagePackageList = stateManager.queryUsageStats(
+            UsageStatsManager.INTERVAL_BEST, cal.timeInMillis, System.currentTimeMillis())
+
+        for (pkg in lastUsagePackageList) {
+            Log.d(GlobalApplication.TagName,
+                "AppName: ${pkg.packageName}\n" +
+                        "LastTimeUse : ${pkg.lastTimeUsed}")
+        }
+    }
+
+    fun setAppInfo() {
+        appInfo = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            packageManager.getApplicationInfo(packageName, PackageManager.ApplicationInfoFlags.of(0))
+        } else {
+            packageManager.getApplicationInfo(packageName, PackageManager.GET_META_DATA)
+        }
+    }
+
+    fun getAppName() {
+        appName = packageManager.getApplicationLabel(appInfo).toString()
+    }
+
+    fun getAppIcon() {
+        appIcon = packageManager.getApplicationIcon(appInfo)
     }
 
     fun setSuspicionPopup() {
@@ -118,35 +150,4 @@ class CameraTrackingManager(context: Context) {
         ContextCompat.getMainExecutor(mContext))
     }
 
-    fun getRecentlyCameraUserPackage() {
-
-        val cal = Calendar.getInstance()
-        cal.add(Calendar.SECOND, -10)
-
-        val lastUsagePackageList = stateManager.queryUsageStats(
-            UsageStatsManager.INTERVAL_BEST, cal.timeInMillis, System.currentTimeMillis())
-
-        for (pkg in lastUsagePackageList) {
-            Log.d(GlobalApplication.TagName,
-                "AppName: ${pkg.packageName}\n" +
-                    "LastTimeUse : ${pkg.lastTimeUsed}")
-        }
-    }
-
-    fun setAppInfo() {
-        appInfo = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            packageManager.getApplicationInfo(packageName, PackageManager.ApplicationInfoFlags.of(0))
-        } else {
-            packageManager.getApplicationInfo(packageName, PackageManager.GET_META_DATA)
-        }
-    }
-
-    fun getAppName() {
-        appName = packageManager.getApplicationLabel(appInfo).toString()
-    }
-
-    fun getAppIcon() {
-        appIcon = packageManager.getApplicationIcon(appInfo)
-    }
-    
 }

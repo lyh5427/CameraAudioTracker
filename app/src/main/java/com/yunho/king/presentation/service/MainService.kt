@@ -37,14 +37,13 @@ class MainService: Service() {
         Log.d(GlobalApplication.TagName, "Checking Service StartCommand")
 
         cameraService = CameraTrackingManager(this)
+        cameraService.setCameraTracker()
         return START_STICKY
     }
 
     fun showForegroundService(){
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
-            val manager = baseContext.getSystemService(
-                NotificationManager::class.java
-            )
+            val manager = getSystemService(NotificationManager::class.java)
             channel = NotificationChannel(
                 Const.CAMERA_CHANNEL_ID,
                 Const.CAMERA_CHANNEL_NAME,
@@ -54,7 +53,8 @@ class MainService: Service() {
             channel.lockscreenVisibility = Notification.VISIBILITY_PRIVATE
             manager.createNotificationChannel(channel)
         }
-        val builder = NotificationCompat.Builder(this, Const.CAMERA_CHANNEL_NAME)
+
+        val builder = NotificationCompat.Builder(this, Const.CAMERA_CHANNEL_ID)
         builder.setContentTitle(StringBuilder(resources.getString(R.string.app_name))
             .append(getString(R.string.service_is_running)).toString())
             .setTicker(StringBuilder(resources.getString(R.string.app_name)).append("service is running").toString())
