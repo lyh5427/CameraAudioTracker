@@ -10,8 +10,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import com.yunho.king.R
-import com.yunho.king.data.AudioDataBase
-import com.yunho.king.data.CameraDataBase
+import com.yunho.king.data.db.AudioDataBase
+import com.yunho.king.data.db.CameraDataBase
 import com.yunho.king.domain.di.AudioDao
 import com.yunho.king.domain.di.CameraDao
 import com.yunho.king.domain.dto.AudioAppData
@@ -24,15 +24,6 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 open class BaseActivity : AppCompatActivity() {
-
-    @Inject
-    @AudioDao
-    lateinit var audioDb: AudioDataBase
-
-    @Inject
-    @CameraDao
-    lateinit var cameraDb: CameraDataBase
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

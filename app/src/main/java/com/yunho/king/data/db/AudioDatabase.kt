@@ -1,4 +1,4 @@
-package com.yunho.king.data
+package com.yunho.king.data.db
 
 import androidx.room.Database
 import androidx.room.RoomDatabase

@@ -1,4 +1,4 @@
-package com.yunho.king.data
+package com.yunho.king.data.db
 
 import androidx.room.Dao
 import androidx.room.Insert
@@ -7,12 +7,6 @@ import com.yunho.king.domain.dto.CameraAppData
 
 @Dao
 interface CameraDao {
-    @Insert
-    fun insert(data: CameraAppData)
-
-    @Query("DELETE FROM CameraAppData")
-    fun deleteAll()
-
     @Query("SELECT * FROM CameraAppData WHERE appPackageName = :appPackageName")
     fun getCameraAppData(appPackageName: String): CameraAppData
 
@@ -27,4 +21,11 @@ interface CameraDao {
 
     @Query("SELECT * FROM CameraAppData WHERE appPackageName = :packageName")
     fun isExistAppData(packageName: String): CameraAppData?
+
+    @Insert
+    fun insert(data: CameraAppData)
+
+    @Query("DELETE FROM CameraAppData")
+    fun deleteAll()
+
 }
