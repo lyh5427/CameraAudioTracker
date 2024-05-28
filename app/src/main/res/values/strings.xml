@@ -1,6 +1,11 @@
 <resources>
     <string name="app_name">CADefender</string>
 
+    <!--Bottom Navi-->
+    <string name="navi_usages">사용 정보</string>
+    <string name="navi_except">제외 목록</string>
+    <string name="navi_hole">전체</string>
+
     <!--Service-->
     <string name="service_is_running">CADefender가 동작중입니다.</string>
 
@@ -41,5 +46,7 @@
 
     <string name="perm_denied_usage_title">사용 정보 권한 미설정</string>
     <string name="perm_denied_usage_content">사용 정보 권한 설정을 하지 않으셨습니다. 어플리케이션 기능 사용에 제한이 됩니다.</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

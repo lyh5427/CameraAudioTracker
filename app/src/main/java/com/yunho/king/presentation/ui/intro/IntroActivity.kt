@@ -3,6 +3,7 @@ package com.yunho.king.presentation.ui.intro
 import android.content.Intent
 import android.os.Bundle
 import android.view.animation.AnimationUtils
+import androidx.activity.viewModels
 import com.yunho.king.R
 import com.yunho.king.Utils.PermManager
 import com.yunho.king.databinding.ActivityIntroBinding
@@ -15,6 +16,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class IntroActivity : BaseActivity() {
 
     lateinit var binding: ActivityIntroBinding
+    private val viewModel: IntroViewModel by viewModels()
     val permManager = PermManager(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,7 +34,7 @@ class IntroActivity : BaseActivity() {
     private fun setSplashAnimation() = with(binding) {
         val anim = AnimationUtils.loadAnimation(this@IntroActivity, R.anim.anim_appear)
 
-        binding.splash.startAnimation(anim)
+        splash.startAnimation(anim)
     }
 
     private fun startIntro() {
