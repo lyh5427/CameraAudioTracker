@@ -1,4 +1,4 @@
-package com.yunho.king.presentation.ui.main.fragment
+package com.yunho.king.presentation.ui.main.fragment.usage
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -25,7 +25,7 @@ class UsageFragment : Fragment() {
     ): View? {
          binding = FragmentUsageBinding.inflate(inflater, container, false)
 
-        
+
         return binding.root
     }
 
