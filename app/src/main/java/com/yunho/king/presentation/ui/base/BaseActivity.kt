@@ -9,6 +9,8 @@ import android.graphics.drawable.Drawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import androidx.activity.viewModels
+import androidx.lifecycle.ReportFragment.Companion.reportFragment
 import com.yunho.king.R
 import com.yunho.king.data.db.AudioDataBase
 import com.yunho.king.data.db.CameraDataBase
@@ -24,6 +26,7 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 open class BaseActivity : AppCompatActivity() {
+    private val baseViewModel: BaseViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -118,34 +121,18 @@ open class BaseActivity : AppCompatActivity() {
         return audioAppList
     }
 
-    fun getAudioUseCount(packageName: String): Int {
-        return try {
-            audioDb.db().getPermUseCount(packageName)
-        } catch (e: Exception) {
-            -1
-        }
-    }
-
-    fun getCameraUseCount(packageName: String): Int {
-        return try {
-            cameraDb.db().getPermUseCount(packageName)
-        } catch (e: Exception) {
-            -1
-        }
-    }
-
     fun insertCameraPackage() {
         val list = getCameraAppList(getAllPackage())
 
         if (list.isNotEmpty()) {
             for (packageName in list) {
                 CoroutineScope(Dispatchers.IO).launch {
-                    if (cameraDb.db().isExistAppData(packageName) == null) {
+                    if (baseViewModel.isExistCameraApp(packageName)) {
                         val appData = CameraAppData(
                             appPackageName = packageName,
                             appName = getAppName(packageName),
                         )
-                        cameraDb.db().insert(appData)
+                        baseViewModel.insertCameraApp(appData)
                     }
                 }
             }
@@ -158,12 +145,12 @@ open class BaseActivity : AppCompatActivity() {
         if (list.isNotEmpty()) {
             for (packageName in list) {
                 CoroutineScope(Dispatchers.IO).launch {
-                    if (audioDb.db().isExistAppData(packageName) == null) {
+                    if (baseViewModel.isExistAudioApp(packageName)) {
                         val appData = AudioAppData(
                             appPackageName = packageName,
                             appName = getAppName(packageName),
                         )
-                        audioDb.db().insert(appData)
+                        baseViewModel.insertAudioApp(appData)
                     }
                 }
             }
