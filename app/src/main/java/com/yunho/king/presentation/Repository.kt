@@ -22,6 +22,8 @@ class Repository @Inject constructor(
         adDb.deleteAll()
     }
 
+    override fun getAllCameraAppList(): List<CameraAppData> = caDb.getAll()
+
     override fun getCameraAppData(pkgName: String): CameraAppData {
         return caDb.getCameraAppData(pkgName)
     }
@@ -49,6 +51,8 @@ class Repository @Inject constructor(
     override fun deleteAllCamera() {
         caDb.deleteAll()
     }
+
+    override fun getAllAudioAppList(): List<AudioAppData> = adDb.getAll()
 
     override fun getAudioAppData(pkgName: String): AudioAppData {
         return adDb.getAudioAppData(pkgName)

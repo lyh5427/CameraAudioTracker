@@ -7,6 +7,7 @@ interface RepositorySource {
     fun clearDb()
 
     // Camera DB
+    fun getAllCameraAppList(): List<CameraAppData>
     fun getCameraAppData(pkgName: String): CameraAppData
     fun getCameraAppPermUseCount(pkgName: String): Int
     fun deleteCameraApp(pkgName: String)
@@ -16,6 +17,7 @@ interface RepositorySource {
     fun deleteAllCamera()
 
     // Audio DB
+    fun getAllAudioAppList(): List<AudioAppData>
     fun getAudioAppData(pkgName: String): AudioAppData
     fun getAudioAppPermUseCount(pkgName: String): Int
     fun deleteAudioApp(pkgName: String)

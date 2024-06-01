@@ -29,4 +29,7 @@ class UsageFragment : Fragment() {
         return binding.root
     }
 
+    fun setTabAdapter() = with(binding) {
+        layoutTab.setlistener
+    }
 }

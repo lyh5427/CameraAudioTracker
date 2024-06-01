@@ -46,7 +46,9 @@
 
     <string name="perm_denied_usage_title">사용 정보 권한 미설정</string>
     <string name="perm_denied_usage_content">사용 정보 권한 설정을 하지 않으셨습니다. 어플리케이션 기능 사용에 제한이 됩니다.</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
+    <!--usagefragment-->
+    <string name="app_list_name">앱 이름 : %1$s</string>
+    <string name="app_list_count">사용 횟수 : %1$s</string>
+    <string name="app_list_last_use">마지막 사용 날짜 : %1$s</string>
 </resources>
