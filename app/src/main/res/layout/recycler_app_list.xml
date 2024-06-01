@@ -48,7 +48,7 @@
                 android:id="@+id/listLastUsageDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="마지막 사용시간 : YYYY년 MM월 DD일 HH:mm:ss"
+                android:text="마지막 사용일자 : MM월 DD일 HH:mm:ss"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@id/appListMiddle"
