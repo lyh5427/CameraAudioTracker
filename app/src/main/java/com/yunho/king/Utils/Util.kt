@@ -1,14 +1,16 @@
 package com.yunho.king.Utils
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
 import android.graphics.drawable.Drawable
 import com.yunho.king.R
+import java.text.SimpleDateFormat
 
-class Util {
+object Util {
 
     fun getAppName(packageName: String, context: Context): String {
         return try {
@@ -77,6 +79,14 @@ class Util {
             }
         }
         return audioAppList
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    fun getDate(time: Long): String {
+        val myDate = SimpleDateFormat("MM월 dd일 hh:mm:ss")
+        return myDate.format(time)
+
+
     }
 
 }

@@ -22,4 +22,8 @@ object Const {
     const val TAG_OVERLAY_DENIED = "tag_overlay_denied"
     const val TAG_USAGE_DIALOG = "tag_usage_dialog"
     const val TAG_USAGE_DENIED_DIALOG = "tag_usage_denied_dialog"
+
+    // UsageFragmentType
+    const val TYPE_CAMERA = "camera"
+    const val TYPE_AUDIO = "audio"
 }

@@ -4,10 +4,15 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
 import com.yunho.king.domain.dto.AudioAppData
+import com.yunho.king.domain.dto.CameraAppData
 
 
 @Dao
 interface AudioDao {
+
+    @Query("SELECT * FROM AudioAppData")
+    fun getAll(): List<AudioAppData>
+
     @Query("SELECT * FROM AudioAppData WHERE appPackageName = :appPackageName")
     fun getAudioAppData(appPackageName: String): AudioAppData
 
