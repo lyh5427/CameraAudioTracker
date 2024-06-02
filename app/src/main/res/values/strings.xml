@@ -51,4 +51,19 @@
     <string name="app_list_name">앱 이름 : %1$s</string>
     <string name="app_list_count">사용 횟수 : %1$s</string>
     <string name="app_list_last_use">마지막 사용 날짜 : %1$s</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <!--AppDetail-->
+    <string name="app_detail_title">상세 페이지</string>
+    <string name="app_detail_download">다운로드 경로 : %1$s</string>
+    <string name="app_detail_camera_title">카메라 권한 정보</string>
+    <string name="app_detail_audio_title">오디오 권한 정보</string>
+    <string name="perm_usage_state_title">권한 허용 여부 : %1$s</string>
+    <string name="perm_usage_count_title">권한 사용 횟수 : %1$s</string>
+    <string name="perm_usage_last_date_title">마지막 사용 일자 : %1$s</string>
+    <string name="btn_app_detail">앱 상세 페이지 이동</string>
 </resources>

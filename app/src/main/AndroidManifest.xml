@@ -8,21 +8,15 @@
     <uses-feature android:name="android.hardware.camera" />
 
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_CAMERA"/>
-
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_CAMERA" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
-
     <uses-permission
         android:name="android.permission.QUERY_ALL_PACKAGES"
         tools:ignore="QueryAllPackagesPermission" />
-
     <uses-permission
         android:name="android.permission.PACKAGE_USAGE_STATS"
         tools:ignore="ProtectedPermissions" />
-    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
-
-
-
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
     <application
         android:name=".GlobalApplication"
@@ -36,6 +30,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.King"
         tools:targetApi="33">
+        <activity
+            android:name=".presentation.ui.appdetail.AppDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".presentation.ui.AppDetailActivity"
+            android:exported="false"
+            android:theme="@style/Theme.King" />
         <activity
             android:name=".presentation.ui.perm.PermActivity"
             android:exported="false">
@@ -70,7 +71,7 @@
         <service
             android:name=".presentation.service.MainService"
             android:exported="true"
-            android:foregroundServiceType="camera"/>
+            android:foregroundServiceType="camera" />
     </application>
 
 </manifest>

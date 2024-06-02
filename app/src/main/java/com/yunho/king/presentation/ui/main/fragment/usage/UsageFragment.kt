@@ -6,17 +6,25 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.replace
+import com.google.android.material.tabs.TabLayout
+import com.yunho.king.Const
 import com.yunho.king.R
 import com.yunho.king.databinding.FragmentUsageBinding
+import com.yunho.king.domain.dto.AppList
 import com.yunho.king.presentation.ui.main.MainViewModel
 
 class UsageFragment : Fragment() {
 
-    lateinit var binding: FragmentUsageBinding
+    private lateinit var binding: FragmentUsageBinding
     private val viewModel: MainViewModel by activityViewModels()
+
+    private lateinit var fragCamera: AppListFragment
+    private lateinit var fragAudio: AppListFragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
     }
 
     override fun onCreateView(
@@ -25,11 +33,37 @@ class UsageFragment : Fragment() {
     ): View? {
          binding = FragmentUsageBinding.inflate(inflater, container, false)
 
+        fragCamera = AppListFragment.newInstance(Const.TYPE_CAMERA)
+        fragAudio = AppListFragment.newInstance(Const.TYPE_AUDIO)
+
+        setTabAdapter()
 
         return binding.root
     }
 
-    fun setTabAdapter() = with(binding) {
-        layoutTab.setlistener
+    private fun setTabAdapter() = with(binding) {
+        layoutTab.addOnTabSelectedListener(object: TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                setFragment(
+                    when (tab!!.id) {
+                    R.id.tabCamera -> fragCamera
+                    else -> fragAudio
+                })
+            }
+
+            override fun onTabUnselected(tab: TabLayout.Tab?) {
+
+            }
+
+            override fun onTabReselected(tab: TabLayout.Tab?) {
+
+            }
+        })
+    }
+
+    private fun setFragment(frag: AppListFragment) {
+        childFragmentManager.beginTransaction().replace(
+            R.id.usageFragmentContainer, frag
+        ).commitAllowingStateLoss()
     }
 }

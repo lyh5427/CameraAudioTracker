@@ -10,3 +10,8 @@ data class AppList(
     var permUseCount: Int = 0,
     var lastUseDateTime: Long = 0
 )
+
+data class State(
+    val status: String,
+    val msg: String
+)
