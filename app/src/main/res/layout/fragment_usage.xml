@@ -15,18 +15,21 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <com.google.android.material.tabs.TabItem
+            android:id="@+id/tabCamera"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:text="tab1" />
 
         <com.google.android.material.tabs.TabItem
+            android:id="@+id/tabAudio"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:text="tab1" />
 
     </com.google.android.material.tabs.TabLayout>
 
-    <androidx.viewpager2.widget.ViewPager2
+    <FrameLayout
+        android:id="@+id/usageFragmentContainer"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintTop_toBottomOf="@id/layoutTab"

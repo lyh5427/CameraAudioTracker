@@ -1,4 +1,4 @@
-package com.yunho.king.presentation.ui.main.fragment.except
+package com.yunho.king.presentation.ui.main.fragment.usage
 
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -16,8 +16,6 @@ import com.yunho.king.Utils.Util
 import com.yunho.king.databinding.FragmentAppListBinding
 import com.yunho.king.domain.dto.AppList
 import com.yunho.king.presentation.ui.main.MainViewModel
-import com.yunho.king.presentation.ui.main.fragment.usage.UsageAdapter
-import com.yunho.king.presentation.ui.main.fragment.usage.UsageAdapterListener
 
 class AppListFragment : Fragment() {
 

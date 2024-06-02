@@ -12,7 +12,7 @@
 
     <color name="main_red">#FF3333</color>
     <color name="main_red2">#F08080</color>
-
+    <color name="main_red3">#BC8F8F</color>
 
     <color name="btn_disable_stroke">#BC8F8F</color>
     <color name="btn_disable_soled">#BC8F8F</color>

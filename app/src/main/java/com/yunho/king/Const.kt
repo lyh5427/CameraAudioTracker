@@ -26,4 +26,7 @@ object Const {
     // UsageFragmentType
     const val TYPE_CAMERA = "camera"
     const val TYPE_AUDIO = "audio"
+
+    //AppDetailActivity
+    const val PKG_NAME = "package_name"
 }
