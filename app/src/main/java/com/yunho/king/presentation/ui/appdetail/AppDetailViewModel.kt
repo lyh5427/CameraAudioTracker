@@ -1,5 +1,6 @@
 package com.yunho.king.presentation.ui.appdetail
 
+import androidx.lifecycle.viewModelScope
 import com.yunho.king.Status
 import com.yunho.king.domain.di.RepositorySource
 import com.yunho.king.domain.dto.AudioAppData
@@ -10,6 +11,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -52,10 +54,12 @@ class AppDetailViewModel@Inject constructor(
     }
 
     fun setCameraView() {
-        cameraData.
-
-
-
+        viewModelScope.launch {
+            cameraData!!.appName
+            cameraData!!.permUseCount
+            cameraData!!.lastUseDateTime
+            cameraData!!.appPackageName
+        }
     }
 
     fun setAudioView() {
