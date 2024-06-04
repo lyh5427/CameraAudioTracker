@@ -63,7 +63,10 @@
     <string name="app_detail_camera_title">카메라 권한 정보</string>
     <string name="app_detail_audio_title">오디오 권한 정보</string>
     <string name="perm_usage_state_title">권한 허용 여부 : %1$s</string>
-    <string name="perm_usage_count_title">권한 사용 횟수 : %1$s</string>
+    <string name="perm_usage_count_title">권한 사용 횟수 : %1$s회</string>
     <string name="perm_usage_last_date_title">마지막 사용 일자 : %1$s</string>
     <string name="btn_app_detail">앱 상세 페이지 이동</string>
+
+    <string name="state_allow"><font color="#8B0000">권한이 허용되어 있습니다.</font></string>
+    <string name="state_denied"><font color="#00FF00">권한이 허용되어 있지 않습니다.</font></string>
 </resources>
