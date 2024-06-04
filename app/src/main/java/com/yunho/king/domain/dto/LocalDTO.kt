@@ -13,5 +13,5 @@ data class AppList(
 
 data class State(
     val status: String,
-    val msg: String
+    val msg: String = ""
 )

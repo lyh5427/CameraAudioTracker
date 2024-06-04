@@ -1,6 +1,7 @@
 package com.yunho.king.presentation.ui.base
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
@@ -125,6 +126,7 @@ open class BaseActivity : AppCompatActivity() {
                         val appData = CameraAppData(
                             appPackageName = packageName,
                             appName = getAppName(packageName),
+                            permState = getPermState(Manifest.permission.CAMERA, packageName)
                         )
                         baseViewModel.insertCameraApp(appData)
                     }
@@ -143,11 +145,18 @@ open class BaseActivity : AppCompatActivity() {
                         val appData = AudioAppData(
                             appPackageName = packageName,
                             appName = getAppName(packageName),
+                            permState = getPermState(Manifest.permission.RECORD_AUDIO, packageName)
                         )
                         baseViewModel.insertAudioApp(appData)
                     }
                 }
             }
         }
+    }
+
+
+    @SuppressLint("UseCheckPermission")
+    fun getPermState(perm: String, pkgName: String): Boolean {
+        return packageManager.checkPermission(perm, pkgName) == PackageManager.PERMISSION_GRANTED
     }
 }

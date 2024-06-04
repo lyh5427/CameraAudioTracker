@@ -1,5 +1,6 @@
 package com.yunho.king.presentation.ui.appdetail
 
+import android.content.pm.PackageManager
 import androidx.lifecycle.viewModelScope
 import com.yunho.king.Status
 import com.yunho.king.domain.di.RepositorySource
@@ -18,6 +19,14 @@ import javax.inject.Inject
 class AppDetailViewModel@Inject constructor(
     private val repo: RepositorySource
 ): BaseViewModel(repo) {
+    private var _appName: MutableSharedFlow<State> =
+        MutableSharedFlow(0, 1, BufferOverflow.DROP_OLDEST)
+    val appName = _appName.asSharedFlow()
+
+    private var _downLoad: MutableSharedFlow<State> =
+        MutableSharedFlow(0, 1, BufferOverflow.DROP_OLDEST)
+    val downLoad = _downLoad.asSharedFlow()
+
     private var _cameraState: MutableSharedFlow<State> =
         MutableSharedFlow(0, 1, BufferOverflow.DROP_OLDEST)
     val cameraState = _cameraState.asSharedFlow()
@@ -36,7 +45,7 @@ class AppDetailViewModel@Inject constructor(
 
     private var _audioCount: MutableSharedFlow<State> =
         MutableSharedFlow(0, 1, BufferOverflow.DROP_OLDEST)
-    val audioCountTitle = _audioCount.asSharedFlow()
+    val audioCount = _audioCount.asSharedFlow()
 
     private var _audioLastUseDate: MutableSharedFlow<State> =
         MutableSharedFlow(0, 1, BufferOverflow.DROP_OLDEST)
@@ -53,16 +62,23 @@ class AppDetailViewModel@Inject constructor(
         if (audioAppData != null) setAudioView()
     }
 
-    fun setCameraView() {
+    private fun setCameraView() {
         viewModelScope.launch {
-            cameraData!!.appName
-            cameraData!!.permUseCount
-            cameraData!!.lastUseDateTime
-            cameraData!!.appPackageName
+            _appName.emit(State(Status.TEXT, cameraData!!.appName))
+            _downLoad.emit(State(Status.TEXT, cameraData!!.appPackageName))
+            _cameraState.emit(State(Status.TEXT, "${cameraData!!.permState}"))
+            _cameraCount.emit(State(Status.TEXT, "${cameraData!!.permUseCount}"))
+            _cameraLastUseDate.emit(State(Status.TEXT, "${cameraData!!.lastUseDateTime}"))
         }
     }
 
-    fun setAudioView() {
-
+    private fun setAudioView() {
+        viewModelScope.launch {
+            _appName.emit(State(Status.TEXT, audioAppData!!.appName))
+            _downLoad.emit(State(Status.TEXT, audioAppData!!.appPackageName))
+            _audioState.emit(State(Status.TEXT, "${audioAppData!!.permState}"))
+            _audioCount.emit(State(Status.TEXT, "${audioAppData!!.permUseCount}"))
+            _audioLastUseDate.emit(State(Status.TEXT, "${audioAppData!!.lastUseDateTime}"))
+        }
     }
 }
