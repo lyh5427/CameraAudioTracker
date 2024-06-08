@@ -39,6 +39,11 @@ class AppDetailActivity : BaseActivity() {
         lifecycleScope.launch { setObserver() }
     }
 
+    override fun onResume() {
+        super.onResume()
+        setView()
+    }
+
     suspend fun setObserver() = with(binding) {
         lifecycle.repeatOnLifecycle(Lifecycle.State.RESUMED) {
             viewModel.appName.collect {
