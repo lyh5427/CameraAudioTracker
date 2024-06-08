@@ -64,15 +64,17 @@ class AppListFragment : Fragment() {
     private fun makeCameraAppList() {
         itemList.clear()
         viewModel.getCameraData().forEach {
-            itemList.add(AppList(
-                appName = it.appName,
-                appIcon = Util.getAppIcon(
-                    it.appPackageName,
-                    requireContext())?: requireContext().getDrawable(R.drawable.ic_launcher_background)!!,
-                appPackageName = it.appPackageName,
-                permUseCount = it.permUseCount,
-                lastUseDateTime = it.lastUseDateTime.toLong()
-            ))
+            if (it.notiFlag) {
+                itemList.add(AppList(
+                    appName = it.appName,
+                    appIcon = Util.getAppIcon(
+                        it.appPackageName,
+                        requireContext())?: requireContext().getDrawable(R.drawable.ic_launcher_background)!!,
+                    appPackageName = it.appPackageName,
+                    permUseCount = it.permUseCount,
+                    lastUseDateTime = it.lastUseDateTime.toLong()
+                ))
+            }
         }
 
     }
@@ -81,15 +83,18 @@ class AppListFragment : Fragment() {
     private fun makeAudioAppList() {
         itemList.clear()
         viewModel.getAudioData().forEach {
-            itemList.add(AppList(
-                appName = it.appName,
-                appIcon = Util.getAppIcon(
-                    it.appPackageName,
-                    requireContext())?: requireContext().getDrawable(R.drawable.ic_launcher_background)!!,
-                appPackageName = it.appPackageName,
-                permUseCount = it.permUseCount,
-                lastUseDateTime = it.lastUseDateTime.toLong()
-            ))
+            if (it.notiFlag) {
+                itemList.add(AppList(
+                    appName = it.appName,
+                    appIcon = Util.getAppIcon(
+                        it.appPackageName,
+                        requireContext())?: requireContext().getDrawable(R.drawable.ic_launcher_background)!!,
+                    appPackageName = it.appPackageName,
+                    permUseCount = it.permUseCount,
+                    lastUseDateTime = it.lastUseDateTime.toLong()
+                ))
+
+            }
         }
     }
 

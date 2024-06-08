@@ -26,12 +26,11 @@ open class BaseActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setActionBar()
-        setFullScreen()
     }
 
     fun setActionBar() {
-        supportActionBar!!.hide()
-        supportActionBar!!.setDisplayShowTitleEnabled(false)
+        supportActionBar?.hide()
+        supportActionBar?.setDisplayShowTitleEnabled(false)
     }
 
     fun setFullScreen() {
@@ -121,16 +120,24 @@ open class BaseActivity : AppCompatActivity() {
 
         if (list.isNotEmpty()) {
             for (packageName in list) {
-                CoroutineScope(Dispatchers.IO).launch {
-                    if (baseViewModel.isExistCameraApp(packageName)) {
-                        val appData = CameraAppData(
-                            appPackageName = packageName,
-                            appName = getAppName(packageName),
-                            permState = getPermState(Manifest.permission.CAMERA, packageName)
-                        )
-                        baseViewModel.insertCameraApp(appData)
-                    }
+                if (baseViewModel.isExistCameraApp(packageName)) {
+                    val appData = CameraAppData(
+                        appPackageName = packageName,
+                        appName = getAppName(packageName),
+                        permState = getPermState(Manifest.permission.CAMERA, packageName)
+                    )
+                    baseViewModel.insertCameraApp(appData)
                 }
+//                CoroutineScope(Dispatchers.IO).launch {
+//                    if (baseViewModel.isExistCameraApp(packageName)) {
+//                        val appData = CameraAppData(
+//                            appPackageName = packageName,
+//                            appName = getAppName(packageName),
+//                            permState = getPermState(Manifest.permission.CAMERA, packageName)
+//                        )
+//                        baseViewModel.insertCameraApp(appData)
+//                    }
+//                }
             }
         }
     }
@@ -140,15 +147,23 @@ open class BaseActivity : AppCompatActivity() {
 
         if (list.isNotEmpty()) {
             for (packageName in list) {
+                if (baseViewModel.isExistAudioApp(packageName)) {
+                    val appData = AudioAppData(
+                        appPackageName = packageName,
+                        appName = getAppName(packageName),
+                        permState = getPermState(Manifest.permission.RECORD_AUDIO, packageName)
+                    )
+                    baseViewModel.insertAudioApp(appData)
+                }
                 CoroutineScope(Dispatchers.IO).launch {
-                    if (baseViewModel.isExistAudioApp(packageName)) {
-                        val appData = AudioAppData(
-                            appPackageName = packageName,
-                            appName = getAppName(packageName),
-                            permState = getPermState(Manifest.permission.RECORD_AUDIO, packageName)
-                        )
-                        baseViewModel.insertAudioApp(appData)
-                    }
+//                    if (baseViewModel.isExistAudioApp(packageName)) {
+//                        val appData = AudioAppData(
+//                            appPackageName = packageName,
+//                            appName = getAppName(packageName),
+//                            permState = getPermState(Manifest.permission.RECORD_AUDIO, packageName)
+//                        )
+//                        baseViewModel.insertAudioApp(appData)
+//                    }
                 }
             }
         }

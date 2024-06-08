@@ -18,6 +18,16 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 @Module
 class RoomCreateModule {
+    @Singleton
+    @Provides
+    fun providesAudioDataBase(@ApplicationContext context: Context): AudioDataBase {
+        val db = Room.databaseBuilder(
+            context,
+            AudioDataBase::class.java,
+            "audio.db").build()
+
+        return db
+    }
 
     @Singleton
     @Provides
@@ -25,13 +35,12 @@ class RoomCreateModule {
 
     @Singleton
     @Provides
-    fun providesAudioDataBase(@ApplicationContext context: Context): AudioDataBase {
+    fun providesCameraDataBase(@ApplicationContext context: Context): CameraDataBase {
         val db = Room.databaseBuilder(
             context,
-            AudioDataBase::class.java,
-            "flora_audio_db").build()
+            CameraDataBase::class.java,
+            "camera.db").build()
 
-        db.openHelper.writableDatabase
         return db
     }
 
@@ -39,15 +48,4 @@ class RoomCreateModule {
     @Provides
     fun provides(cameraDB: CameraDataBase): CameraDao = cameraDB.db()
 
-    @Singleton
-    @Provides
-    fun providesCameraDataBase(@ApplicationContext context: Context): CameraDataBase {
-        val db = Room.databaseBuilder(
-            context,
-            CameraDataBase::class.java,
-            "flora_camera_db").build()
-
-        db.openHelper.writableDatabase
-        return db
-    }
 }
