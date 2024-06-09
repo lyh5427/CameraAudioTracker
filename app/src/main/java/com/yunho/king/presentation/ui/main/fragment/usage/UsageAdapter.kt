@@ -45,6 +45,10 @@ class UsageAdapter(
         return item.size
     }
 
+    override fun getItemViewType(position: Int): Int {
+        return position
+    }
+
     inner class ImageViewHolder(val binding: RecyclerAppListBinding) :
         RecyclerView.ViewHolder(binding.root) {
     }

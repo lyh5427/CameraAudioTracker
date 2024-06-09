@@ -1,70 +1,92 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:paddingTop="6dp"
-    android:paddingBottom="6dp"
-    android:paddingStart="12dp"
-    android:paddingEnd="12dp"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
-
+    android:layout_height="wrap_content">
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <ImageView
-            android:id="@+id/listAppIcon"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:src="@drawable/img_splash"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"/>
+        android:layout_height="wrap_content"
+        android:paddingTop="6dp"
+        android:paddingBottom="6dp"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp"
+        android:background="@drawable/btn_type_stroke"
+        android:layout_marginTop="10dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
-        <LinearLayout
-            android:id="@+id/appListMiddle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@id/listAppIcon"
-            app:layout_constraintEnd_toStartOf="@+id/moveAppDetail">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
             <TextView
                 android:id="@+id/listAppName"
                 android:text="앱 이름 : dkdkdk"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-
-            <TextView
-                android:id="@+id/listAppUsageCount"
+                style="@style/Text.body10"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="총 사용 횟수 : 4"/>
-
-            <TextView
-                android:id="@+id/listLastUsageDate"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="마지막 사용일자 : MM월 DD일 HH:mm:ss"
                 app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"/>
+
+            <ImageView
+                android:id="@+id/listAppIcon"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/img_splash"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="10dp"
+                app:layout_constraintTop_toBottomOf="@id/listAppName"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@id/appListMiddle"
-                app:layout_constraintEnd_toStartOf="@id/moveAppDetail"
-                />
+                app:layout_constraintStart_toStartOf="parent"/>
 
-        </LinearLayout>
+            <LinearLayout
+                android:id="@+id/appListMiddle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                app:layout_constraintHorizontal_bias="0.1"
+                app:layout_constraintTop_toBottomOf="@id/listAppName"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@id/listAppIcon"
+                app:layout_constraintEnd_toStartOf="@+id/moveAppDetail">
 
-        <ImageView
-            android:id="@+id/moveAppDetail"
-            android:layout_width="25dp"
-            android:layout_height="50dp"
-            android:src="@drawable/img_splash"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+                <TextView
+                    android:id="@+id/listAppUsageCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/Text.description2"
+                    android:text="총 사용 횟수 : 4"/>
+
+                <TextView
+                    android:id="@+id/listLastUsageDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/Text.description2"
+                    android:text="마지막 사용일자 : MM월 DD일 HH:mm:ss"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/appListMiddle"
+                    app:layout_constraintEnd_toStartOf="@id/moveAppDetail"
+                    />
+
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/moveAppDetail"
+                android:layout_width="25dp"
+                android:layout_height="50dp"
+                android:src="@drawable/img_splash"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

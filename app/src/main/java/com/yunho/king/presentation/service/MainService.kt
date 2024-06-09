@@ -24,20 +24,18 @@ class MainService: Service() {
 
         showForegroundService()
 
+        Log.d(GlobalApplication.TagName, "Checking Service StartCommand")
+
+        cameraService = CameraTrackingManager(this)
+        cameraService.setCameraTracker()
     }
 
     override fun onBind(intent: Intent?): IBinder? {
-
-
         return null
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         super.onStartCommand(intent, flags, startId)
-        Log.d(GlobalApplication.TagName, "Checking Service StartCommand")
-
-        cameraService = CameraTrackingManager(this)
-        cameraService.setCameraTracker()
         return START_STICKY
     }
 

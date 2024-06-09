@@ -48,6 +48,8 @@
     <string name="perm_denied_usage_content">사용 정보 권한 설정을 하지 않으셨습니다. 어플리케이션 기능 사용에 제한이 됩니다.</string>
 
     <!--usagefragment-->
+    <string name="camera_tab">카메라 앱</string>
+    <string name="audio_tab">오디오 앱</string>
     <string name="app_list_name">앱 이름 : %1$s</string>
     <string name="app_list_count">사용 횟수 : %1$s</string>
     <string name="app_list_last_use">마지막 사용 날짜 : %1$s</string>
@@ -67,6 +69,9 @@
     <string name="perm_usage_last_date_title">마지막 사용 일자 : %1$s</string>
     <string name="btn_app_detail">앱 상세 페이지 이동</string>
 
-    <string name="state_allow"><font color="#8B0000">권한이 허용되어 있습니다.</font></string>
-    <string name="state_denied"><font color="#00FF00">권한이 허용되어 있지 않습니다.</font></string>
+    <string name="state_allow">권한이 허용되어 있습니다.</string>
+    <string name="state_denied">권한이 허용되어 있지 않습니다.</string>
+
+    <!--Util-->
+    <string name="un_known">알 수 없음</string>
 </resources>

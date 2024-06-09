@@ -5,25 +5,42 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import androidx.recyclerview.widget.RecyclerView.LayoutManager
 import com.yunho.king.Const
+import com.yunho.king.GlobalApplication
 import com.yunho.king.R
+import com.yunho.king.Status
 import com.yunho.king.Utils.Util
 import com.yunho.king.databinding.FragmentAppListBinding
 import com.yunho.king.domain.dto.AppList
+import com.yunho.king.domain.dto.AudioAppData
+import com.yunho.king.domain.dto.CameraAppData
+import com.yunho.king.presentation.ui.appdetail.AppDetailActivity
 import com.yunho.king.presentation.ui.main.MainViewModel
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
+@AndroidEntryPoint
 class AppListFragment : Fragment() {
 
     lateinit var binding: FragmentAppListBinding
     val viewModel: MainViewModel by activityViewModels()
 
     lateinit var type: String
-    var itemList: ArrayList<AppList> = ArrayList()
+    var audio: ArrayList<AppList> = ArrayList()
+    var camera: ArrayList<AppList> = ArrayList()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,68 +52,106 @@ class AppListFragment : Fragment() {
     ): View? {
 
         binding = FragmentAppListBinding.inflate(inflater)
-        setType()
-        setRecyclerView()
+        type = arguments?.getString(Const.TYPE)?: Const.TYPE_CAMERA
+        lifecycleScope.launch { setObserver() }
+
         return binding.root
     }
 
+    override fun onResume() {
+        super.onResume()
+        setType()
+    }
+
     private fun setType() {
-        type = arguments?.getString(Const.TYPE)?: Const.TYPE_CAMERA
+
+        lifecycleScope.launch {
+            withContext(Dispatchers.IO) {
+                when (type) {
+                    Const.TYPE_CAMERA -> viewModel.getCameraData()
+                    Const.TYPE_AUDIO -> viewModel.getAudioData()
+                    else -> {}
+                }
+            }
+        }
+    }
+
+    private suspend fun setObserver() {
+        when (type) {
+            Const.TYPE_CAMERA -> {
+                lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                    viewModel.cameraList.collect {
+                        makeCameraAppList(it)
+                    }
+                }
+            }
+
+            Const.TYPE_AUDIO -> {
+                lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                    viewModel.audioList.collect {
+                        makeAudioAppList(it)
+                    }
+                }
+            }
+        }
+    }
+
+    @SuppressLint("UseCompatLoadingForDrawables")
+    private fun makeCameraAppList(caList: List<CameraAppData>) {
+        camera.clear()
+        caList.forEach {
+            if (it.notiFlag) {
+                Log.d(GlobalApplication.TagName, "Camera ${it.appPackageName}")
+
+                camera.add(AppList(
+                    appName = it.appName,
+                    appIcon = Util.getAppIcon(
+                        it.appPackageName,
+                        requireContext())?: requireContext().getDrawable(R.drawable.ic_launcher_background)!!,
+                    appPackageName = it.appPackageName,
+                    permUseCount = it.permUseCount,
+                    lastUseDateTime = it.lastUseDateTime.toLong()
+                ))
+            }
+        }
+        setRecyclerView()
+    }
+
+    @SuppressLint("UseCompatLoadingForDrawables")
+    private fun makeAudioAppList(adList: List<AudioAppData>) {
+        audio.clear()
+        adList.forEach {
+            if (it.notiFlag) {
+                Log.d(GlobalApplication.TagName, "Audio ${it.appPackageName}")
+                audio.add(AppList(
+                    appName = it.appName,
+                    appIcon = Util.getAppIcon(
+                        it.appPackageName,
+                        requireContext())?: requireContext().getDrawable(R.drawable.ic_launcher_background)!!,
+                    appPackageName = it.appPackageName,
+                    permUseCount = it.permUseCount,
+                    lastUseDateTime = it.lastUseDateTime.toLong()
+                ))
+
+            }
+        }
+        setRecyclerView()
     }
 
     private fun setRecyclerView() = with(binding) {
-        when (type) {
-            Const.TYPE_CAMERA -> makeCameraAppList()
-            else -> makeAudioAppList()
-        }
 
-        binding.appList.adapter = UsageAdapter(itemList, requireContext(),
+        appList.adapter = UsageAdapter(
+            if (type == Const.TYPE_CAMERA) camera else audio,
+            requireContext(),
             object: UsageAdapterListener{
-            override fun moveToDetail(pkgName: String) {
-                startActivity(
-                    Intent(
-                        Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
-                        Uri.parse("package:${pkgName}"))) }
-        })
+                override fun moveToDetail(pkgName: String) {
+                    startActivity(Intent(requireContext(), AppDetailActivity::class.java).apply {
+                        putExtra(Const.PKG_NAME, pkgName)
+                    })
+                }
+            })
     }
 
-    @SuppressLint("UseCompatLoadingForDrawables")
-    private fun makeCameraAppList() {
-        itemList.clear()
-        viewModel.getCameraData().forEach {
-            if (it.notiFlag) {
-                itemList.add(AppList(
-                    appName = it.appName,
-                    appIcon = Util.getAppIcon(
-                        it.appPackageName,
-                        requireContext())?: requireContext().getDrawable(R.drawable.ic_launcher_background)!!,
-                    appPackageName = it.appPackageName,
-                    permUseCount = it.permUseCount,
-                    lastUseDateTime = it.lastUseDateTime.toLong()
-                ))
-            }
-        }
-
-    }
-
-    @SuppressLint("UseCompatLoadingForDrawables")
-    private fun makeAudioAppList() {
-        itemList.clear()
-        viewModel.getAudioData().forEach {
-            if (it.notiFlag) {
-                itemList.add(AppList(
-                    appName = it.appName,
-                    appIcon = Util.getAppIcon(
-                        it.appPackageName,
-                        requireContext())?: requireContext().getDrawable(R.drawable.ic_launcher_background)!!,
-                    appPackageName = it.appPackageName,
-                    permUseCount = it.permUseCount,
-                    lastUseDateTime = it.lastUseDateTime.toLong()
-                ))
-
-            }
-        }
-    }
 
     companion object {
         @JvmStatic

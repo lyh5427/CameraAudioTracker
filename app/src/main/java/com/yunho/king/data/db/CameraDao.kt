@@ -7,7 +7,7 @@ import com.yunho.king.domain.dto.CameraAppData
 
 @Dao
 interface CameraDao {
-    @Query("SELECT * FROM CameraAppData")
+    @Query("SELECT * FROM CameraAppData ORDER BY appName DESC")
     fun getAll(): List<CameraAppData>
 
     @Query("SELECT * FROM CameraAppData WHERE appPackageName = :appPackageName")

@@ -24,12 +24,11 @@ class RoomCreateModule {
         val db = Room.databaseBuilder(
             context,
             AudioDataBase::class.java,
-            "audio.db").build()
+            "ad.db").build()
 
         return db
     }
 
-    @Singleton
     @Provides
     fun providesAudioDao(audioDB: AudioDataBase): AudioDao = audioDB.db()
 
@@ -39,12 +38,11 @@ class RoomCreateModule {
         val db = Room.databaseBuilder(
             context,
             CameraDataBase::class.java,
-            "camera.db").build()
+            "ca.db").build()
 
         return db
     }
 
-    @Singleton
     @Provides
     fun provides(cameraDB: CameraDataBase): CameraDao = cameraDB.db()
 

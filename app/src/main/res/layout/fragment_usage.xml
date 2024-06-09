@@ -6,30 +6,20 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:paddingStart="20dp"
     android:paddingEnd="20dp"
+    android:background="@color/white"
     tools:context=".presentation.ui.main.fragment.usage.UsageFragment">
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/layoutTab"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/white"
         app:layout_constraintTop_toTopOf="parent">
-
-        <com.google.android.material.tabs.TabItem
-            android:id="@+id/tabCamera"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="tab1" />
-
-        <com.google.android.material.tabs.TabItem
-            android:id="@+id/tabAudio"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="tab1" />
 
     </com.google.android.material.tabs.TabLayout>
 
-    <FrameLayout
-        android:id="@+id/usageFragmentContainer"
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/usageFragViewPager"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintTop_toBottomOf="@id/layoutTab"
