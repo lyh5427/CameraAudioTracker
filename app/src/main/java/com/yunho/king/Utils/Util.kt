@@ -85,8 +85,8 @@ object Util {
     fun getDate(time: Long): String {
         val myDate = SimpleDateFormat("MM월 dd일 hh:mm:ss")
         return myDate.format(time)
-
-
     }
+
+
 
 }

@@ -2,6 +2,7 @@ package com.yunho.king.presentation.ui.intro
 
 import android.content.Intent
 import android.os.Bundle
+import android.provider.Settings
 import android.view.animation.AnimationUtils
 import androidx.activity.viewModels
 import com.yunho.king.R
@@ -24,6 +25,7 @@ class IntroActivity : BaseActivity() {
         binding = ActivityIntroBinding.inflate(layoutInflater, null, false)
 
         setSplashAnimation()
+        setContentView(binding.root)
     }
 
     override fun onResume() {

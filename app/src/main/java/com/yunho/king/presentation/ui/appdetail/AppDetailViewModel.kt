@@ -1,7 +1,8 @@
 package com.yunho.king.presentation.ui.appdetail
 
-import android.content.pm.PackageManager
+import android.util.Log
 import androidx.lifecycle.viewModelScope
+import com.yunho.king.GlobalApplication
 import com.yunho.king.Status
 import com.yunho.king.domain.di.RepositorySource
 import com.yunho.king.domain.dto.AudioAppData
@@ -54,15 +55,19 @@ class AppDetailViewModel@Inject constructor(
     var cameraData: CameraAppData? = null
     var audioAppData: AudioAppData? = null
 
-    fun getCameraAppData(pkgName: String) {
+    suspend fun getAppData(pkgName: String) {
         cameraData = repo.getCameraAppData(pkgName)
         audioAppData = repo.getAudioAppData(pkgName)
+
+        Log.d(GlobalApplication.TagName, "${pkgName}\n  ${cameraData} \n ${audioAppData}")
 
         if (cameraData != null) setCameraView()
         if (audioAppData != null) setAudioView()
     }
 
     private fun setCameraView() {
+        Log.d(GlobalApplication.TagName, "${cameraData}\n")
+
         viewModelScope.launch {
             _appName.emit(State(Status.TEXT, cameraData!!.appName))
             _downLoad.emit(State(Status.TEXT, cameraData!!.appPackageName))

@@ -19,13 +19,18 @@ class MainActivity : BaseActivity() {
     lateinit var binding: ActivityMainBinding
     private val viewModel: MainViewModel by viewModels()
 
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        binding = ActivityMainBinding.inflate(layoutInflater)
+        binding = ActivityMainBinding.inflate(layoutInflater, null, false)
         setBottomNavi()
-        startForegroundService(Intent(this, MainService::class.java))
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            startForegroundService(Intent(this, MainService::class.java))
+        } else {
+            startService(Intent(this, MainService::class.java))
+        }
+
+        setContentView(binding.root)
     }
 
     private fun setBottomNavi() = with(binding) {
@@ -49,12 +54,15 @@ class MainActivity : BaseActivity() {
                 else -> return@OnItemSelectedListener false
             }
         })
+
+        bottomNavi.selectedItemId = R.id.usage
     }
 
     private fun moveToUsage() {
-        val fragmentTransaction = supportFragmentManager.beginTransaction()
-        fragmentTransaction.replace(R.id.mainFragmentContainer, UsageFragment())
-        fragmentTransaction.commit()
+        supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.mainFragmentContainer, UsageFragment())
+            .commit()
     }
 
     private fun moveToExcept() {
