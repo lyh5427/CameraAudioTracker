@@ -8,7 +8,7 @@ import java.io.File
 class GlobalApplication: Application() {
     override fun onCreate() {
         super.onCreate()
-
+            prefs = Prefs(this)
 //        val dexOutputDir: File = codeCacheDir
 //        dexOutputDir.setReadOnly()
     }

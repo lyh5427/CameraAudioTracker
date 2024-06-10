@@ -17,6 +17,7 @@ import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.provider.Settings
+import android.provider.Settings.Global
 import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -35,6 +36,12 @@ import com.yunho.king.Utils.toGone
 import com.yunho.king.Utils.toVisible
 import com.yunho.king.databinding.PopupSuspicionBinding
 import com.yunho.king.domain.di.RepositorySource
+import com.yunho.king.domain.dto.CameraAppData
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.util.Calendar
 import javax.inject.Inject
 
@@ -74,7 +81,9 @@ class CameraTrackingManager(context: Context) {
 
             override fun onCameraUnavailable(cameraId: String) { // 카메라 사용이 불가능 할 때!
                 super.onCameraUnavailable(cameraId)
-                getRecentlyCameraUserPackage()
+                if (GlobalApplication.prefs!!.appAlim) {
+                    getRecentlyCameraUserPackage()
+                }
             }
 
         }, Handler(Looper.getMainLooper()))
@@ -89,6 +98,7 @@ class CameraTrackingManager(context: Context) {
         var lastTime = 0L
         for (pkg in lastUsagePackageList) {
             if (pkg.lastTimeUsed > lastTime) {
+                Log.d(GlobalApplication.TagName, "Camera ${pkg.lastTimeUsed}  ${pkg.packageName}")
                 lastTime = pkg.lastTimeUsed
                 packageName = pkg.packageName
             }
@@ -97,15 +107,25 @@ class CameraTrackingManager(context: Context) {
     }
 
     fun setAppInfo() {
-        appInfo = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            packageManager.getApplicationInfo(packageName, PackageManager.ApplicationInfoFlags.of(0))
-        } else {
-            packageManager.getApplicationInfo(packageName, PackageManager.GET_META_DATA)
+        try {
+            appInfo = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                packageManager.getApplicationInfo(packageName, PackageManager.ApplicationInfoFlags.of(0))
+            } else {
+                packageManager.getApplicationInfo(packageName, PackageManager.GET_META_DATA)
+            }
+
+            getAppName()
+            getAppIcon()
+
+            val appData = repo.getCameraAppData(packageName)
+            if (appData.notiFlag) {
+                setSuspicionPopup()
+                updateAppData(appData)
+            }
+        } catch (e: Exception) {
+            Log.d(GlobalApplication.TagName, e.message?: "")
         }
 
-        getAppName()
-        getAppIcon()
-        setSuspicionPopup()
     }
 
     fun getAppName() {
@@ -151,7 +171,17 @@ class CameraTrackingManager(context: Context) {
     }
 
     fun setListener() = with(popupSuspicionBinding) {
+        cameraAlimCheckBox.singleClickListener {
+            cameraAlimCheckBox.isChecked = !cameraAlimCheckBox.isChecked
+        }
+
+        appAlimCheckBox.singleClickListener {
+            appAlimCheckBox.isChecked = !appAlimCheckBox.isChecked
+        }
+
         cancel.singleClickListener {
+            setAlimOption(cameraAlimCheckBox.isChecked)
+            setAppAlim(appAlimCheckBox.isChecked)
             closeCamera()
             root.toGone()
 
@@ -164,6 +194,18 @@ class CameraTrackingManager(context: Context) {
                     Uri.parse("package:${packageName}"))
             )
         }
+    }
+
+    private fun setAlimOption(isChecked: Boolean) {
+        if (isChecked) {
+            CoroutineScope(Dispatchers.IO).launch {
+                repo.updateNotiFlag(packageName, false)
+            }
+        }
+    }
+
+    private fun setAppAlim(isChecked: Boolean) {
+        GlobalApplication.prefs!!.appAlim = !isChecked
     }
 
     private fun openCamera2() {
@@ -188,6 +230,15 @@ class CameraTrackingManager(context: Context) {
         } catch (e: Exception) {
             Log.d(GlobalApplication.TagName, "${e.message}")
         }
+    }
+
+    private fun updateAppData(data: CameraAppData) {
+        CoroutineScope(Dispatchers.IO).launch {
+            repo.updateCameraAppPermUseCount(packageName, data.permUseCount + 1)
+            repo.updateLastUseDate(packageName, System.currentTimeMillis())
+        }
+
+
     }
 
 }

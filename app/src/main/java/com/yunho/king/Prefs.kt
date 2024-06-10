@@ -13,4 +13,8 @@ class Prefs (context : Context) {
     var firstOpenApp: Boolean
         get() = prefs.getBoolean("firstPermissionCheck", true)
         set(value) = prefs.edit().putBoolean("firstPermissionCheck", value).apply()
+
+    var appAlim: Boolean
+        get() = prefs.getBoolean("appAlim", true)
+        set(value) = prefs.edit().putBoolean("appAlim", value).apply()
 }

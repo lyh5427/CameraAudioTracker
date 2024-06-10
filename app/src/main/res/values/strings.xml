@@ -8,6 +8,8 @@
 
     <!--Service-->
     <string name="service_is_running">CADefender가 동작중입니다.</string>
+    <string name="now_app_alim_off">현재 앱 알림 끄기</string>
+    <string name="today_off_alim">오늘 하루 알림 끄기</string>
 
     <!--Base-->
     <string name="not_fount_app_name">앱 이름 추출 불가</string>

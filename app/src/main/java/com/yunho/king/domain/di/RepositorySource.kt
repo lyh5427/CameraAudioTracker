@@ -13,6 +13,8 @@ interface RepositorySource {
     fun deleteCameraApp(pkgName: String)
     fun updateCameraAppPermUseCount(pkgName: String, count: Int)
     fun existCameraApp(pkgName: String): Boolean
+    fun updateLastUseDate(pkgName: String, lastUse: Long)
+    fun updateNotiFlag(pkgName: String, notiFlag: Boolean)
     fun insertCameraApp(data: CameraAppData)
     fun deleteAllCamera()
 
