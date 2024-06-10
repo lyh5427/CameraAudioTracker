@@ -67,13 +67,55 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            style="@style/Text.description5"
+            style="@style/Text.description4"
             android:text="@string/suspocion_content"
             app:layout_constraintStart_toEndOf="@id/cameraPreview"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layoutOption"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        app:layout_constraintTop_toBottomOf="@id/layoutCamera"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <CheckBox
+                android:id="@+id/cameraAlimCheckBox"
+                android:layout_width="30dp"
+                android:layout_height="30dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/Text.description3"
+                android:text="@string/now_app_alim_off"/>
+
+            <CheckBox
+                android:id="@+id/appAlimCheckBox"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/Text.description3"
+                android:text="@string/today_off_alim"/>
+
+        </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -89,7 +131,7 @@
         android:layout_marginEnd="10dp"
         style="@style/Text.description3"
         android:textColor="@drawable/text_color_cancel"
-        app:layout_constraintTop_toBottomOf="@id/layoutCamera"
+        app:layout_constraintTop_toBottomOf="@id/layoutOption"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/btnPopupOk"/>
 
@@ -106,7 +148,7 @@
         android:minWidth="0dp"
         android:textColor="@color/white"
         style="@style/Text.description3"
-        app:layout_constraintTop_toBottomOf="@id/layoutCamera"
+        app:layout_constraintTop_toBottomOf="@id/layoutOption"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/cancel"/>
     

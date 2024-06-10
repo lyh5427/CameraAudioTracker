@@ -101,8 +101,6 @@ class AppListFragment : Fragment() {
         camera.clear()
         caList.forEach {
             if (it.notiFlag) {
-                Log.d(GlobalApplication.TagName, "Camera ${it.appPackageName}")
-
                 camera.add(AppList(
                     appName = it.appName,
                     appIcon = Util.getAppIcon(
@@ -122,7 +120,6 @@ class AppListFragment : Fragment() {
         audio.clear()
         adList.forEach {
             if (it.notiFlag) {
-                Log.d(GlobalApplication.TagName, "Audio ${it.appPackageName}")
                 audio.add(AppList(
                     appName = it.appName,
                     appIcon = Util.getAppIcon(

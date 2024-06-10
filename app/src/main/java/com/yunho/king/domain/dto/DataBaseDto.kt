@@ -11,7 +11,7 @@ data class CameraAppData(
     var appName: String = "",
     var permUseCount: Int = 0,
     var notiFlag: Boolean = true,
-    var lastUseDateTime: Int = 0,
+    var lastUseDateTime: Long = 0,
     var permState: Boolean
 )
 
@@ -22,7 +22,7 @@ data class AudioAppData(
     var appName: String = "",
     var permUseCount: Int = 0,
     var notiFlag: Boolean = true,
-    var lastUseDateTime: Int = 0,
+    var lastUseDateTime: Long = 0,
     var permState: Boolean
 )
 

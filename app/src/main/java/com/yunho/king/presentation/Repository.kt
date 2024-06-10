@@ -44,6 +44,14 @@ class Repository @Inject constructor(
         return caDb.isExistAppData(pkgName) != null
     }
 
+    override fun updateLastUseDate(pkgName: String, lastUse: Long) {
+        caDb.updateLastUseDate(pkgName, lastUse)
+    }
+
+    override fun updateNotiFlag(pkgName: String, notiFlag: Boolean) {
+        caDb.updateNotiFlag(pkgName, notiFlag)
+    }
+
     override fun insertCameraApp(data: CameraAppData) {
         caDb.insert(data)
     }
