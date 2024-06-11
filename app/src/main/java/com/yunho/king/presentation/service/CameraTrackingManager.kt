@@ -1,34 +1,29 @@
 package com.yunho.king.presentation.service
 
-import android.app.usage.UsageStats
+import android.app.Service
 import android.app.usage.UsageStatsManager
 import android.content.Context
 import android.content.Intent
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
-import android.graphics.Bitmap
 import android.graphics.PixelFormat
 import android.graphics.drawable.Drawable
-import android.hardware.camera2.CameraAccessException
-import android.hardware.camera2.CameraDevice
 import android.hardware.camera2.CameraManager
 import android.net.Uri
 import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.provider.Settings
-import android.provider.Settings.Global
 import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
-import android.view.PointerIcon
-import android.view.Window
 import android.view.WindowManager
-import androidx.camera.core.CameraProvider
+import androidx.camera.core.CameraSelector
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
-import androidx.core.content.getSystemService
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleOwner
 import com.google.common.util.concurrent.ListenableFuture
 import com.yunho.king.GlobalApplication
 import com.yunho.king.Utils.singleClickListener
@@ -39,15 +34,16 @@ import com.yunho.king.domain.di.RepositorySource
 import com.yunho.king.domain.dto.CameraAppData
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.Calendar
 import javax.inject.Inject
+import javax.inject.Singleton
 
-class CameraTrackingManager(context: Context) {
-
-    @Inject lateinit var repo: RepositorySource
+@Singleton
+class CameraTrackingManager @Inject constructor(
+    context: Context,
+    private val repo: RepositorySource) {
 
     var mContext: Context = context
 
@@ -62,6 +58,7 @@ class CameraTrackingManager(context: Context) {
     lateinit var appName: String
     lateinit var appIcon: Drawable
     lateinit var appInfo: ApplicationInfo
+    lateinit var cameraId: String
 
     fun setCameraTracker() {
         cameraProviderFuture = ProcessCameraProvider.getInstance(mContext)
@@ -81,11 +78,12 @@ class CameraTrackingManager(context: Context) {
 
             override fun onCameraUnavailable(cameraId: String) { // 카메라 사용이 불가능 할 때!
                 super.onCameraUnavailable(cameraId)
-                if (GlobalApplication.prefs!!.appAlim) {
-                    getRecentlyCameraUserPackage()
-                }
+                this@CameraTrackingManager.cameraId = cameraId
+//                if (GlobalApplication.prefs!!.appAlim) {
+//                    getRecentlyCameraUserPackage()
+//                    setAppInfo()
+//                }
             }
-
         }, Handler(Looper.getMainLooper()))
     }
 
@@ -100,43 +98,50 @@ class CameraTrackingManager(context: Context) {
             if (pkg.lastTimeUsed > lastTime) {
                 Log.d(GlobalApplication.TagName, "Camera ${pkg.lastTimeUsed}  ${pkg.packageName}")
                 lastTime = pkg.lastTimeUsed
-                packageName = pkg.packageName
+                this.packageName = pkg.packageName
             }
         }
-        setAppInfo()
     }
 
-    fun setAppInfo() {
-        try {
-            appInfo = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                packageManager.getApplicationInfo(packageName, PackageManager.ApplicationInfoFlags.of(0))
-            } else {
-                packageManager.getApplicationInfo(packageName, PackageManager.GET_META_DATA)
-            }
+    private fun setAppInfo() {
+        CoroutineScope(Dispatchers.IO).launch {
+
+            appInfo = packageManager.getApplicationInfo(packageName, PackageManager.GET_META_DATA)
 
             getAppName()
             getAppIcon()
 
-            val appData = repo.getCameraAppData(packageName)
-            if (appData.notiFlag) {
-                setSuspicionPopup()
-                updateAppData(appData)
-            }
-        } catch (e: Exception) {
-            Log.d(GlobalApplication.TagName, e.message?: "")
-        }
+            repo.getCameraAppData(packageName)
 
+            val appData = repo.getCameraAppData(packageName)
+
+            withContext(Dispatchers.Main) {
+                if (appData.notiFlag) {
+                    makeSuspicionPopup()
+                    updateAppData(appData)
+                }
+                try {
+
+                } catch (e: Exception) {
+                    Log.d(GlobalApplication.TagName, e.message?: "")
+                }
+            }
+        }
     }
 
     fun getAppName() {
-        appName = packageManager.getApplicationLabel(appInfo).toString()
+        appName = try {
+            packageManager.getApplicationLabel(appInfo).toString()
+        } catch (e: Exception) {
+            appInfo.name
+        }
     }
 
     fun getAppIcon() {
         appIcon = packageManager.getApplicationIcon(appInfo)
     }
 
-    fun setSuspicionPopup() {
+    fun makeSuspicionPopup() {
         if (!::popupSuspicionBinding.isInitialized) {
             popupSuspicionBinding = PopupSuspicionBinding.inflate(
                 LayoutInflater.from(mContext),
@@ -166,7 +171,14 @@ class CameraTrackingManager(context: Context) {
             val windowManager = mContext.getSystemService(Context.WINDOW_SERVICE) as WindowManager
             windowManager.addView(popupSuspicionBinding.root, params)
         }
-        popupSuspicionBinding.root.toVisible()
+
+        setSuspicionPopup()
+    }
+    fun setSuspicionPopup() = with(popupSuspicionBinding) {
+        appImg.setImageDrawable(appIcon)
+        appName.text = this@CameraTrackingManager.appName
+
+        root.toVisible()
         openCamera2()
     }
 
@@ -217,10 +229,19 @@ class CameraTrackingManager(context: Context) {
                         .build()
 
                     preview.setSurfaceProvider(popupSuspicionBinding.cameraPreview.surfaceProvider)
+
+                    val cameraSelector = CameraSelector.DEFAULT_FRONT_CAMERA
+
+                    try {
+                        cameraProvider.unbindAll()
+                        cameraProvider.bindToLifecycle((mContext as MainService), cameraSelector, preview)
+                    } catch (e: Exception) {
+
+                    }
                 },
                 ContextCompat.getMainExecutor(mContext))
         } catch (e: Exception) {
-            Log.d(GlobalApplication.TagName, "${e.message}")
+            Log.d(GlobalApplication.TagName, "aaa ${e.message}")
         }
     }
 
@@ -237,8 +258,5 @@ class CameraTrackingManager(context: Context) {
             repo.updateCameraAppPermUseCount(packageName, data.permUseCount + 1)
             repo.updateLastUseDate(packageName, System.currentTimeMillis())
         }
-
-
     }
-
 }

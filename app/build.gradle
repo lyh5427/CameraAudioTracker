@@ -112,7 +112,9 @@ dependencies {
     implementation "androidx.camera:camera-extensions:1.3.3"
 
     // ViewPager
-
     implementation "androidx.viewpager2:viewpager2:1.0.0"
+
+    // LifecycleService
+    implementation "androidx.lifecycle:lifecycle-service:2.7.0"
 
 }

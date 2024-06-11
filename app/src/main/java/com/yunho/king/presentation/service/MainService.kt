@@ -9,12 +9,18 @@ import android.os.Build
 import android.os.IBinder
 import android.util.Log
 import androidx.core.app.NotificationCompat
+import androidx.lifecycle.LifecycleService
 import com.yunho.king.Const
 import com.yunho.king.GlobalApplication
 import com.yunho.king.R
+import com.yunho.king.domain.di.RepositorySource
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
-class MainService: Service() {
+@AndroidEntryPoint
+class MainService: LifecycleService() {
 
+    @Inject lateinit var repo: RepositorySource
     lateinit var cameraService: CameraTrackingManager
     lateinit var channel: NotificationChannel
 
@@ -26,12 +32,8 @@ class MainService: Service() {
 
         Log.d(GlobalApplication.TagName, "Checking Service StartCommand")
 
-        cameraService = CameraTrackingManager(this)
+        cameraService = CameraTrackingManager(this, repo)
         cameraService.setCameraTracker()
-    }
-
-    override fun onBind(intent: Intent?): IBinder? {
-        return null
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
