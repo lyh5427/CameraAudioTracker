@@ -25,6 +25,7 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import com.google.common.util.concurrent.ListenableFuture
+import com.yunho.king.Const
 import com.yunho.king.GlobalApplication
 import com.yunho.king.Utils.singleClickListener
 import com.yunho.king.Utils.toGone
@@ -32,6 +33,7 @@ import com.yunho.king.Utils.toVisible
 import com.yunho.king.databinding.PopupSuspicionBinding
 import com.yunho.king.domain.di.RepositorySource
 import com.yunho.king.domain.dto.CameraAppData
+import com.yunho.king.presentation.ui.cameraintercept.CameraInterceptActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -79,10 +81,10 @@ class CameraTrackingManager @Inject constructor(
             override fun onCameraUnavailable(cameraId: String) { // 카메라 사용이 불가능 할 때!
                 super.onCameraUnavailable(cameraId)
                 this@CameraTrackingManager.cameraId = cameraId
-//                if (GlobalApplication.prefs!!.appAlim) {
-//                    getRecentlyCameraUserPackage()
-//                    setAppInfo()
-//                }
+                if (GlobalApplication.prefs!!.appAlim) {
+                    getRecentlyCameraUserPackage()
+                    setAppInfo()
+                }
             }
         }, Handler(Looper.getMainLooper()))
     }
@@ -101,11 +103,19 @@ class CameraTrackingManager @Inject constructor(
                 this.packageName = pkg.packageName
             }
         }
+
+        if (packageName != mContext.packageName) {
+            mContext.startActivity(
+                Intent(mContext, CameraInterceptActivity::class.java).apply {
+                    putExtra(Const.PKG_NAME, packageName)
+                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                }
+            )
+        }
     }
 
     private fun setAppInfo() {
         CoroutineScope(Dispatchers.IO).launch {
-
             appInfo = packageManager.getApplicationInfo(packageName, PackageManager.GET_META_DATA)
 
             getAppName()
@@ -116,12 +126,11 @@ class CameraTrackingManager @Inject constructor(
             val appData = repo.getCameraAppData(packageName)
 
             withContext(Dispatchers.Main) {
-                if (appData.notiFlag) {
-                    makeSuspicionPopup()
-                    updateAppData(appData)
-                }
                 try {
-
+                    if (appData.notiFlag) {
+                        makeSuspicionPopup()
+                        updateAppData(appData)
+                    }
                 } catch (e: Exception) {
                     Log.d(GlobalApplication.TagName, e.message?: "")
                 }
