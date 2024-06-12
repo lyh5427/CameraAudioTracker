@@ -14,6 +14,7 @@ import android.os.Looper
 import android.provider.Settings
 import android.util.Log
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.Preview
@@ -41,7 +42,7 @@ import kotlinx.coroutines.withContext
 class CameraInterceptActivity : AppCompatActivity() {
 
     lateinit var binding: ActivityCameraInterceptBinding
-
+    val viewModel: CameraInterceptViewModel by viewModels()
 
     lateinit var cameraManager: CameraManager
     lateinit var cameraIds: Array<String>
@@ -60,10 +61,10 @@ class CameraInterceptActivity : AppCompatActivity() {
         binding = ActivityCameraInterceptBinding.inflate(layoutInflater)
 
         cameraProviderFuture = ProcessCameraProvider.getInstance(this)
-        cameraManager = getSystemService(Context.CAMERA_SERVICE) as CameraManager
-        stateManager = getSystemService(Context.USAGE_STATS_SERVICE) as UsageStatsManager
 
-        packageName = intent.getStringExtra(Const.PKG_NAME)?: ""
+        viewModel.packageName = intent.getStringExtra(Const.PKG_NAME)?: ""
+        viewModel.getCameraAppData()
+        viewModel.setAppInfo(packageManager)
 
         cameraIds = cameraManager.cameraIdList
         setListener()
