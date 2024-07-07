@@ -44,6 +44,7 @@ class CameraInterceptActivity : AppCompatActivity() {
     lateinit var binding: ActivityCameraInterceptBinding
     val viewModel: CameraInterceptViewModel by viewModels()
 
+
     lateinit var cameraManager: CameraManager
     lateinit var cameraIds: Array<String>
     lateinit var cameraProviderFuture: ListenableFuture<ProcessCameraProvider>
@@ -77,6 +78,10 @@ class CameraInterceptActivity : AppCompatActivity() {
         openCamera2()
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+    }
+
     fun setListener() = with(binding) {
         cameraAlimCheckBox.singleClickListener {
             cameraAlimCheckBox.isChecked = !cameraAlimCheckBox.isChecked
@@ -88,20 +93,19 @@ class CameraInterceptActivity : AppCompatActivity() {
 
         cancel.singleClickListener {
 //            setAlimOption(cameraAlimCheckBox.isChecked)
-//            setAppAlim(appAlimCheckBox.isChecked)
-//            closeCamera()
-            root.toGone()
+            setAppAlim(appAlimCheckBox.isChecked)
+            closeCamera()
         }
 
         btnPopupOk.singleClickListener {
             startActivity(
                 Intent(
-                    android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
-                    android.net.Uri.parse("package:${packageName}"))
+                    Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                    Uri.parse("package:${packageName}"))
             )
+            closeCamera()
         }
     }
-
 
     private fun setAppInfo() {
         CoroutineScope(Dispatchers.IO).launch {
@@ -110,14 +114,14 @@ class CameraInterceptActivity : AppCompatActivity() {
             getAppName()
             getAppIcon()
 
-            repo.getCameraAppData(packageName)
 
-            val appData = repo.getCameraAppData(packageName)
+            viewModel.getCameraAppData()
+
 
             withContext(Dispatchers.Main) {
                 try {
-                    if (appData.notiFlag) {
-                        updateAppData(appData)
+                    if (viewModel.appData.notiFlag) {
+                        updateAppData()
                     }
                 } catch (e: Exception) {
                     Log.d(GlobalApplication.TagName, e.message?: "")
@@ -125,7 +129,6 @@ class CameraInterceptActivity : AppCompatActivity() {
             }
         }
     }
-
 
     fun getAppName() {
         appName = try {
@@ -170,14 +173,20 @@ class CameraInterceptActivity : AppCompatActivity() {
         } catch (e: Exception) {
             Log.d(GlobalApplication.TagName, "${e.message}")
         }
+
+        finish()
     }
 
-
-    private fun updateAppData(data: CameraAppData) {
+    private fun updateAppData() {
         CoroutineScope(Dispatchers.IO).launch {
-            repo.updateCameraAppPermUseCount(packageName, data.permUseCount + 1)
-            repo.updateLastUseDate(packageName, System.currentTimeMillis())
+            viewModel.updateUseCount()
+            viewModel.updateUseDate()
         }
     }
 
+    private fun setAppAlim(alimFlag: Boolean) {
+        if (alimFlag) {
+            GlobalApplication.prefs!!.appAlim = false
+        }
+    }
 }

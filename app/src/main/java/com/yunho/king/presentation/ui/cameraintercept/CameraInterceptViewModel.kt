@@ -63,7 +63,6 @@ class CameraInterceptViewModel @Inject constructor(
         }
     }
 
-
     suspend fun getAppName(pm: PackageManager) {
         _appName.emit(State(Status.TEXT, pm.getApplicationLabel(appInfo).toString()?: ""))
     }
@@ -71,6 +70,4 @@ class CameraInterceptViewModel @Inject constructor(
     suspend fun getAppIcon(pm: PackageManager) {
         _appIcon.emit(pm.getApplicationIcon(appInfo))
     }
-
-
 }
