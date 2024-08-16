@@ -46,10 +46,12 @@
             android:exported="false" />
         <activity
             android:name=".presentation.ui.perm.PermActivity"
-            android:exported="false"></activity>
+            android:exported="false"/>
+
         <activity
             android:name=".presentation.ui.base.BaseActivity"
-            android:exported="true"></activity>
+            android:exported="true"/>
+
         <activity
             android:name=".presentation.ui.intro.IntroActivity"
             android:exported="true">
@@ -59,6 +61,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".presentation.ui.main.MainActivity"
             android:exported="true">
