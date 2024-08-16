@@ -9,29 +9,19 @@ import android.graphics.drawable.Drawable
 import android.hardware.camera2.CameraManager
 import android.net.Uri
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.provider.Settings
 import android.util.Log
-import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import com.google.common.util.concurrent.ListenableFuture
 import com.yunho.king.Const
 import com.yunho.king.GlobalApplication
-import com.yunho.king.R
 import com.yunho.king.Utils.singleClickListener
-import com.yunho.king.Utils.toGone
 import com.yunho.king.databinding.ActivityCameraInterceptBinding
-import com.yunho.king.databinding.PopupSuspicionBinding
-import com.yunho.king.domain.dto.CameraAppData
-import com.yunho.king.presentation.service.MainService
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -50,7 +40,6 @@ class CameraInterceptActivity : AppCompatActivity() {
     lateinit var cameraProviderFuture: ListenableFuture<ProcessCameraProvider>
     lateinit var cameraProvider: ProcessCameraProvider
     lateinit var stateManager: UsageStatsManager
-    lateinit var packageName: String
     lateinit var appName: String
     lateinit var appIcon: Drawable
     lateinit var appInfo: ApplicationInfo
@@ -101,7 +90,7 @@ class CameraInterceptActivity : AppCompatActivity() {
             startActivity(
                 Intent(
                     Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
-                    Uri.parse("package:${packageName}"))
+                    Uri.parse("package:${viewModel.packageName}"))
             )
             closeCamera()
         }
@@ -109,7 +98,7 @@ class CameraInterceptActivity : AppCompatActivity() {
 
     private fun setAppInfo() {
         CoroutineScope(Dispatchers.IO).launch {
-            appInfo = packageManager.getApplicationInfo(packageName, PackageManager.GET_META_DATA)
+            appInfo = packageManager.getApplicationInfo(viewModel.packageName, PackageManager.GET_META_DATA)
 
             getAppName()
             getAppIcon()
