@@ -40,7 +40,7 @@ class Repository @Inject constructor(
         caDb.updatePermUseCount(pkgName, count)
     }
 
-    override fun existCameraApp(pkgName: String): Boolean {
+    override suspend fun existCameraApp(pkgName: String): Boolean {
         return caDb.isExistAppData(pkgName) != null
     }
 
@@ -52,7 +52,7 @@ class Repository @Inject constructor(
         caDb.updateNotiFlag(pkgName, notiFlag)
     }
 
-    override fun insertCameraApp(data: CameraAppData) {
+    override suspend fun insertCameraApp(data: CameraAppData) {
         caDb.insert(data)
     }
 
@@ -78,11 +78,11 @@ class Repository @Inject constructor(
         adDb.updatePermUseCount(pkgName, count)
     }
 
-    override fun existAudioApp(pkgName: String): Boolean {
+    override suspend fun existAudioApp(pkgName: String): Boolean {
         return adDb.isExistAppData(pkgName) != null
     }
 
-    override fun insertAudioApp(data: AudioAppData) {
+    override suspend fun insertAudioApp(data: AudioAppData) {
         adDb.insert(data)
     }
 

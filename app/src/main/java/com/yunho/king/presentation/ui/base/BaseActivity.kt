@@ -139,9 +139,9 @@ open class BaseActivity : AppCompatActivity() {
     fun insertCameraPackage() {
         val list = getCameraAppList(getAllPackage())
 
-        if (list.isNotEmpty()) {
-            for (packageName in list) {
-                CoroutineScope(Dispatchers.IO).launch {
+        CoroutineScope(Dispatchers.IO).launch {
+            if (list.isNotEmpty()) {
+                for (packageName in list) {
                     if (!baseViewModel.isExistCameraApp(packageName)) {
                         val appData = CameraAppData(
                             appPackageName = packageName,
@@ -150,6 +150,7 @@ open class BaseActivity : AppCompatActivity() {
                         )
                         baseViewModel.insertCameraApp(appData)
                     }
+
                 }
             }
         }
@@ -157,10 +158,9 @@ open class BaseActivity : AppCompatActivity() {
 
     fun insertAudioPackage() {
         val list = getAudioAppList(getAllPackage())
-
-        if (list.isNotEmpty()) {
-            for (packageName in list) {
-                CoroutineScope(Dispatchers.IO).launch {
+        CoroutineScope(Dispatchers.IO).launch {
+            if (list.isNotEmpty()) {
+                for (packageName in list) {
                     if (!baseViewModel.isExistAudioApp(packageName)) {
                         val appData = AudioAppData(
                             appPackageName = packageName,
@@ -169,6 +169,7 @@ open class BaseActivity : AppCompatActivity() {
                         )
                         baseViewModel.insertAudioApp(appData)
                     }
+
                 }
             }
         }

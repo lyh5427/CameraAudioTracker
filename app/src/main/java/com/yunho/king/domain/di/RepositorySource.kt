@@ -12,10 +12,10 @@ interface RepositorySource {
     fun getCameraAppPermUseCount(pkgName: String): Int
     fun deleteCameraApp(pkgName: String)
     fun updateCameraAppPermUseCount(pkgName: String, count: Int)
-    fun existCameraApp(pkgName: String): Boolean
+    suspend fun existCameraApp(pkgName: String): Boolean
     fun updateLastUseDate(pkgName: String, lastUse: Long)
     fun updateNotiFlag(pkgName: String, notiFlag: Boolean)
-    fun insertCameraApp(data: CameraAppData)
+    suspend fun insertCameraApp(data: CameraAppData)
     fun deleteAllCamera()
 
     // Audio DB
@@ -24,7 +24,7 @@ interface RepositorySource {
     fun getAudioAppPermUseCount(pkgName: String): Int
     fun deleteAudioApp(pkgName: String)
     fun updateAudioAppPermUseCount(pkgName: String, count: Int)
-    fun existAudioApp(pkgName: String): Boolean
-    fun insertAudioApp(data: AudioAppData)
+    suspend fun existAudioApp(pkgName: String): Boolean
+    suspend fun insertAudioApp(data: AudioAppData)
     fun deleteAllAudio()
 }

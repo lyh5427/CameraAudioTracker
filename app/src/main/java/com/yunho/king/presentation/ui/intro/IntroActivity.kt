@@ -2,6 +2,8 @@ package com.yunho.king.presentation.ui.intro
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.provider.Settings
 import android.view.animation.AnimationUtils
 import androidx.activity.viewModels
@@ -12,6 +14,7 @@ import com.yunho.king.presentation.ui.base.BaseActivity
 import com.yunho.king.presentation.ui.main.MainActivity
 import com.yunho.king.presentation.ui.perm.PermActivity
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
 
 @AndroidEntryPoint
 class IntroActivity : BaseActivity() {
@@ -23,9 +26,10 @@ class IntroActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityIntroBinding.inflate(layoutInflater, null, false)
+        setContentView(binding.root)
 
         setSplashAnimation()
-        setContentView(binding.root)
+
     }
 
     override fun onResume() {
@@ -56,10 +60,12 @@ class IntroActivity : BaseActivity() {
     }
 
     private fun navigateToMain() {
-        startActivity(
-            Intent(this, MainActivity::class.java).apply {
-                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
-            }
-        )
+        Handler(Looper.getMainLooper()).postDelayed({
+            startActivity(
+                Intent(this, MainActivity::class.java).apply {
+                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                }
+            )
+        }, 3000)
     }
 }

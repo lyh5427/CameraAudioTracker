@@ -35,8 +35,10 @@ class MainActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         binding = ActivityMainBinding.inflate(layoutInflater, null, false)
+
+        setContentView(binding.root)
+
         setBottomNavi()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             startForegroundService(Intent(this, MainService::class.java))
@@ -44,7 +46,6 @@ class MainActivity : BaseActivity() {
             startService(Intent(this, MainService::class.java))
         }
 
-        setContentView(binding.root)
     }
 
     private fun setBottomNavi() = with(binding) {
