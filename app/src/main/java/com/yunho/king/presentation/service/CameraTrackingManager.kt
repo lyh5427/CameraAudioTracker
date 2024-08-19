@@ -22,8 +22,6 @@ import androidx.camera.core.CameraSelector
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleOwner
 import com.google.common.util.concurrent.ListenableFuture
 import com.yunho.king.Const
 import com.yunho.king.GlobalApplication
@@ -128,7 +126,6 @@ class CameraTrackingManager @Inject constructor(
             withContext(Dispatchers.Main) {
                 try {
                     if (appData.notiFlag) {
-                        makeSuspicionPopup()
                         updateAppData(appData)
                     }
                 } catch (e: Exception) {

@@ -38,6 +38,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.King"
         tools:targetApi="33">
+
         <activity
             android:name=".presentation.ui.cameraintercept.CameraInterceptActivity"
             android:exported="false" />
