@@ -19,7 +19,8 @@ class UsageAdapter(
     lateinit var binding: RecyclerAppListBinding
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImageViewHolder {
-        binding = RecyclerAppListBinding.inflate(LayoutInflater.from(parent.context))
+        val inflater = LayoutInflater.from(parent.context)
+        binding = RecyclerAppListBinding.inflate(inflater, parent, false)
 
         return ImageViewHolder(binding)
     }
