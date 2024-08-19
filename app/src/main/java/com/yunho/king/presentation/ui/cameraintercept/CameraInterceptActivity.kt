@@ -49,6 +49,9 @@ class CameraInterceptActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         binding = ActivityCameraInterceptBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        cameraManager = getSystemService(Context.CAMERA_SERVICE) as CameraManager
 
         cameraProviderFuture = ProcessCameraProvider.getInstance(this)
 
@@ -58,7 +61,6 @@ class CameraInterceptActivity : AppCompatActivity() {
 
         cameraIds = cameraManager.cameraIdList
         setListener()
-        setContentView(binding.root)
 
     }
 
