@@ -39,7 +39,6 @@ class UsageFragment : Fragment() {
     ): View? {
         binding = FragmentUsageBinding.inflate(inflater, container, false)
 
-
         fragCamera = AppListFragment.newInstance(Const.TYPE_CAMERA)
         fragAudio = AppListFragment.newInstance(Const.TYPE_AUDIO)
 
