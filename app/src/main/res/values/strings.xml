@@ -1,6 +1,12 @@
 <resources>
     <string name="app_name">CADefender</string>
 
+    <!--Secret String-->
+    <string name="admob_id">ca-app-pub-7304776672885578~4887867420</string>
+    <string name="admob_unit_id_main_banner_test">ca-app-pub-7304776672885578/2497038616</string>
+    <string name="admob_unit_id_main_banner">ca-app-pub-7304776672885578/2497038616</string>
+
+
     <!--Bottom Navi-->
     <string name="navi_usages">사용 정보</string>
     <string name="navi_except">제외 목록</string>

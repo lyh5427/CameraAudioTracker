@@ -66,9 +66,18 @@
             android:layout_height="wrap_content"
             android:id="@+id/bottomNavi"
             app:menu="@menu/main_navi"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/admobView"
             app:itemIconTint="@color/color_navi"
             app:itemTextColor="@color/color_navi"/>
+
+        <com.google.android.gms.ads.AdView
+            xmlns:ads="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/admobView"
+            ads:adSize="BANNER"
+            ads:adUnitId="@string/admob_unit_id_main_banner_test"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
