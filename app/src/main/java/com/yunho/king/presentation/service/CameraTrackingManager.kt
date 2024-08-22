@@ -49,15 +49,11 @@ class CameraTrackingManager @Inject constructor(
 
     lateinit var cameraManager: CameraManager
     lateinit var cameraIds: Array<String>
-    lateinit var popupSuspicionBinding: PopupSuspicionBinding
     lateinit var cameraProviderFuture: ListenableFuture<ProcessCameraProvider>
-    lateinit var cameraProvider: ProcessCameraProvider
     lateinit var stateManager: UsageStatsManager
     lateinit var packageManager: PackageManager
     lateinit var packageName: String
     lateinit var appName: String
-    lateinit var appIcon: Drawable
-    lateinit var appInfo: ApplicationInfo
     lateinit var cameraId: String
 
     fun setCameraTracker() {
@@ -78,31 +74,38 @@ class CameraTrackingManager @Inject constructor(
 
             override fun onCameraUnavailable(cameraId: String) { // 카메라 사용이 불가능 할 때!
                 super.onCameraUnavailable(cameraId)
+
+                Log.i(GlobalApplication.TagName, "this????")
+
                 this@CameraTrackingManager.cameraId = cameraId
-                if (GlobalApplication.prefs!!.appAlim) {
+                if (GlobalApplication.prefs!!.appAlim && !CameraInterceptActivity.isRunning) {
                     getRecentlyCameraUserPackage()
-                    setAppInfo()
                 }
             }
         }, Handler(Looper.getMainLooper()))
     }
 
     fun getRecentlyCameraUserPackage() {
+        var lastTime = 0L
         val cal = Calendar.getInstance()
         cal.add(Calendar.SECOND, -1)
 
-        val lastUsagePackageList = stateManager.queryUsageStats(
-            UsageStatsManager.INTERVAL_BEST, cal.timeInMillis, System.currentTimeMillis())
-        var lastTime = 0L
+        val lastUsagePackageList = stateManager
+            .queryUsageStats(
+                UsageStatsManager.INTERVAL_BEST,
+                cal.timeInMillis,
+                System.currentTimeMillis())
+
+
         for (pkg in lastUsagePackageList) {
             if (pkg.lastTimeUsed > lastTime) {
-                Log.d(GlobalApplication.TagName, "Camera ${pkg.lastTimeUsed}  ${pkg.packageName}")
-                lastTime = pkg.lastTimeUsed
                 this.packageName = pkg.packageName
+                lastTime = pkg.lastTimeUsed
             }
         }
 
         if (packageName != mContext.packageName) {
+            CameraInterceptActivity.isRunning = true
             mContext.startActivity(
                 Intent(mContext, CameraInterceptActivity::class.java).apply {
                     putExtra(Const.PKG_NAME, packageName)
@@ -111,6 +114,10 @@ class CameraTrackingManager @Inject constructor(
             )
         }
     }
+/*
+
+    lateinit var appIcon: Drawable
+    lateinit var appInfo: ApplicationInfo
 
     private fun setAppInfo() {
         CoroutineScope(Dispatchers.IO).launch {
@@ -147,6 +154,12 @@ class CameraTrackingManager @Inject constructor(
         appIcon = packageManager.getApplicationIcon(appInfo)
     }
 
+    private fun updateAppData(data: CameraAppData) {
+        CoroutineScope(Dispatchers.IO).launch {
+            repo.updateCameraAppPermUseCount(packageName, data.permUseCount + 1)
+            repo.updateLastUseDate(packageName, System.currentTimeMillis())
+        }
+    }
     fun makeSuspicionPopup() {
         if (!::popupSuspicionBinding.isInitialized) {
             popupSuspicionBinding = PopupSuspicionBinding.inflate(
@@ -258,11 +271,5 @@ class CameraTrackingManager @Inject constructor(
             Log.d(GlobalApplication.TagName, "${e.message}")
         }
     }
-
-    private fun updateAppData(data: CameraAppData) {
-        CoroutineScope(Dispatchers.IO).launch {
-            repo.updateCameraAppPermUseCount(packageName, data.permUseCount + 1)
-            repo.updateLastUseDate(packageName, System.currentTimeMillis())
-        }
-    }
+*/
 }
