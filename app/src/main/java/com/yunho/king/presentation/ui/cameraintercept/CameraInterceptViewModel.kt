@@ -40,7 +40,9 @@ class CameraInterceptViewModel @Inject constructor(
 
 
     suspend fun updateUseCount() {
-        repo.updateCameraAppPermUseCount(packageName, appData.permUseCount + 1)
+        while(!::appData.isInitialized){
+            repo.updateCameraAppPermUseCount(packageName, appData.permUseCount + 1)
+        }
     }
 
     suspend fun updateUseDate() {

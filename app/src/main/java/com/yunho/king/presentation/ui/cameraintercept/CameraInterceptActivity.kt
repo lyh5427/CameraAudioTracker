@@ -17,19 +17,29 @@ import androidx.camera.core.CameraSelector
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.google.common.util.concurrent.ListenableFuture
 import com.yunho.king.Const
 import com.yunho.king.GlobalApplication
+import com.yunho.king.Status.TEXT
 import com.yunho.king.Utils.singleClickListener
 import com.yunho.king.databinding.ActivityCameraInterceptBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 @AndroidEntryPoint
 class CameraInterceptActivity : AppCompatActivity() {
+
+    companion object {
+        // onCameraUnavailable이 여러번 호출되어 Activity 중복 방지를 위한 최후의 수단
+        var isRunning = false
+    }
 
     lateinit var binding: ActivityCameraInterceptBinding
     val viewModel: CameraInterceptViewModel by viewModels()
@@ -39,7 +49,6 @@ class CameraInterceptActivity : AppCompatActivity() {
     lateinit var cameraIds: Array<String>
     lateinit var cameraProviderFuture: ListenableFuture<ProcessCameraProvider>
     lateinit var cameraProvider: ProcessCameraProvider
-    lateinit var stateManager: UsageStatsManager
     lateinit var appName: String
     lateinit var appIcon: Drawable
     lateinit var appInfo: ApplicationInfo
@@ -47,33 +56,31 @@ class CameraInterceptActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         binding = ActivityCameraInterceptBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         cameraManager = getSystemService(Context.CAMERA_SERVICE) as CameraManager
-
         cameraProviderFuture = ProcessCameraProvider.getInstance(this)
-
         viewModel.packageName = intent.getStringExtra(Const.PKG_NAME)?: ""
         viewModel.getCameraAppData()
-        viewModel.setAppInfo(packageManager)
-
-        cameraIds = cameraManager.cameraIdList
-        setListener()
+        lifecycleScope.launch { setObserver() }
 
     }
 
     override fun onResume() {
         super.onResume()
+        viewModel.setAppInfo(packageManager)
+        cameraIds = cameraManager.cameraIdList
+        setListener()
         openCamera2()
     }
 
     override fun onDestroy() {
         super.onDestroy()
+        isRunning = false
     }
 
-    fun setListener() = with(binding) {
+    private fun setListener() = with(binding) {
         cameraAlimCheckBox.singleClickListener {
             cameraAlimCheckBox.isChecked = !cameraAlimCheckBox.isChecked
         }
@@ -83,7 +90,7 @@ class CameraInterceptActivity : AppCompatActivity() {
         }
 
         cancel.singleClickListener {
-//            setAlimOption(cameraAlimCheckBox.isChecked)
+            isRunning = false
             setAppAlim(appAlimCheckBox.isChecked)
             closeCamera()
         }
@@ -98,24 +105,16 @@ class CameraInterceptActivity : AppCompatActivity() {
         }
     }
 
-    private fun setAppInfo() {
-        CoroutineScope(Dispatchers.IO).launch {
-            appInfo = packageManager.getApplicationInfo(viewModel.packageName, PackageManager.GET_META_DATA)
-
-            getAppName()
-            getAppIcon()
-
-
-            viewModel.getCameraAppData()
-
-
-            withContext(Dispatchers.Main) {
-                try {
-                    if (viewModel.appData.notiFlag) {
-                        updateAppData()
-                    }
-                } catch (e: Exception) {
-                    Log.d(GlobalApplication.TagName, e.message?: "")
+    private suspend fun setObserver() = with(binding){
+        lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+            viewModel.appIcon.collectLatest {
+                appImg.setImageDrawable(it)
+            }
+        }
+        lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+            viewModel.appName.collectLatest {
+                when (it.status) {
+                    TEXT -> appName.text = it.toString()
                 }
             }
         }
