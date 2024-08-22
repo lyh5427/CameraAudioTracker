@@ -5,6 +5,7 @@ import android.content.Intent
 import android.graphics.PixelFormat
 import android.os.Build
 import android.os.Bundle
+import android.provider.Settings.Global
 import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -15,6 +16,9 @@ import androidx.camera.core.CameraSelector
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdListener
+import com.google.android.gms.ads.LoadAdError
 import com.google.android.material.navigation.NavigationBarView
 import com.google.common.util.concurrent.ListenableFuture
 import com.yunho.king.GlobalApplication
@@ -35,17 +39,32 @@ class MainActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+
         binding = ActivityMainBinding.inflate(layoutInflater, null, false)
 
         setContentView(binding.root)
 
         setBottomNavi()
+
+        setAdmobview()
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             startForegroundService(Intent(this, MainService::class.java))
         } else {
             startService(Intent(this, MainService::class.java))
         }
 
+    }
+
+    private fun setAdmobview() = with(binding) {
+        val adRequest = AdRequest.Builder().build()
+        admobView.loadAd(adRequest)
+        admobView.adListener = object : AdListener() {
+            override fun onAdFailedToLoad(error: LoadAdError) {
+                Log.e(GlobalApplication.TagName, error.message)
+            }
+        }
     }
 
     private fun setBottomNavi() = with(binding) {
