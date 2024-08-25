@@ -58,13 +58,21 @@ class MainActivity : BaseActivity() {
     }
 
     private fun setAdmobview() = with(binding) {
-        val adRequest = AdRequest.Builder().build()
-        admobView.loadAd(adRequest)
         admobView.adListener = object : AdListener() {
             override fun onAdFailedToLoad(error: LoadAdError) {
                 Log.e(GlobalApplication.TagName, error.message)
             }
         }
+        val adRequest = AdRequest.Builder().build()
+        admobView.loadAd(adRequest)
+
+//        admobView.adUnitId = getString(R.string.admob_unit_id_main_banner_test)
+//        admobView.setAdSize(com.google.android.gms.ads.AdSize.BANNER)
+//        admobView.adListener = object : AdListener() {
+//            override fun onAdFailedToLoad(error: LoadAdError) {
+//                Log.e(GlobalApplication.TagName, error.message)
+//            }
+//        }
     }
 
     private fun setBottomNavi() = with(binding) {
