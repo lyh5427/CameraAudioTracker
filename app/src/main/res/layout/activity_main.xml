@@ -74,7 +74,7 @@
             xmlns:ads="http://schemas.android.com/apk/res-auto"
             android:id="@+id/admobView"
             ads:adSize="BANNER"
-            ads:adUnitId="@string/admob_unit_id_main_banner_test"
+            ads:adUnitId="@string/admob_unit_id_main_banner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"/>
