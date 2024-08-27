@@ -1,11 +1,7 @@
-package com.yunho.king.presentation.ui.main.fragment.usage
+package com.yunho.king.presentation.ui.main.fragment.except
 
 import android.annotation.SuppressLint
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
-import android.provider.Settings
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -14,61 +10,49 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.recyclerview.widget.RecyclerView.LayoutManager
 import com.yunho.king.Const
-import com.yunho.king.GlobalApplication
 import com.yunho.king.R
-import com.yunho.king.Status
 import com.yunho.king.Utils.Util
-import com.yunho.king.databinding.FragmentAppListBinding
-import com.yunho.king.domain.dto.AppList
+import com.yunho.king.databinding.FragmentExAppListBinding
 import com.yunho.king.domain.dto.AudioAppData
 import com.yunho.king.domain.dto.CameraAppData
-import com.yunho.king.presentation.ui.appdetail.AppDetailActivity
+import com.yunho.king.domain.dto.ExAppList
 import com.yunho.king.presentation.ui.main.MainViewModel
-import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-@AndroidEntryPoint
-class AppListFragment : Fragment() {
+class ExAppListFragment : Fragment() {
 
-    lateinit var binding: FragmentAppListBinding
-    val viewModel: MainViewModel by activityViewModels()
+    lateinit var binding: FragmentExAppListBinding
+    val model: MainViewModel by activityViewModels()
 
     lateinit var type: String
-    var audio: ArrayList<AppList> = ArrayList()
-    var camera: ArrayList<AppList> = ArrayList()
-
+    var audio: ArrayList<ExAppList> = ArrayList()
+    var camera: ArrayList<ExAppList> = ArrayList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        arguments?.let {
+        }
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
-        binding = FragmentAppListBinding.inflate(inflater)
+        binding = FragmentExAppListBinding.inflate(inflater, container, false)
         type = arguments?.getString(Const.TYPE)?: Const.TYPE_CAMERA
-        lifecycleScope.launch { setObserver() }
 
         return binding.root
-    }
-
-    override fun onResume() {
-        super.onResume()
-        setType()
     }
 
     private fun setType() {
         lifecycleScope.launch {
             withContext(Dispatchers.IO) {
                 when (type) {
-                    Const.TYPE_CAMERA -> viewModel.getCameraData()
-                    Const.TYPE_AUDIO -> viewModel.getAudioData()
+                    Const.TYPE_CAMERA -> model.getExceptionCameraApp()
+                    Const.TYPE_AUDIO -> model.getExceptionAudioApp()
                     else -> {}
                 }
             }
@@ -79,7 +63,7 @@ class AppListFragment : Fragment() {
         when (type) {
             Const.TYPE_CAMERA -> {
                 lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                    viewModel.cameraList.collect {
+                    model.cameraList.collect {
                         makeCameraAppList(it)
                     }
                 }
@@ -87,7 +71,7 @@ class AppListFragment : Fragment() {
 
             Const.TYPE_AUDIO -> {
                 lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                    viewModel.audioList.collect {
+                    model.audioList.collect {
                         makeAudioAppList(it)
                     }
                 }
@@ -95,20 +79,24 @@ class AppListFragment : Fragment() {
         }
     }
 
+
     @SuppressLint("UseCompatLoadingForDrawables")
     private fun makeCameraAppList(caList: List<CameraAppData>) {
         camera.clear()
         caList.forEach {
             if (it.notiFlag) {
-                camera.add(AppList(
+                camera.add(
+                    ExAppList(
                     appName = it.appName,
                     appIcon = Util.getAppIcon(
                         it.appPackageName,
                         requireContext())?: requireContext().getDrawable(R.drawable.ic_launcher_background)!!,
                     appPackageName = it.appPackageName,
                     permUseCount = it.permUseCount,
-                    lastUseDateTime = it.lastUseDateTime.toLong()
-                ))
+                    lastUseDateTime = it.lastUseDateTime.toLong(),
+                    exceptionDate = it.exceptionDate
+                )
+                )
             }
         }
         setRecyclerView()
@@ -119,15 +107,18 @@ class AppListFragment : Fragment() {
         audio.clear()
         adList.forEach {
             if (it.notiFlag) {
-                audio.add(AppList(
+                audio.add(
+                    ExAppList(
                     appName = it.appName,
                     appIcon = Util.getAppIcon(
                         it.appPackageName,
                         requireContext())?: requireContext().getDrawable(R.drawable.ic_launcher_background)!!,
                     appPackageName = it.appPackageName,
                     permUseCount = it.permUseCount,
-                    lastUseDateTime = it.lastUseDateTime.toLong()
-                ))
+                    lastUseDateTime = it.lastUseDateTime.toLong(),
+                    exceptionDate = it.exceptionDate
+                )
+                )
 
             }
         }
@@ -135,29 +126,25 @@ class AppListFragment : Fragment() {
     }
 
     private fun setRecyclerView() = with(binding) {
-
-        appList.adapter = UsageAdapter(
+        appList.adapter = ExAdapter(
             if (type == Const.TYPE_CAMERA) camera else audio,
             requireContext(),
-            object: UsageAdapterListener{
-                override fun moveToDetail(pkgName: String) {
-                    startActivity(Intent(requireContext(), AppDetailActivity::class.java).apply {
-                        putExtra(Const.PKG_NAME, pkgName)
-                    })
+            object: ExAdapterListener {
+                override fun deletePackage(pkgName: String) {
+                    TODO("Not yet implemented")
                 }
             })
     }
 
 
+
     companion object {
         @JvmStatic
-        fun newInstance(
-            fragmentType: String
-        ) = AppListFragment().apply {
-            arguments = Bundle().apply {
-                putString(Const.TYPE, fragmentType)
+        fun newInstance(fragmentType: String) =
+            ExAppListFragment().apply {
+                arguments = Bundle().apply {
+                    putString(Const.TYPE, fragmentType)
+                }
             }
-        }
     }
-
 }

@@ -32,6 +32,12 @@ interface CameraDao {
     @Query("UPDATE CameraAppData set notiFlag = :notiFlag WHERE appPackageName = :pkgName")
     fun updateNotiFlag(pkgName: String, notiFlag: Boolean)
 
+    @Query("UPDATE CameraAppData set exceptionDate = :exceptionDate WHERE appPackageName = :pkgName")
+    fun updateExceptionDate(pkgName: String, exceptionDate: Long)
+
+    @Query("SELECT * FROM CameraAppData WHERE notiFlag = :notiFlag")
+    fun getExceptionPackage(notiFlag: Boolean = false)
+
     @Insert
     fun insert(data: CameraAppData)
 

@@ -1,59 +1,87 @@
-package com.yunho.king.presentation.ui.main.fragment
+package com.yunho.king.presentation.ui.main.fragment.except
 
+import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import com.google.android.material.tabs.TabLayoutMediator
+import com.yunho.king.Const
 import com.yunho.king.R
+import com.yunho.king.Utils.Util
+import com.yunho.king.databinding.FragmentExceptBinding
+import com.yunho.king.domain.dto.AppList
+import com.yunho.king.domain.dto.AudioAppData
+import com.yunho.king.domain.dto.CameraAppData
+import com.yunho.king.domain.dto.ExAppList
+import com.yunho.king.presentation.ui.appdetail.AppDetailActivity
+import com.yunho.king.presentation.ui.main.MainViewModel
+import com.yunho.king.presentation.ui.main.fragment.usage.AppListFragment
+import com.yunho.king.presentation.ui.main.fragment.usage.FragmentAdapter
+import com.yunho.king.presentation.ui.main.fragment.usage.UsageAdapter
+import com.yunho.king.presentation.ui.main.fragment.usage.UsageAdapterListener
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [ExceptFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class ExceptFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+
+    lateinit var binding: FragmentExceptBinding
+    val model: MainViewModel by activityViewModels()
+
+    private lateinit var fragCamera: ExAppListFragment
+    private lateinit var fragAudio: ExAppListFragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
+
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        binding = FragmentExceptBinding.inflate(inflater, container, false)
+
+        fragCamera = ExAppListFragment.newInstance(Const.TYPE_CAMERA)
+        fragAudio = ExAppListFragment.newInstance(Const.TYPE_AUDIO)
+
+        setTabAdapter()
+
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_except, container, false)
+        return binding.root
     }
 
+
+    private fun setTabAdapter() = with(binding) {
+        val adapter = FragmentAdapter(this@ExceptFragment).apply {
+            addFragments(fragCamera)
+            addFragments(fragAudio)
+        }
+        usageFragViewPager.adapter = adapter
+
+        TabLayoutMediator(layoutTab, usageFragViewPager) {tab, position ->
+            tab.text = when (position) {
+                0 -> getString(R.string.camera_tab)
+                else -> getString(R.string.audio_tab)
+            }
+        }.attach()
+
+        layoutTab.selectTab(layoutTab.getTabAt(0))
+    }
+
+
     companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment Except.
-         */
-        // TODO: Rename and change types and number of parameters
         @JvmStatic
-        fun newInstance(param1: String, param2: String) =
+        fun newInstance( ) =
             ExceptFragment().apply {
                 arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
                 }
             }
     }

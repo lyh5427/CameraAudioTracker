@@ -40,4 +40,12 @@ class MainViewModel @Inject constructor(
         _audioList.emit(repo.getAllAudioAppList())
     }
 
+    suspend fun getExceptionCameraApp() {
+
+    }
+
+    suspend fun getExceptionAudioApp() {
+
+    }
+
 }

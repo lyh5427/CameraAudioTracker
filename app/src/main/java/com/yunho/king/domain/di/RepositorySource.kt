@@ -14,7 +14,7 @@ interface RepositorySource {
     fun updateCameraAppPermUseCount(pkgName: String, count: Int)
     suspend fun existCameraApp(pkgName: String): Boolean
     fun updateLastUseDate(pkgName: String, lastUse: Long)
-    fun updateNotiFlag(pkgName: String, notiFlag: Boolean)
+    fun updateNotiFlag(pkgName: String, notiFlag: Boolean, exceptionDate: Long)
     suspend fun insertCameraApp(data: CameraAppData)
     fun deleteAllCamera()
 
