@@ -4,15 +4,15 @@
     <item
         android:id="@+id/usage"
         android:title="@string/navi_usages"
-        android:icon="@mipmap/icon_mic"/>
+        android:icon="@mipmap/icon_usage"/>
 
     <item
         android:id="@+id/except"
         android:title="@string/navi_except"
-        android:icon="@mipmap/icon_mic"/>
+        android:icon="@mipmap/icon_exception"/>
 
     <item
         android:id="@+id/hole"
         android:title="@string/navi_hole"
-        android:icon="@mipmap/icon_mic"/>
+        android:icon="@mipmap/icon_hole"/>
 </menu>
