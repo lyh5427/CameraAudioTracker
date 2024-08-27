@@ -8,6 +8,7 @@ import com.yunho.king.data.db.CameraDataBase
 import com.yunho.king.domain.di.RepositorySource
 import com.yunho.king.domain.dto.AudioAppData
 import com.yunho.king.domain.dto.CameraAppData
+import java.lang.Exception
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -48,8 +49,9 @@ class Repository @Inject constructor(
         caDb.updateLastUseDate(pkgName, lastUse)
     }
 
-    override fun updateNotiFlag(pkgName: String, notiFlag: Boolean) {
+    override fun updateNotiFlag(pkgName: String, notiFlag: Boolean, exceptionDate: Long) {
         caDb.updateNotiFlag(pkgName, notiFlag)
+        caDb.updateExceptionDate(pkgName, exceptionDate)
     }
 
     override suspend fun insertCameraApp(data: CameraAppData) {

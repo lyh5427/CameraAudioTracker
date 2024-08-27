@@ -11,6 +11,15 @@ data class AppList(
     var lastUseDateTime: Long = 0
 )
 
+data class ExAppList(
+    val appPackageName: String = "",
+    val appIcon: Drawable,
+    var appName: String = "",
+    var permUseCount: Int = 0,
+    var lastUseDateTime: Long = 0,
+    var exceptionDate: Long = 0
+)
+
 data class State(
     val status: String,
     val msg: String = ""

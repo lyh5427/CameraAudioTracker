@@ -67,7 +67,7 @@
                     style="@style/Text.description2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="마지막 사용일자 : MM월 DD일 HH:mm:ss"
+                    android:text="알림 제외 날짜 : MM월 DD일 HH:mm:ss"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@id/moveAppDetail"
                     app:layout_constraintStart_toEndOf="@id/appListMiddle"
@@ -79,7 +79,7 @@
                 android:id="@+id/moveAppDetail"
                 android:layout_width="25dp"
                 android:layout_height="50dp"
-                android:src="@mipmap/icon_detail"
+                android:src="@mipmap/icon_x"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />

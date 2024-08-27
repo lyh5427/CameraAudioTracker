@@ -12,6 +12,7 @@ data class CameraAppData(
     var permUseCount: Int = 0,
     var notiFlag: Boolean = true,
     var lastUseDateTime: Long = 0,
+    var exceptionDate: Long = 0,
     var permState: Boolean
 )
 
@@ -23,6 +24,7 @@ data class AudioAppData(
     var permUseCount: Int = 0,
     var notiFlag: Boolean = true,
     var lastUseDateTime: Long = 0,
+    var exceptionDate: Long = 0,
     var permState: Boolean
 )
 

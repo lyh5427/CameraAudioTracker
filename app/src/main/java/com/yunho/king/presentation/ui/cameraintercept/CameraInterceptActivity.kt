@@ -50,8 +50,6 @@ class CameraInterceptActivity : AppCompatActivity() {
     lateinit var cameraProviderFuture: ListenableFuture<ProcessCameraProvider>
     lateinit var cameraProvider: ProcessCameraProvider
     lateinit var appName: String
-    lateinit var appIcon: Drawable
-    lateinit var appInfo: ApplicationInfo
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -91,7 +89,7 @@ class CameraInterceptActivity : AppCompatActivity() {
 
         cancel.singleClickListener {
             isRunning = false
-            setAppAlim(appAlimCheckBox.isChecked)
+            setAppAlim()
             closeCamera()
         }
 
@@ -118,18 +116,6 @@ class CameraInterceptActivity : AppCompatActivity() {
                 }
             }
         }
-    }
-
-    fun getAppName() {
-        appName = try {
-            packageManager.getApplicationLabel(appInfo).toString()
-        } catch (e: Exception) {
-            appInfo.name
-        }
-    }
-
-    fun getAppIcon() {
-        appIcon = packageManager.getApplicationIcon(appInfo)
     }
 
     private fun openCamera2() {
@@ -163,20 +149,16 @@ class CameraInterceptActivity : AppCompatActivity() {
         } catch (e: Exception) {
             Log.d(GlobalApplication.TagName, "${e.message}")
         }
-
         finish()
     }
 
-    private fun updateAppData() {
-        CoroutineScope(Dispatchers.IO).launch {
-            viewModel.updateUseCount()
-            viewModel.updateUseDate()
-        }
-    }
-
-    private fun setAppAlim(alimFlag: Boolean) {
-        if (alimFlag) {
+    private fun setAppAlim() = with(binding) {
+        if (appAlimCheckBox.isChecked) {
             GlobalApplication.prefs!!.appAlim = false
+        }
+
+        if (cameraAlimCheckBox.isChecked) {
+            viewModel.updateNotiFlag()
         }
     }
 }
