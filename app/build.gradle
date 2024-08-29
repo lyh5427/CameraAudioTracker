@@ -6,6 +6,8 @@ plugins {
     id 'kotlin-kapt'
     id 'dagger.hilt.android.plugin'
 
+    //google firebase
+    id 'com.google.gms.google-services'
 }
 
 android {
@@ -17,7 +19,7 @@ android {
         minSdk 24
         targetSdk 34
         versionCode 1
-        versionName "1.0"
+        versionName "1.0.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -31,7 +33,7 @@ android {
         }
 
         release {
-            storeFile file('../app/key/relase_king.jks')
+            storeFile file('../app/key/release_king.jks')
             storePassword 'azsxplok@1029'
             keyAlias "King"
             keyPassword "azsxplok@1029"
@@ -40,8 +42,10 @@ android {
 
     buildTypes {
         release {
+            signingConfigs.release
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
     }
     compileOptions {
@@ -95,6 +99,9 @@ dependencies {
     testImplementation("org.mockito.kotlin:mockito-kotlin:5.2.0")
     testImplementation("io.mockk:mockk:1.13.7")
 
+    //firebase
+    implementation platform('com.google.firebase:firebase-bom:33.2.0')
+    implementation 'com.google.firebase:firebase-analytics'
 
     //livedata viewmodel
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.8.3'
