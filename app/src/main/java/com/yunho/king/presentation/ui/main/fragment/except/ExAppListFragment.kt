@@ -76,8 +76,8 @@ class ExAppListFragment : Fragment() {
             Const.TYPE_CAMERA -> {
                 lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
                     model.exCameraList.collect {
-                        when (it) {
-                            null -> {
+                        when (it!!.size) {
+                            0 -> {
                                 txtNonList.toVisible()
                                 appList.toGone()
                             }
@@ -91,8 +91,8 @@ class ExAppListFragment : Fragment() {
             Const.TYPE_AUDIO -> {
                 lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
                     model.exAudioList.collect {
-                        when (it) {
-                            null -> {
+                        when (it!!.size) {
+                            0 -> {
                                 txtNonList.toVisible()
                                 appList.toGone()
                             }
