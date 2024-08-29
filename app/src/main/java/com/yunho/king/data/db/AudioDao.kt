@@ -35,7 +35,7 @@ interface AudioDao {
     fun updateExceptionDate(pkgName: String, exceptionDate: Long)
 
     @Query("SELECT * FROM AudioAppData WHERE notiFlag = :notiFlag")
-    fun getExceptionPackage(notiFlag: Boolean = false)
+    fun getExceptionPackage(notiFlag: Boolean = false): List<AudioAppData>?
 
     @Insert
     fun insert(data: AudioAppData)

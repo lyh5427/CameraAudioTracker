@@ -52,9 +52,7 @@ class AppListFragment : Fragment() {
     ): View? {
 
         binding = FragmentAppListBinding.inflate(inflater)
-        type = arguments?.getString(Const.TYPE)?: Const.TYPE_CAMERA
         lifecycleScope.launch { setObserver() }
-
         return binding.root
     }
 
@@ -64,6 +62,8 @@ class AppListFragment : Fragment() {
     }
 
     private fun setType() {
+        type = arguments?.getString(Const.TYPE)?: Const.TYPE_CAMERA
+
         lifecycleScope.launch {
             withContext(Dispatchers.IO) {
                 when (type) {
