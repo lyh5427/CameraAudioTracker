@@ -15,6 +15,7 @@ import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 @HiltViewModel
@@ -40,7 +41,7 @@ class CameraInterceptViewModel @Inject constructor(
 
 
     suspend fun updateUseCount() {
-        while(!::appData.isInitialized){
+        if (::appData.isInitialized) {
             repo.updateCameraAppPermUseCount(packageName, appData.permUseCount + 1)
         }
     }
@@ -56,7 +57,7 @@ class CameraInterceptViewModel @Inject constructor(
     }
 
     fun getCameraAppData() {
-        CoroutineScope(Dispatchers.IO).launch {
+        runBlocking(Dispatchers.IO) {
             appData = repo.getCameraAppData(packageName)
         }
     }
