@@ -20,6 +20,9 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import com.google.android.gms.ads.AdListener
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.LoadAdError
 import com.google.common.util.concurrent.ListenableFuture
 import com.yunho.king.Const
 import com.yunho.king.GlobalApplication
@@ -64,7 +67,7 @@ class CameraInterceptActivity : AppCompatActivity() {
         viewModel.packageName = intent.getStringExtra(Const.PKG_NAME)?: ""
         viewModel.getCameraAppData()
         lifecycleScope.launch { setObserver() }
-
+        setAdmobview()
     }
 
     override fun onResume() {
@@ -78,6 +81,16 @@ class CameraInterceptActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         isRunning = false
+    }
+
+    private fun setAdmobview() = with(binding) {
+        admobView.adListener = object : AdListener() {
+            override fun onAdFailedToLoad(error: LoadAdError) {
+                Log.e(GlobalApplication.TagName, error.message)
+            }
+        }
+        val adRequest = AdRequest.Builder().build()
+        admobView.loadAd(adRequest)
     }
 
     private fun setListener() = with(binding) {
