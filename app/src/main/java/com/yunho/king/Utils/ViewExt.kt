@@ -10,7 +10,6 @@ class SingleClickListener(
     private val interval: Int = 600,
     private var singleClick: (View) -> Unit
 ) : View.OnClickListener {
-
     companion object {
         private var lastestClickTime: Long = 0
     }
