@@ -37,7 +37,7 @@ interface CameraDao {
     fun updateExceptionDate(pkgName: String, exceptionDate: Long)
 
     @Query("SELECT * FROM CameraAppData WHERE notiFlag = :notiFlag")
-    fun getExceptionPackage(notiFlag: Boolean = false): List<AudioAppData>?
+    fun getExceptionPackage(notiFlag: Boolean = false): List<CameraAppData>?
 
     @Insert
     fun insert(data: CameraAppData)
