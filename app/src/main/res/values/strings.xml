@@ -3,8 +3,10 @@
 
     <!--Secret String-->
     <string name="admob_id">ca-app-pub-7304776672885578~4887867420</string>
+    <!--Test ID-->
+<!--    <string name="admob_unit_id_main_banner">ca-app-pub-7304776672885578/2497038616</string>-->
+    <!--Release ID-->
     <string name="admob_unit_id_main_banner">ca-app-pub-7304776672885578/2497038616</string>
-    <!--<string name="admob_unit_id_main_banner">ca-app-pub-7304776672885578/2497038616</string>-->
 
 
     <!--Bottom Navi-->

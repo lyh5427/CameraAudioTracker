@@ -69,7 +69,11 @@ class PermActivity : BaseActivity(), DialogNormalType1Listener, DialogNormalType
             registerForActivityResult(ActivityResultContracts.RequestPermission()) {
                 if (permIndex >= permManager.permSize()) {
                     if (permManager.isRuntimePermAllow()) {
-                        moveToOverlayPerm()
+                        if (permManager.isOverlayAllow()) {
+                            showReqUsagePermDialog()
+                        } else {
+                            moveToOverlayPerm()
+                        }
                     } else {
                         showPermDeniedDialog()
                     }
@@ -133,7 +137,7 @@ class PermActivity : BaseActivity(), DialogNormalType1Listener, DialogNormalType
     }
 
     override fun clickCancel() {
-
+        showUsagePermDeniedDialog()
     }
 
     private fun startPermAllow() {
@@ -146,7 +150,7 @@ class PermActivity : BaseActivity(), DialogNormalType1Listener, DialogNormalType
             content = getString(R.string.perm_denied_content),
             type = Const.DIALOG_TYPE1,
             okText = getString(R.string.setting),
-            cancelText = "",
+            cancelText = getString(R.string.cancel),
             cancelable = true,
         )
 
@@ -198,7 +202,11 @@ class PermActivity : BaseActivity(), DialogNormalType1Listener, DialogNormalType
             cancelable = true
         )
 
-        dialogNormal.regType1Listener(this)
+        dialogNormal.regType1Listener(object : DialogNormalType1Listener{
+            override fun onClick() {
+                showReqUsagePermDialog()
+            }
+        })
 
         supportFragmentManager.beginTransaction().add(dialogNormal, TAG_USAGE_DENIED_DIALOG)
             .commitAllowingStateLoss()
