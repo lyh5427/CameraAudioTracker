@@ -44,7 +44,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/typ2Layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -63,7 +63,7 @@
 
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/type2Cancel"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:background="@drawable/btn_type_stroke"
                     android:text="닫기"
@@ -76,7 +76,7 @@
 
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/type2Ok"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:text="이동하기"
                     android:background="@drawable/btn_type_solid"
