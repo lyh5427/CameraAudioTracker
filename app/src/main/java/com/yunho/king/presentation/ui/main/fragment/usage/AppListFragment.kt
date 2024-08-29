@@ -50,8 +50,9 @@ class AppListFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
         binding = FragmentAppListBinding.inflate(inflater)
+        type = arguments?.getString(Const.TYPE)?: Const.TYPE_CAMERA
+
         lifecycleScope.launch { setObserver() }
         return binding.root
     }
@@ -62,8 +63,6 @@ class AppListFragment : Fragment() {
     }
 
     private fun setType() {
-        type = arguments?.getString(Const.TYPE)?: Const.TYPE_CAMERA
-
         lifecycleScope.launch {
             withContext(Dispatchers.IO) {
                 when (type) {
@@ -135,7 +134,6 @@ class AppListFragment : Fragment() {
     }
 
     private fun setRecyclerView() = with(binding) {
-
         appList.adapter = UsageAdapter(
             if (type == Const.TYPE_CAMERA) camera else audio,
             requireContext(),

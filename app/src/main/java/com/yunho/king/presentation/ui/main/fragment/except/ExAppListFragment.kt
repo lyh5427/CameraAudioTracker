@@ -2,6 +2,7 @@ package com.yunho.king.presentation.ui.main.fragment.except
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -11,13 +12,17 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.yunho.king.Const
+import com.yunho.king.GlobalApplication
 import com.yunho.king.R
 import com.yunho.king.Utils.Util
+import com.yunho.king.Utils.toGone
+import com.yunho.king.Utils.toVisible
 import com.yunho.king.databinding.FragmentExAppListBinding
 import com.yunho.king.domain.dto.AudioAppData
 import com.yunho.king.domain.dto.CameraAppData
 import com.yunho.king.domain.dto.ExAppList
 import com.yunho.king.presentation.ui.main.MainViewModel
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -42,16 +47,19 @@ class ExAppListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentExAppListBinding.inflate(inflater, container, false)
+        type = arguments?.getString(Const.TYPE)?: Const.TYPE_CAMERA
 
-        setType()
         lifecycleScope.launch { setObserver() }
 
         return binding.root
     }
 
-    private fun setType() {
-        type = arguments?.getString(Const.TYPE)?: Const.TYPE_CAMERA
+    override fun onResume() {
+        super.onResume()
+        setType()
+    }
 
+    private fun setType() {
         lifecycleScope.launch {
             withContext(Dispatchers.IO) {
                 when (type) {
@@ -63,14 +71,15 @@ class ExAppListFragment : Fragment() {
         }
     }
 
-    private suspend fun setObserver() {
+    private suspend fun setObserver() = with(binding) {
         when (type) {
             Const.TYPE_CAMERA -> {
                 lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                    model.cameraList.collect {
+                    model.exCameraList.collect {
                         when (it) {
                             null -> {
-
+                                txtNonList.toVisible()
+                                appList.toGone()
                             }
 
                             else -> makeCameraAppList(it)
@@ -81,10 +90,11 @@ class ExAppListFragment : Fragment() {
 
             Const.TYPE_AUDIO -> {
                 lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                    model.audioList.collect {
+                    model.exAudioList.collect {
                         when (it) {
                             null -> {
-
+                                txtNonList.toVisible()
+                                appList.toGone()
                             }
 
                             else -> makeAudioAppList(it)
@@ -98,22 +108,22 @@ class ExAppListFragment : Fragment() {
 
     @SuppressLint("UseCompatLoadingForDrawables")
     private fun makeCameraAppList(caList: List<CameraAppData>) {
+        Log.d(GlobalApplication.TagName, "aaaaaaaaaaaa")
+
         camera.clear()
         caList.forEach {
-            if (it.notiFlag) {
-                camera.add(
-                    ExAppList(
+            camera.add(
+                ExAppList(
                     appName = it.appName,
                     appIcon = Util.getAppIcon(
                         it.appPackageName,
                         requireContext())?: requireContext().getDrawable(R.drawable.ic_launcher_background)!!,
                     appPackageName = it.appPackageName,
                     permUseCount = it.permUseCount,
-                    lastUseDateTime = it.lastUseDateTime.toLong(),
+                    lastUseDateTime = it.lastUseDateTime,
                     exceptionDate = it.exceptionDate
                 )
-                )
-            }
+            )
         }
         setRecyclerView()
     }
@@ -131,11 +141,10 @@ class ExAppListFragment : Fragment() {
                         requireContext())?: requireContext().getDrawable(R.drawable.ic_launcher_background)!!,
                     appPackageName = it.appPackageName,
                     permUseCount = it.permUseCount,
-                    lastUseDateTime = it.lastUseDateTime.toLong(),
+                    lastUseDateTime = it.lastUseDateTime,
                     exceptionDate = it.exceptionDate
+                    )
                 )
-                )
-
             }
         }
         setRecyclerView()
@@ -147,12 +156,12 @@ class ExAppListFragment : Fragment() {
             requireContext(),
             object: ExAdapterListener {
                 override fun deletePackage(pkgName: String) {
-                    TODO("Not yet implemented")
+                    CoroutineScope(Dispatchers.IO).launch {
+                        model.updateCameraAppFlag(pkgName, true)
+                    }
                 }
             })
     }
-
-
 
     companion object {
         @JvmStatic

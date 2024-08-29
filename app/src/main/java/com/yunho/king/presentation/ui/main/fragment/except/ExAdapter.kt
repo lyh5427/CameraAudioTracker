@@ -8,6 +8,7 @@ import com.yunho.king.R
 import com.yunho.king.Utils.Util
 import com.yunho.king.Utils.singleClickListener
 import com.yunho.king.databinding.RecyclerAppListBinding
+import com.yunho.king.databinding.RecyclerExAppListBinding
 import com.yunho.king.domain.dto.ExAppList
 
 class ExAdapter(
@@ -16,11 +17,11 @@ class ExAdapter(
     val listener: ExAdapterListener
 ): RecyclerView.Adapter<ExAdapter.ImageViewHolder>() {
 
-    lateinit var binding: RecyclerAppListBinding
+    lateinit var binding: RecyclerExAppListBinding
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImageViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        binding = RecyclerAppListBinding.inflate(inflater, parent, false)
+        binding = RecyclerExAppListBinding.inflate(inflater, parent, false)
 
         return ImageViewHolder(binding)
     }
@@ -50,7 +51,7 @@ class ExAdapter(
         return position
     }
 
-    inner class ImageViewHolder(val binding: RecyclerAppListBinding) :
+    inner class ImageViewHolder(val binding: RecyclerExAppListBinding) :
         RecyclerView.ViewHolder(binding.root) {
     }
 
