@@ -21,13 +21,21 @@ class MainViewModel @Inject constructor(
     private val repo: RepositorySource
 ): BaseViewModel(repo) {
 
-    private var _cameraList: MutableSharedFlow<List<CameraAppData>?> =
+    private var _cameraList: MutableSharedFlow<List<CameraAppData>> =
         MutableSharedFlow(0, 1, BufferOverflow.DROP_OLDEST)
     val cameraList = _cameraList.asSharedFlow()
 
-    private var _audioList: MutableSharedFlow<List<AudioAppData>?> =
+    private var _audioList: MutableSharedFlow<List<AudioAppData>> =
         MutableSharedFlow(0, 1, BufferOverflow.DROP_OLDEST)
     val audioList = _audioList.asSharedFlow()
+
+    private var _exCameraList: MutableSharedFlow<List<CameraAppData>?> =
+        MutableSharedFlow(0, 1, BufferOverflow.DROP_OLDEST)
+    val exCameraList = _exCameraList.asSharedFlow()
+
+    private var _exAudioList: MutableSharedFlow<List<AudioAppData>?> =
+        MutableSharedFlow(0, 1, BufferOverflow.DROP_OLDEST)
+    val exAudioList = _exAudioList.asSharedFlow()
 
 
     suspend fun getCameraData() {
@@ -40,16 +48,18 @@ class MainViewModel @Inject constructor(
         _audioList.emit(repo.getAllAudioAppList())
     }
 
-    fun getExceptionCameraApp() {
-        viewModelScope.launch {
-            _cameraList.emit(repo.getExceptionCameraAppData())
-        }
+    suspend fun getExceptionCameraApp() {
+        Log.d(GlobalApplication.TagName, "Search Camera")
+        _exCameraList.emit(repo.getExceptionCameraAppData())
     }
 
-    fun getExceptionAudioApp() {
-        viewModelScope.launch {
-            _audioList.emit(repo.getExceptionAudioAppData())
-        }
+    suspend fun getExceptionAudioApp() {
+        Log.d(GlobalApplication.TagName, "Search Audio")
+        _exAudioList.emit(repo.getExceptionAudioAppData())
+    }
+
+    suspend fun updateCameraAppFlag(pkgName: String, flag: Boolean) {
+        repo.updateCameraNotiFlag(pkgName, flag, System.currentTimeMillis())
     }
 
 }
