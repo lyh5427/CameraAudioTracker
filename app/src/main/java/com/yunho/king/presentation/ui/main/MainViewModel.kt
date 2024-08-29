@@ -21,6 +21,7 @@ class MainViewModel @Inject constructor(
     private val repo: RepositorySource
 ): BaseViewModel(repo) {
 
+    //AppListFragment
     private var _cameraList: MutableSharedFlow<List<CameraAppData>> =
         MutableSharedFlow(0, 1, BufferOverflow.DROP_OLDEST)
     val cameraList = _cameraList.asSharedFlow()
@@ -29,6 +30,7 @@ class MainViewModel @Inject constructor(
         MutableSharedFlow(0, 1, BufferOverflow.DROP_OLDEST)
     val audioList = _audioList.asSharedFlow()
 
+    //ExAppListFragment
     private var _exCameraList: MutableSharedFlow<List<CameraAppData>?> =
         MutableSharedFlow(0, 1, BufferOverflow.DROP_OLDEST)
     val exCameraList = _exCameraList.asSharedFlow()
@@ -37,7 +39,7 @@ class MainViewModel @Inject constructor(
         MutableSharedFlow(0, 1, BufferOverflow.DROP_OLDEST)
     val exAudioList = _exAudioList.asSharedFlow()
 
-
+    //AppListFragment
     suspend fun getCameraData() {
         Log.d(GlobalApplication.TagName, "Search Camera")
         _cameraList.emit(repo.getAllCameraAppList())
@@ -48,8 +50,9 @@ class MainViewModel @Inject constructor(
         _audioList.emit(repo.getAllAudioAppList())
     }
 
+    //ExAppListFragment
     suspend fun getExceptionCameraApp() {
-        Log.d(GlobalApplication.TagName, "Search Camera")
+        Log.d(GlobalApplication.TagName, "Search Camera ${repo.getExceptionCameraAppData()}")
         _exCameraList.emit(repo.getExceptionCameraAppData())
     }
 
@@ -61,5 +64,4 @@ class MainViewModel @Inject constructor(
     suspend fun updateCameraAppFlag(pkgName: String, flag: Boolean) {
         repo.updateCameraNotiFlag(pkgName, flag, System.currentTimeMillis())
     }
-
 }
