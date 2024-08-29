@@ -51,6 +51,8 @@ class CameraInterceptActivity : AppCompatActivity() {
     lateinit var cameraProvider: ProcessCameraProvider
     lateinit var appName: String
 
+    var isCameraAlimCheckBox = false
+    var isAppAlimCheckBox = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -80,11 +82,11 @@ class CameraInterceptActivity : AppCompatActivity() {
 
     private fun setListener() = with(binding) {
         cameraAlimCheckBox.singleClickListener {
-            cameraAlimCheckBox.isChecked = !cameraAlimCheckBox.isChecked
+            cameraAlimCheckBox.isChecked = !isCameraAlimCheckBox
         }
 
         appAlimCheckBox.singleClickListener {
-            appAlimCheckBox.isChecked = !appAlimCheckBox.isChecked
+            appAlimCheckBox.isChecked = !isAppAlimCheckBox
         }
 
         cancel.singleClickListener {
