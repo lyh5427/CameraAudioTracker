@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
+import android.graphics.Camera
 import android.graphics.PixelFormat
 import android.graphics.drawable.Drawable
 import android.hardware.camera2.CameraManager
@@ -35,6 +36,7 @@ import com.yunho.king.presentation.ui.cameraintercept.CameraInterceptActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import java.util.Calendar
 import javax.inject.Inject
@@ -55,6 +57,7 @@ class CameraTrackingManager @Inject constructor(
     lateinit var packageName: String
     lateinit var appName: String
     lateinit var cameraId: String
+    var exceptCameraAppList: List<CameraAppData>? = null
 
     fun setCameraTracker() {
         cameraProviderFuture = ProcessCameraProvider.getInstance(mContext)
@@ -90,12 +93,10 @@ class CameraTrackingManager @Inject constructor(
         val cal = Calendar.getInstance()
         cal.add(Calendar.SECOND, -1)
 
-        val lastUsagePackageList = stateManager
-            .queryUsageStats(
-                UsageStatsManager.INTERVAL_BEST,
-                cal.timeInMillis,
-                System.currentTimeMillis())
-
+        val lastUsagePackageList = stateManager.queryUsageStats(
+            UsageStatsManager.INTERVAL_BEST,
+            cal.timeInMillis,
+            System.currentTimeMillis())
 
         for (pkg in lastUsagePackageList) {
             if (pkg.lastTimeUsed > lastTime) {
@@ -105,6 +106,16 @@ class CameraTrackingManager @Inject constructor(
         }
 
         if (packageName != mContext.packageName) {
+            runBlocking(Dispatchers.IO) {
+                exceptCameraAppList = repo.getExceptionCameraAppData()
+            }
+
+            if (exceptCameraAppList != null) {
+                exceptCameraAppList?.forEach {
+                    if (packageName == it.appPackageName) return
+                }
+            }
+
             CameraInterceptActivity.isRunning = true
             mContext.startActivity(
                 Intent(mContext, CameraInterceptActivity::class.java).apply {
