@@ -3,6 +3,7 @@ package com.yunho.king.data.db
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
+import com.yunho.king.domain.dto.AudioAppData
 import com.yunho.king.domain.dto.CameraAppData
 import java.security.cert.PKIXReason
 
@@ -36,7 +37,7 @@ interface CameraDao {
     fun updateExceptionDate(pkgName: String, exceptionDate: Long)
 
     @Query("SELECT * FROM CameraAppData WHERE notiFlag = :notiFlag")
-    fun getExceptionPackage(notiFlag: Boolean = false)
+    fun getExceptionPackage(notiFlag: Boolean = false): List<AudioAppData>?
 
     @Insert
     fun insert(data: CameraAppData)

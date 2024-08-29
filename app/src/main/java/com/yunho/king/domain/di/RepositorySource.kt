@@ -1,5 +1,6 @@
 package com.yunho.king.domain.di
 
+import android.graphics.Camera
 import com.yunho.king.domain.dto.AudioAppData
 import com.yunho.king.domain.dto.CameraAppData
 
@@ -14,7 +15,8 @@ interface RepositorySource {
     fun updateCameraAppPermUseCount(pkgName: String, count: Int)
     suspend fun existCameraApp(pkgName: String): Boolean
     fun updateLastUseDate(pkgName: String, lastUse: Long)
-    fun updateNotiFlag(pkgName: String, notiFlag: Boolean, exceptionDate: Long)
+    fun updateCameraNotiFlag(pkgName: String, notiFlag: Boolean, exceptionDate: Long)
+    fun getExceptionCameraAppData(): List<CameraAppData>?
     suspend fun insertCameraApp(data: CameraAppData)
     fun deleteAllCamera()
 
@@ -26,5 +28,7 @@ interface RepositorySource {
     fun updateAudioAppPermUseCount(pkgName: String, count: Int)
     suspend fun existAudioApp(pkgName: String): Boolean
     suspend fun insertAudioApp(data: AudioAppData)
+    fun updateAudioNotiFlag(pkgName: String, notiFlag: Boolean, exceptionDate: Long)
+    fun getExceptionAudioAppData(): List<AudioAppData>?
     fun deleteAllAudio()
 }

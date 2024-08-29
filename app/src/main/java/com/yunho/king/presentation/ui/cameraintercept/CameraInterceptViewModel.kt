@@ -4,7 +4,6 @@ import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import android.graphics.drawable.Drawable
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.yunho.king.Status
 import com.yunho.king.domain.di.RepositorySource
 import com.yunho.king.domain.dto.CameraAppData
@@ -52,7 +51,7 @@ class CameraInterceptViewModel @Inject constructor(
 
     fun updateNotiFlag() {
         CoroutineScope(Dispatchers.IO).launch {
-            repo.updateNotiFlag(appData.appPackageName, false, System.currentTimeMillis())
+            repo.updateCameraNotiFlag(appData.appPackageName, false, System.currentTimeMillis())
         }
     }
 

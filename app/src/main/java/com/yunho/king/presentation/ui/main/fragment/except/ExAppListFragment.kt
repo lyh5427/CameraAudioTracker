@@ -42,12 +42,16 @@ class ExAppListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentExAppListBinding.inflate(inflater, container, false)
-        type = arguments?.getString(Const.TYPE)?: Const.TYPE_CAMERA
+
+        setType()
+        lifecycleScope.launch { setObserver() }
 
         return binding.root
     }
 
     private fun setType() {
+        type = arguments?.getString(Const.TYPE)?: Const.TYPE_CAMERA
+
         lifecycleScope.launch {
             withContext(Dispatchers.IO) {
                 when (type) {
@@ -64,7 +68,13 @@ class ExAppListFragment : Fragment() {
             Const.TYPE_CAMERA -> {
                 lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
                     model.cameraList.collect {
-                        makeCameraAppList(it)
+                        when (it) {
+                            null -> {
+
+                            }
+
+                            else -> makeCameraAppList(it)
+                        }
                     }
                 }
             }
@@ -72,7 +82,13 @@ class ExAppListFragment : Fragment() {
             Const.TYPE_AUDIO -> {
                 lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
                     model.audioList.collect {
-                        makeAudioAppList(it)
+                        when (it) {
+                            null -> {
+
+                            }
+
+                            else -> makeAudioAppList(it)
+                        }
                     }
                 }
             }

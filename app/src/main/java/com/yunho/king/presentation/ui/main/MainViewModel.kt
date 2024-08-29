@@ -21,11 +21,11 @@ class MainViewModel @Inject constructor(
     private val repo: RepositorySource
 ): BaseViewModel(repo) {
 
-    private var _cameraList: MutableSharedFlow<List<CameraAppData>> =
+    private var _cameraList: MutableSharedFlow<List<CameraAppData>?> =
         MutableSharedFlow(0, 1, BufferOverflow.DROP_OLDEST)
     val cameraList = _cameraList.asSharedFlow()
 
-    private var _audioList: MutableSharedFlow<List<AudioAppData>> =
+    private var _audioList: MutableSharedFlow<List<AudioAppData>?> =
         MutableSharedFlow(0, 1, BufferOverflow.DROP_OLDEST)
     val audioList = _audioList.asSharedFlow()
 
@@ -40,12 +40,16 @@ class MainViewModel @Inject constructor(
         _audioList.emit(repo.getAllAudioAppList())
     }
 
-    suspend fun getExceptionCameraApp() {
-
+    fun getExceptionCameraApp() {
+        viewModelScope.launch {
+            _cameraList.emit(repo.getExceptionCameraAppData())
+        }
     }
 
-    suspend fun getExceptionAudioApp() {
-
+    fun getExceptionAudioApp() {
+        viewModelScope.launch {
+            _audioList.emit(repo.getExceptionAudioAppData())
+        }
     }
 
 }

@@ -49,13 +49,17 @@ class Repository @Inject constructor(
         caDb.updateLastUseDate(pkgName, lastUse)
     }
 
-    override fun updateNotiFlag(pkgName: String, notiFlag: Boolean, exceptionDate: Long) {
+    override fun updateCameraNotiFlag(pkgName: String, notiFlag: Boolean, exceptionDate: Long) {
         caDb.updateNotiFlag(pkgName, notiFlag)
         caDb.updateExceptionDate(pkgName, exceptionDate)
     }
 
     override suspend fun insertCameraApp(data: CameraAppData) {
         caDb.insert(data)
+    }
+
+    override fun getExceptionCameraAppData(): List<CameraAppData>? {
+        return caDb.getExceptionPackage(false)
     }
 
     override fun deleteAllCamera() {
@@ -86,6 +90,15 @@ class Repository @Inject constructor(
 
     override suspend fun insertAudioApp(data: AudioAppData) {
         adDb.insert(data)
+    }
+
+    override fun updateAudioNotiFlag(pkgName: String, notiFlag: Boolean, exceptionDate: Long) {
+        adDb.updateNotiFlag(pkgName, notiFlag)
+        adDb.updateExceptionDate(pkgName, exceptionDate)
+    }
+
+    override fun getExceptionAudioAppData(): List<AudioAppData>? {
+        return adDb.getExceptionPackage(false)
     }
 
     override fun deleteAllAudio() {
