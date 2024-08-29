@@ -1,5 +1,6 @@
 package com.yunho.king.presentation.ui.main.fragment.except
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -26,6 +27,7 @@ class ExAdapter(
         return ImageViewHolder(binding)
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun onBindViewHolder(holder: ImageViewHolder, position: Int) = with(binding) {
         listAppName.text = mContext.getString(R.string.app_list_name, item[position].appName)
         listAppIcon.setImageDrawable(item[position].appIcon)
@@ -40,6 +42,13 @@ class ExAdapter(
 
         holder.binding.moveAppDetail.singleClickListener {
             listener.deletePackage(item[position].appPackageName)
+            item.forEachIndexed { index, exAppList ->
+                if (exAppList.appPackageName == item[position].appPackageName) {
+                    item.removeAt(index)
+                    return@forEachIndexed
+                }
+            }
+            notifyDataSetChanged()
         }
     }
 
