@@ -15,6 +15,7 @@ import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.provider.Settings
+import android.provider.Settings.Global
 import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -81,8 +82,12 @@ class CameraTrackingManager @Inject constructor(
                 Log.i(GlobalApplication.TagName, "this????")
 
                 this@CameraTrackingManager.cameraId = cameraId
-                if (GlobalApplication.prefs!!.appAlim && !CameraInterceptActivity.isRunning) {
-                    getRecentlyCameraUserPackage()
+                try {
+                    if (GlobalApplication.prefs!!.appAlim && !CameraInterceptActivity.isRunning) {
+                        getRecentlyCameraUserPackage()
+                    }
+                } catch (e: Exception) {
+                    Log.i(GlobalApplication.TagName, "${e.message}")
                 }
             }
         }, Handler(Looper.getMainLooper()))
@@ -105,7 +110,7 @@ class CameraTrackingManager @Inject constructor(
             }
         }
 
-        if (packageName != mContext.packageName) {
+        if (packageName != mContext.packageName && ::packageName.isInitialized) {
             runBlocking(Dispatchers.IO) {
                 exceptCameraAppList = repo.getExceptionCameraAppData()
             }
