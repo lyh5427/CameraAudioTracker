@@ -58,8 +58,8 @@ class MainService: LifecycleService() {
         builder.setContentTitle(StringBuilder(resources.getString(R.string.app_name))
             .append(getString(R.string.service_is_running)).toString())
             .setTicker(StringBuilder(resources.getString(R.string.app_name)).append("service is running").toString())
-            .setContentText("Touch to open") //                    , swipe down for more options.
-            .setSmallIcon(R.drawable.ic_launcher_foreground)
+            .setContentText("") //                    , swipe down for more options.
+            .setSmallIcon(R.mipmap.app_icon)
             .setPriority(NotificationCompat.PRIORITY_LOW)
             .setWhen(0)
             .setOnlyAlertOnce(true)
