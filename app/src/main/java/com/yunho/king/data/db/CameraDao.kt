@@ -9,7 +9,7 @@ import java.security.cert.PKIXReason
 
 @Dao
 interface CameraDao {
-    @Query("SELECT * FROM CameraAppData ORDER BY appName DESC")
+    @Query("SELECT * FROM CameraAppData ORDER BY permUseCount DESC")
     fun getAll(): List<CameraAppData>
 
     @Query("SELECT * FROM CameraAppData WHERE appPackageName = :appPackageName")
