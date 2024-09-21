@@ -19,6 +19,7 @@ class ExAdapter(
 ): RecyclerView.Adapter<ExAdapter.ImageViewHolder>() {
 
     lateinit var binding: RecyclerExAppListBinding
+    var appList: ArrayList<ExAppList> = item
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImageViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -30,7 +31,7 @@ class ExAdapter(
     @SuppressLint("NotifyDataSetChanged")
     override fun onBindViewHolder(holder: ImageViewHolder, position: Int) = with(binding) {
         listAppName.text = mContext.getString(R.string.app_list_name, item[position].appName)
-        listAppIcon.setImageDrawable(item[position].appIcon)
+        listAppIcon.setImageDrawable(appList[position].appIcon)
 
         listAppUsageCount.text = mContext.getString(
             R.string.app_list_count,
@@ -41,10 +42,10 @@ class ExAdapter(
             Util.getDate(item[position].lastUseDateTime))
 
         holder.binding.moveAppDetail.singleClickListener {
-            listener.deletePackage(item[position].appPackageName)
-            item.forEachIndexed { index, exAppList ->
-                if (exAppList.appPackageName == item[position].appPackageName) {
-                    item.removeAt(index)
+            listener.deletePackage(appList[position].appPackageName)
+            appList.forEachIndexed { index, exAppList ->
+                if (exAppList.appPackageName == appList[position].appPackageName) {
+                    appList.removeAt(index)
                     return@forEachIndexed
                 }
             }
@@ -53,7 +54,7 @@ class ExAdapter(
     }
 
     override fun getItemCount(): Int {
-        return item.size
+        return appList.size
     }
 
     override fun getItemViewType(position: Int): Int {
