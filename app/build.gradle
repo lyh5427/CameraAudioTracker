@@ -8,6 +8,7 @@ plugins {
 
     //google firebase
     id 'com.google.gms.google-services'
+    id 'com.google.firebase.crashlytics'
 }
 
 android {
@@ -16,9 +17,9 @@ android {
 
     defaultConfig {
         applicationId "com.yunho.king"
-        minSdk 24
+        minSdk 26
         targetSdk 34
-        versionCode 1
+        versionCode 7
         versionName "1.0.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
