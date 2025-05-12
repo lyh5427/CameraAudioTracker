@@ -1,5 +1,6 @@
 package com.yunho.king.presentation.service
 
+import android.app.Application
 import android.app.Service
 import android.app.usage.UsageStatsManager
 import android.content.Context
@@ -79,8 +80,6 @@ class CameraTrackingManager @Inject constructor(
             override fun onCameraUnavailable(cameraId: String) { // 카메라 사용이 불가능 할 때!
                 super.onCameraUnavailable(cameraId)
 
-                Log.i(GlobalApplication.TagName, "this????")
-
                 this@CameraTrackingManager.cameraId = cameraId
                 try {
                     if (GlobalApplication.prefs!!.appAlim && !CameraInterceptActivity.isRunning) {
@@ -104,9 +103,13 @@ class CameraTrackingManager @Inject constructor(
             System.currentTimeMillis())
 
         for (pkg in lastUsagePackageList) {
-            if (pkg.lastTimeUsed > lastTime) {
-                this.packageName = pkg.packageName
-                lastTime = pkg.lastTimeUsed
+            if (!GlobalApplication.prefs!!.removeList.contains(pkg.packageName)) {
+                if (pkg.lastTimeUsed > lastTime) {
+                    Log.i("yunho", "Usages PackageName ${pkg.packageName}")
+
+                    this.packageName = pkg.packageName
+                    lastTime = pkg.lastTimeUsed
+                }
             }
         }
 

@@ -3,6 +3,7 @@ package com.yunho.king.presentation.ui.cameraintercept
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import android.graphics.drawable.Drawable
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.yunho.king.Status
 import com.yunho.king.domain.di.RepositorySource
@@ -58,6 +59,7 @@ class CameraInterceptViewModel @Inject constructor(
 
     fun getCameraAppData() {
         runBlocking(Dispatchers.IO) {
+            Log.e("yunho", "${packageName}")
             appData = repo.getCameraAppData(packageName)
         }
     }

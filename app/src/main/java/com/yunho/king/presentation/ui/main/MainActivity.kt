@@ -32,8 +32,7 @@ class MainActivity : BaseActivity() {
         setContentView(binding.root)
 
         setBottomNavi()
-
-        setAdmobview()
+        setAdmobView()
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             startForegroundService(Intent(this, MainService::class.java))
@@ -43,7 +42,7 @@ class MainActivity : BaseActivity() {
 
     }
 
-    private fun setAdmobview() = with(binding) {
+    private fun setAdmobView() = with(binding) {
         admobView.adListener = object : AdListener() {
             override fun onAdFailedToLoad(error: LoadAdError) {
                 Log.e(GlobalApplication.TagName, error.message)
