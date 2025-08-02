@@ -78,9 +78,14 @@ class CameraInterceptActivity : AppCompatActivity() {
         openCamera2()
     }
 
+    override fun onStop() {
+        super.onStop()
+
+        isRunning = false
+    }
+
     override fun onDestroy() {
         super.onDestroy()
-        isRunning = false
     }
 
     private fun setAdmobview() = with(binding) {
