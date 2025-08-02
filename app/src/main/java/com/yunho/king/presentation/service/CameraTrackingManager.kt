@@ -97,25 +97,14 @@ class CameraTrackingManager @Inject constructor(
     fun getRecentlyCameraUserPackage() {
         var lastTime = 0L
         val cal = Calendar.getInstance()
-        cal.add(Calendar.SECOND, -1)
+        Calendar.getInstance().add(Calendar.SECOND, -1)
 
-        val lastUsagePackageList = stateManager.queryUsageStats(
-            UsageStatsManager.INTERVAL_BEST,
-            cal.timeInMillis,
-            System.currentTimeMillis())
+        val lastUsagePackageList = getLastUsagesPackages(cal)
 
         for (pkg in lastUsagePackageList) {
-            if (!GlobalApplication.prefs!!.removeList.contains(pkg.packageName)
-                && pkg.packageName != mContext.packageName
-                && !pkg.packageName.contains("com.android")
-                && !pkg.packageName.contains("com.samsung")
-                && !pkg.packageName.contains("com.google")) {
-                Log.d("mytag", "Usages PackageName ${pkg.packageName}  ${lastTime}  ${pkg.lastTimeUsed}")
-                if (pkg.lastTimeUsed > lastTime) {
-                    Log.d("yunho", "Usages PackageName ${pkg.packageName}")
-                    this.packageName = pkg.packageName
-                    lastTime = pkg.lastTimeUsed
-                }
+            if (checkPackage(pkg.packageName) && pkg.lastTimeUsed > lastTime) {
+                this.packageName = pkg.packageName
+                lastTime = pkg.lastTimeUsed
             }
         }
 
@@ -124,177 +113,34 @@ class CameraTrackingManager @Inject constructor(
                 exceptCameraAppList = repo.getExceptionCameraAppData()
             }
 
-            if (exceptCameraAppList != null) {
-                exceptCameraAppList?.forEach {
-                    if (packageName == it.appPackageName) return
-                }
+            exceptCameraAppList?.forEach {
+                if (packageName == it.appPackageName) return
             }
 
-            CameraInterceptActivity.isRunning = true
-            mContext.startActivity(
-                Intent(mContext, CameraInterceptActivity::class.java).apply {
-                    putExtra(Const.PKG_NAME, packageName)
-                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                }
-            )
+            startCameraInterceptActivity()
         }
     }
-/*
 
-    lateinit var appIcon: Drawable
-    lateinit var appInfo: ApplicationInfo
+    private fun getLastUsagesPackages(cal: Calendar) =
+        stateManager.queryUsageStats(
+        UsageStatsManager.INTERVAL_BEST,
+        cal.timeInMillis,
+        System.currentTimeMillis())
 
-    private fun setAppInfo() {
-        CoroutineScope(Dispatchers.IO).launch {
-            appInfo = packageManager.getApplicationInfo(packageName, PackageManager.GET_META_DATA)
+    private fun checkPackage(packageName: String) =
+        !GlobalApplication.prefs!!.removeList.contains(packageName)
+            && packageName != mContext.packageName
+            && packageName.contains("com.android")
+            && packageName.contains("com.samsung")
+            && packageName.contains("com.google")
 
-            getAppName()
-            getAppIcon()
-
-            repo.getCameraAppData(packageName)
-
-            val appData = repo.getCameraAppData(packageName)
-
-            withContext(Dispatchers.Main) {
-                try {
-                    if (appData.notiFlag) {
-                        updateAppData(appData)
-                    }
-                } catch (e: Exception) {
-                    Log.d(GlobalApplication.TagName, e.message?: "")
-                }
+    private fun startCameraInterceptActivity() {
+        CameraInterceptActivity.isRunning = true
+        mContext.startActivity(
+            Intent(mContext, CameraInterceptActivity::class.java).apply {
+                putExtra(Const.PKG_NAME, packageName)
+                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             }
-        }
+        )
     }
-
-    fun getAppName() {
-        appName = try {
-            packageManager.getApplicationLabel(appInfo).toString()
-        } catch (e: Exception) {
-            appInfo.name
-        }
-    }
-
-    fun getAppIcon() {
-        appIcon = packageManager.getApplicationIcon(appInfo)
-    }
-
-    private fun updateAppData(data: CameraAppData) {
-        CoroutineScope(Dispatchers.IO).launch {
-            repo.updateCameraAppPermUseCount(packageName, data.permUseCount + 1)
-            repo.updateLastUseDate(packageName, System.currentTimeMillis())
-        }
-    }
-    fun makeSuspicionPopup() {
-        if (!::popupSuspicionBinding.isInitialized) {
-            popupSuspicionBinding = PopupSuspicionBinding.inflate(
-                LayoutInflater.from(mContext),
-                null,
-                false)
-
-            setListener()
-
-            val flag = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
-            } else {
-                WindowManager.LayoutParams.TYPE_PHONE
-            }
-
-            val params = WindowManager.LayoutParams(
-                WindowManager.LayoutParams.WRAP_CONTENT,
-                WindowManager.LayoutParams.WRAP_CONTENT,
-                flag,
-                WindowManager.LayoutParams.FLAG_ALLOW_LOCK_WHILE_SCREEN_ON or
-                        WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
-                PixelFormat.TRANSLUCENT)
-
-            params.x = 0
-            params.y = 0
-            params.gravity = Gravity.CENTER_VERTICAL
-
-            val windowManager = mContext.getSystemService(Context.WINDOW_SERVICE) as WindowManager
-            windowManager.addView(popupSuspicionBinding.root, params)
-        }
-
-        setSuspicionPopup()
-    }
-    fun setSuspicionPopup() = with(popupSuspicionBinding) {
-        appImg.setImageDrawable(appIcon)
-        appName.text = this@CameraTrackingManager.appName
-
-        root.toVisible()
-        openCamera2()
-    }
-
-    fun setListener() = with(popupSuspicionBinding) {
-        cameraAlimCheckBox.singleClickListener {
-            cameraAlimCheckBox.isChecked = !cameraAlimCheckBox.isChecked
-        }
-
-        appAlimCheckBox.singleClickListener {
-            appAlimCheckBox.isChecked = !appAlimCheckBox.isChecked
-        }
-
-        cancel.singleClickListener {
-            setAlimOption(cameraAlimCheckBox.isChecked)
-            setAppAlim(appAlimCheckBox.isChecked)
-            closeCamera()
-            root.toGone()
-
-        }
-
-        btnPopupOk.singleClickListener {
-            mContext.startActivity(
-                Intent(
-                    Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
-                    Uri.parse("package:${packageName}"))
-            )
-        }
-    }
-
-    private fun setAlimOption(isChecked: Boolean) {
-        if (isChecked) {
-            CoroutineScope(Dispatchers.IO).launch {
-                repo.updateNotiFlag(packageName, false)
-            }
-        }
-    }
-
-    private fun setAppAlim(isChecked: Boolean) {
-        GlobalApplication.prefs!!.appAlim = !isChecked
-    }
-
-    private fun openCamera2() {
-        try {
-            cameraProviderFuture.addListener(
-                {
-                    cameraProvider = cameraProviderFuture.get()
-                    val preview = Preview.Builder()
-                        .build()
-
-                    preview.setSurfaceProvider(popupSuspicionBinding.cameraPreview.surfaceProvider)
-
-                    val cameraSelector = CameraSelector.DEFAULT_FRONT_CAMERA
-
-                    try {
-                        cameraProvider.unbindAll()
-                        cameraProvider.bindToLifecycle((mContext as MainService), cameraSelector, preview)
-                    } catch (e: Exception) {
-
-                    }
-                },
-                ContextCompat.getMainExecutor(mContext))
-        } catch (e: Exception) {
-            Log.d(GlobalApplication.TagName, "aaa ${e.message}")
-        }
-    }
-
-    private fun closeCamera() {
-        try {
-            cameraProvider.unbindAll()
-        } catch (e: Exception) {
-            Log.d(GlobalApplication.TagName, "${e.message}")
-        }
-    }
-*/
 }
