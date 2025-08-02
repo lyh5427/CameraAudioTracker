@@ -83,7 +83,9 @@ class CameraTrackingManager @Inject constructor(
                 this@CameraTrackingManager.cameraId = cameraId
                 try {
                     if (GlobalApplication.prefs!!.appAlim && !CameraInterceptActivity.isRunning) {
-                        getRecentlyCameraUserPackage()
+                        Handler(Looper.getMainLooper()).postDelayed({
+                            getRecentlyCameraUserPackage()
+                        }, 500)
                     }
                 } catch (e: Exception) {
                     Log.i(GlobalApplication.TagName, "${e.message}")
@@ -103,10 +105,14 @@ class CameraTrackingManager @Inject constructor(
             System.currentTimeMillis())
 
         for (pkg in lastUsagePackageList) {
-            if (!GlobalApplication.prefs!!.removeList.contains(pkg.packageName)) {
+            if (!GlobalApplication.prefs!!.removeList.contains(pkg.packageName)
+                && pkg.packageName != mContext.packageName
+                && !pkg.packageName.contains("com.android")
+                && !pkg.packageName.contains("com.samsung")
+                && !pkg.packageName.contains("com.google")) {
+                Log.d("mytag", "Usages PackageName ${pkg.packageName}  ${lastTime}  ${pkg.lastTimeUsed}")
                 if (pkg.lastTimeUsed > lastTime) {
-                    Log.i("yunho", "Usages PackageName ${pkg.packageName}")
-
+                    Log.d("yunho", "Usages PackageName ${pkg.packageName}")
                     this.packageName = pkg.packageName
                     lastTime = pkg.lastTimeUsed
                 }
