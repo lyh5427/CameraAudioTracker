@@ -2,10 +2,7 @@ package com.yunho.king.presentation.ui.main.fragment.usage
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
-import android.provider.Settings
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -14,11 +11,8 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.recyclerview.widget.RecyclerView.LayoutManager
 import com.yunho.king.Const
-import com.yunho.king.GlobalApplication
 import com.yunho.king.R
-import com.yunho.king.Status
 import com.yunho.king.Utils.Util
 import com.yunho.king.databinding.FragmentAppListBinding
 import com.yunho.king.domain.dto.AppList
@@ -26,6 +20,8 @@ import com.yunho.king.domain.dto.AudioAppData
 import com.yunho.king.domain.dto.CameraAppData
 import com.yunho.king.presentation.ui.appdetail.AppDetailActivity
 import com.yunho.king.presentation.ui.main.MainViewModel
+import com.yunho.king.presentation.ui.main.fragment.usage.adapter.UsageAdapter
+import com.yunho.king.presentation.ui.main.fragment.usage.adapter.UsageAdapterListener
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -137,7 +133,7 @@ class AppListFragment : Fragment() {
         appList.adapter = UsageAdapter(
             if (type == Const.TYPE_CAMERA) camera else audio,
             requireContext(),
-            object: UsageAdapterListener{
+            object: UsageAdapterListener {
                 override fun moveToDetail(pkgName: String) {
                     startActivity(Intent(requireContext(), AppDetailActivity::class.java).apply {
                         putExtra(Const.PKG_NAME, pkgName)
