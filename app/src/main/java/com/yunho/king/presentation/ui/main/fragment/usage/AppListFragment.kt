@@ -3,6 +3,7 @@ package com.yunho.king.presentation.ui.main.fragment.usage
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -20,6 +21,8 @@ import com.yunho.king.domain.dto.AudioAppData
 import com.yunho.king.domain.dto.CameraAppData
 import com.yunho.king.presentation.ui.appdetail.AppDetailActivity
 import com.yunho.king.presentation.ui.main.MainViewModel
+import com.yunho.king.presentation.ui.main.fragment.usage.adapter.PageAdapter
+import com.yunho.king.presentation.ui.main.fragment.usage.adapter.PageAdapterListener
 import com.yunho.king.presentation.ui.main.fragment.usage.adapter.UsageAdapter
 import com.yunho.king.presentation.ui.main.fragment.usage.adapter.UsageAdapterListener
 import dagger.hilt.android.AndroidEntryPoint
@@ -37,7 +40,6 @@ class AppListFragment : Fragment() {
     var audio: ArrayList<AppList> = ArrayList()
     var camera: ArrayList<AppList> = ArrayList()
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -49,20 +51,25 @@ class AppListFragment : Fragment() {
         binding = FragmentAppListBinding.inflate(inflater)
         type = arguments?.getString(Const.TYPE)?: Const.TYPE_CAMERA
 
-        lifecycleScope.launch { setObserver() }
+        setObserver()
+
+        setType()
+
         return binding.root
     }
 
     override fun onResume() {
         super.onResume()
-        setType()
     }
 
     private fun setType() {
         lifecycleScope.launch {
             withContext(Dispatchers.IO) {
                 when (type) {
-                    Const.TYPE_CAMERA -> viewModel.getCameraData()
+                    Const.TYPE_CAMERA -> {
+                        viewModel.getCameraData(1)
+                    }
+
                     Const.TYPE_AUDIO -> viewModel.getAudioData()
                     else -> {}
                 }
@@ -70,21 +77,32 @@ class AppListFragment : Fragment() {
         }
     }
 
-    private suspend fun setObserver() {
-        when (type) {
-            Const.TYPE_CAMERA -> {
-                lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                    viewModel.cameraList.collect {
-                        makeCameraAppList(it)
+    private fun setObserver() {
+        lifecycleScope.launch {
+            when (type) {
+                Const.TYPE_CAMERA -> {
+                    lifecycle.repeatOnLifecycle(Lifecycle.State.CREATED) {
+                        viewModel.cameraList.collect {
+                            makeCameraAppList(it)
+                        }
+                    }
+                }
+
+                Const.TYPE_AUDIO -> {
+                    lifecycle.repeatOnLifecycle(Lifecycle.State.CREATED) {
+                        viewModel.audioList.collect {
+                            makeAudioAppList(it)
+                        }
                     }
                 }
             }
+        }
 
-            Const.TYPE_AUDIO -> {
-                lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                    viewModel.audioList.collect {
-                        makeAudioAppList(it)
-                    }
+        lifecycleScope.launch {
+            lifecycle.repeatOnLifecycle(Lifecycle.State.CREATED) {
+                viewModel.pageAdapter.collect {
+                    Log.d("Tag", "????")
+                    setPageAdapter(it)
                 }
             }
         }
@@ -106,6 +124,7 @@ class AppListFragment : Fragment() {
                 ))
             }
         }
+
         setRecyclerView()
     }
 
@@ -142,6 +161,19 @@ class AppListFragment : Fragment() {
             })
     }
 
+    private fun setPageAdapter(pageCount: Int) = with(binding) {
+        pageIndex.adapter = PageAdapter(
+            pageCount = pageCount,
+            listener = object : PageAdapterListener {
+                override fun loadPage(pageIndex: Int) {
+                    lifecycleScope.launch {
+                        viewModel.getCameraData(pageIndex)
+                    }
+                }
+            }
+        )
+    }
+
 
     companion object {
         @JvmStatic
@@ -153,5 +185,4 @@ class AppListFragment : Fragment() {
             }
         }
     }
-
 }

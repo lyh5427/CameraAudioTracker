@@ -95,29 +95,33 @@ class CameraTrackingManager @Inject constructor(
     }
 
     fun getRecentlyCameraUserPackage() {
-        var lastTime = 0L
-        val cal = Calendar.getInstance()
-        Calendar.getInstance().add(Calendar.SECOND, -1)
+        try {
+            var lastTime = 0L
+            val cal = Calendar.getInstance()
+            Calendar.getInstance().add(Calendar.SECOND, -1)
 
-        val lastUsagePackageList = getLastUsagesPackages(cal)
+            val lastUsagePackageList = getLastUsagesPackages(cal)
 
-        for (pkg in lastUsagePackageList) {
-            if (checkPackage(pkg.packageName) && pkg.lastTimeUsed > lastTime) {
-                this.packageName = pkg.packageName
-                lastTime = pkg.lastTimeUsed
-            }
-        }
-
-        if (packageName != mContext.packageName && ::packageName.isInitialized) {
-            runBlocking(Dispatchers.IO) {
-                exceptCameraAppList = repo.getExceptionCameraAppData()
+            for (pkg in lastUsagePackageList) {
+                if (checkPackage(pkg.packageName) && pkg.lastTimeUsed > lastTime) {
+                    this.packageName = pkg.packageName
+                    lastTime = pkg.lastTimeUsed
+                }
             }
 
-            exceptCameraAppList?.forEach {
-                if (packageName == it.appPackageName) return
-            }
+            if (packageName != mContext.packageName && ::packageName.isInitialized) {
+                runBlocking(Dispatchers.IO) {
+                    exceptCameraAppList = repo.getExceptionCameraAppData()
+                }
 
-            startCameraInterceptActivity()
+                exceptCameraAppList?.forEach {
+                    if (packageName == it.appPackageName) return
+                }
+
+                startCameraInterceptActivity()
+            }
+        } catch (e: Exception) {
+            e.stackTrace
         }
     }
 

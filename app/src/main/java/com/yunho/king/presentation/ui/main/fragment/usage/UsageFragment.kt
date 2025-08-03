@@ -1,24 +1,18 @@
 package com.yunho.king.presentation.ui.main.fragment.usage
 
 import android.os.Bundle
-import android.provider.Settings.Global
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.replace
-import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.yunho.king.Const
-import com.yunho.king.GlobalApplication
 import com.yunho.king.R
 import com.yunho.king.databinding.FragmentUsageBinding
-import com.yunho.king.domain.dto.AppList
 import com.yunho.king.presentation.ui.main.MainViewModel
+import com.yunho.king.presentation.ui.main.fragment.usage.adapter.FragmentAdapter
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.newFixedThreadPoolContext
 
 @AndroidEntryPoint
 class UsageFragment : Fragment() {

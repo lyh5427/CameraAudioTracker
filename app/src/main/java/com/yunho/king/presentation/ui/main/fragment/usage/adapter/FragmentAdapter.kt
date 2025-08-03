@@ -1,4 +1,4 @@
-package com.yunho.king.presentation.ui.main.fragment.usage
+package com.yunho.king.presentation.ui.main.fragment.usage.adapter
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import java.util.ArrayList

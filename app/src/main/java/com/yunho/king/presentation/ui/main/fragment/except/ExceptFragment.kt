@@ -11,7 +11,7 @@ import com.yunho.king.Const
 import com.yunho.king.R
 import com.yunho.king.databinding.FragmentExceptBinding
 import com.yunho.king.presentation.ui.main.MainViewModel
-import com.yunho.king.presentation.ui.main.fragment.usage.FragmentAdapter
+import com.yunho.king.presentation.ui.main.fragment.usage.adapter.FragmentAdapter
 
 class ExceptFragment : Fragment() {
 
