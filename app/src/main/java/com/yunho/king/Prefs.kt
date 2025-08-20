@@ -19,5 +19,5 @@ class Prefs (context : Context) {
         get() = prefs.getBoolean("appAlim", true)
         set(value) = prefs.edit().putBoolean("appAlim", value).apply()
 
-    var removeList: ArrayList<String> = arrayListOf("com.sec.android.app.camera", "com.sec.android.app.launcher")
+    var removeList: ArrayList<String> = arrayListOf("com.sec.android.app.launcher")
 }
