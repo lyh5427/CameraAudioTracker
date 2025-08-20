@@ -29,7 +29,6 @@ open class BaseActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setActionBar()
     }
 
     fun setActionBar() {
@@ -105,7 +104,7 @@ open class BaseActivity : AppCompatActivity() {
             )
 
             if (packageInfo.requestedPermissions != null) {
-                for (perm in packageInfo.requestedPermissions) {
+                for (perm in packageInfo.requestedPermissions!!) {
                     if (perm == Manifest.permission.CAMERA) {
                         cameraAppList.add(packageName)
                     }
@@ -126,7 +125,7 @@ open class BaseActivity : AppCompatActivity() {
             )
 
             if (packageInfo.requestedPermissions != null) {
-                for (perm in packageInfo.requestedPermissions) {
+                for (perm in packageInfo.requestedPermissions!!) {
                     if (perm == Manifest.permission.RECORD_AUDIO) {
                         audioAppList.add(packageName)
                     }

@@ -174,7 +174,6 @@ class AppListFragment : Fragment() {
         )
     }
 
-
     companion object {
         @JvmStatic
         fun newInstance(

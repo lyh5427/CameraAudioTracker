@@ -40,7 +40,6 @@ class IntroActivity : BaseActivity() {
         setContentView(binding.root)
 
         setSplashAnimation()
-
     }
 
     override fun onResume() {

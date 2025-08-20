@@ -50,7 +50,7 @@ object Util {
             )
 
             if (packageInfo.requestedPermissions != null) {
-                for (perm in packageInfo.requestedPermissions) {
+                for (perm in packageInfo.requestedPermissions!!) {
                     if (perm == Manifest.permission.CAMERA) {
                         cameraAppList.add(packageName)
                     }
@@ -71,7 +71,7 @@ object Util {
             )
 
             if (packageInfo.requestedPermissions != null) {
-                for (perm in packageInfo.requestedPermissions) {
+                for (perm in packageInfo.requestedPermissions!!) {
                     if (perm == Manifest.permission.RECORD_AUDIO) {
                         audioAppList.add(packageName)
                     }
@@ -86,7 +86,4 @@ object Util {
         val myDate = SimpleDateFormat("MM월 dd일 hh:mm:ss")
         return myDate.format(time)
     }
-
-
-
 }
