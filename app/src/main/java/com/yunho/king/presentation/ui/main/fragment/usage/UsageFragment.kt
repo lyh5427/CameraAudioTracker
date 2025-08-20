@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import com.google.android.material.tabs.TabLayoutMediator
-import com.yunho.king.Const
+import com.yunho.king.presentation.constant.Const
 import com.yunho.king.R
 import com.yunho.king.databinding.FragmentUsageBinding
 import com.yunho.king.presentation.ui.main.MainViewModel

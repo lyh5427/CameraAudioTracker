@@ -3,7 +3,7 @@ package com.yunho.king.presentation.ui.appdetail
 import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.yunho.king.GlobalApplication
-import com.yunho.king.Status
+import com.yunho.king.presentation.constant.Status
 import com.yunho.king.domain.di.RepositorySource
 import com.yunho.king.domain.dto.AudioAppData
 import com.yunho.king.domain.dto.CameraAppData

@@ -6,21 +6,20 @@ import android.os.Bundle
 import android.provider.Settings
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import com.yunho.king.Const
-import com.yunho.king.Const.TAG_OVERLAY_DENIED
-import com.yunho.king.Const.TAG_PERM_DENIED
-import com.yunho.king.Const.TAG_USAGE_DENIED_DIALOG
-import com.yunho.king.Const.TAG_USAGE_DIALOG
+import com.yunho.king.presentation.constant.Const
+import com.yunho.king.presentation.constant.Const.TAG_OVERLAY_DENIED
+import com.yunho.king.presentation.constant.Const.TAG_PERM_DENIED
+import com.yunho.king.presentation.constant.Const.TAG_USAGE_DENIED_DIALOG
+import com.yunho.king.presentation.constant.Const.TAG_USAGE_DIALOG
 import com.yunho.king.R
-import com.yunho.king.Utils.PermManager
-import com.yunho.king.Utils.singleClickListener
+import com.yunho.king.presentation.Utils.PermManager
+import com.yunho.king.presentation.Utils.singleClickListener
 import com.yunho.king.databinding.ActivityPermBinding
 import com.yunho.king.domain.listener.DialogNormalType1Listener
 import com.yunho.king.domain.listener.DialogNormalType2Listener
 import com.yunho.king.presentation.ui.base.BaseActivity
 import com.yunho.king.presentation.ui.dialog.DialogTypeNormal
 import com.yunho.king.presentation.ui.intro.IntroActivity
-import com.yunho.king.presentation.ui.main.MainActivity
 
 class PermActivity : BaseActivity(), DialogNormalType1Listener, DialogNormalType2Listener {
 

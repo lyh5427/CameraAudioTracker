@@ -1,4 +1,4 @@
-package com.yunho.king.Utils
+package com.yunho.king.presentation.Utils
 
 import android.app.AppOpsManager
 import android.app.AppOpsManager.MODE_ALLOWED

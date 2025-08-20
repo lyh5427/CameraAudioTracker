@@ -4,7 +4,7 @@ import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.yunho.king.Utils.singleClickListener
+import com.yunho.king.presentation.Utils.singleClickListener
 import com.yunho.king.databinding.RecyclerAppListBinding
 import com.yunho.king.databinding.RecyclerPageIndexBinding
 

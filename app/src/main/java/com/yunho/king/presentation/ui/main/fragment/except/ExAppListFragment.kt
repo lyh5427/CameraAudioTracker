@@ -11,12 +11,12 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import com.yunho.king.Const
+import com.yunho.king.presentation.constant.Const
 import com.yunho.king.GlobalApplication
 import com.yunho.king.R
-import com.yunho.king.Utils.Util
-import com.yunho.king.Utils.toGone
-import com.yunho.king.Utils.toVisible
+import com.yunho.king.presentation.Utils.Util
+import com.yunho.king.presentation.Utils.toGone
+import com.yunho.king.presentation.Utils.toVisible
 import com.yunho.king.databinding.FragmentExAppListBinding
 import com.yunho.king.domain.dto.AudioAppData
 import com.yunho.king.domain.dto.CameraAppData

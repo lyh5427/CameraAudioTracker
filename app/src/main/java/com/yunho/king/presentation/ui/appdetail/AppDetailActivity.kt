@@ -1,19 +1,15 @@
 package com.yunho.king.presentation.ui.appdetail
 
-import android.graphics.Color
 import android.os.Bundle
-import android.text.SpannableString
-import android.text.SpannableStringBuilder
-import android.text.style.ForegroundColorSpan
 import androidx.activity.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import com.yunho.king.Const
+import com.yunho.king.presentation.constant.Const
 import com.yunho.king.R
-import com.yunho.king.Status
-import com.yunho.king.Utils.Util
-import com.yunho.king.Utils.singleClickListener
+import com.yunho.king.presentation.constant.Status
+import com.yunho.king.presentation.Utils.Util
+import com.yunho.king.presentation.Utils.singleClickListener
 import com.yunho.king.databinding.ActivityAppDetailBinding
 import com.yunho.king.presentation.ui.base.BaseActivity
 import kotlinx.coroutines.CoroutineScope

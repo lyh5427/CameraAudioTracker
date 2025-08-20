@@ -13,7 +13,7 @@ import com.google.android.play.core.appupdate.AppUpdateOptions
 import com.google.android.play.core.install.model.AppUpdateType
 import com.google.android.play.core.install.model.UpdateAvailability
 import com.yunho.king.R
-import com.yunho.king.Utils.PermManager
+import com.yunho.king.presentation.Utils.PermManager
 import com.yunho.king.databinding.ActivityIntroBinding
 import com.yunho.king.presentation.ui.base.BaseActivity
 import com.yunho.king.presentation.ui.main.MainActivity

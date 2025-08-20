@@ -1,6 +1,5 @@
 package com.yunho.king.presentation.service
 
-import android.app.usage.UsageEvents
 import android.app.usage.UsageStats
 import android.app.usage.UsageStatsManager
 import android.content.Context
@@ -12,18 +11,14 @@ import android.os.Looper
 import android.util.Log
 import androidx.camera.lifecycle.ProcessCameraProvider
 import com.google.common.util.concurrent.ListenableFuture
-import com.yunho.king.Const
+import com.yunho.king.presentation.constant.Const
 import com.yunho.king.GlobalApplication
 import com.yunho.king.domain.di.RepositorySource
 import com.yunho.king.domain.dto.CameraAppData
 import com.yunho.king.presentation.ui.cameraintercept.CameraInterceptActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
-import java.text.SimpleDateFormat
 import java.util.Calendar
-import java.util.Date
-import java.util.Locale
-import java.util.TimeZone
 import javax.inject.Inject
 import javax.inject.Singleton
 

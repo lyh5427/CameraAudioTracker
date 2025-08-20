@@ -12,9 +12,9 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import com.yunho.king.Const
+import com.yunho.king.presentation.constant.Const
 import com.yunho.king.R
-import com.yunho.king.Utils.Util
+import com.yunho.king.presentation.Utils.Util
 import com.yunho.king.databinding.FragmentAppListBinding
 import com.yunho.king.domain.dto.AppList
 import com.yunho.king.domain.dto.AudioAppData

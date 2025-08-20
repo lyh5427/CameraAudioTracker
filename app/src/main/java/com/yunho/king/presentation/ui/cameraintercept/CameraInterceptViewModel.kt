@@ -5,7 +5,7 @@ import android.content.pm.PackageManager
 import android.graphics.drawable.Drawable
 import android.util.Log
 import androidx.lifecycle.ViewModel
-import com.yunho.king.Status
+import com.yunho.king.presentation.constant.Status
 import com.yunho.king.domain.di.RepositorySource
 import com.yunho.king.domain.dto.CameraAppData
 import com.yunho.king.domain.dto.State

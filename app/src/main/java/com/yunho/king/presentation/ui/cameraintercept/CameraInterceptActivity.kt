@@ -1,11 +1,7 @@
 package com.yunho.king.presentation.ui.cameraintercept
 
-import android.app.usage.UsageStatsManager
 import android.content.Context
 import android.content.Intent
-import android.content.pm.ApplicationInfo
-import android.content.pm.PackageManager
-import android.graphics.drawable.Drawable
 import android.hardware.camera2.CameraManager
 import android.net.Uri
 import android.os.Bundle
@@ -24,17 +20,14 @@ import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.LoadAdError
 import com.google.common.util.concurrent.ListenableFuture
-import com.yunho.king.Const
+import com.yunho.king.presentation.constant.Const
 import com.yunho.king.GlobalApplication
-import com.yunho.king.Status.TEXT
-import com.yunho.king.Utils.singleClickListener
+import com.yunho.king.presentation.constant.Status.TEXT
+import com.yunho.king.presentation.Utils.singleClickListener
 import com.yunho.king.databinding.ActivityCameraInterceptBinding
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 @AndroidEntryPoint
 class CameraInterceptActivity : AppCompatActivity() {

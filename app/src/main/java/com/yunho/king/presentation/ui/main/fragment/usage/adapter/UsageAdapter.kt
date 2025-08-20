@@ -5,8 +5,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.yunho.king.R
-import com.yunho.king.Utils.Util
-import com.yunho.king.Utils.singleClickListener
+import com.yunho.king.presentation.Utils.Util
+import com.yunho.king.presentation.Utils.singleClickListener
 import com.yunho.king.databinding.RecyclerAppListBinding
 import com.yunho.king.domain.dto.AppList
 

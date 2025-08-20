@@ -1,4 +1,4 @@
-package com.yunho.king
+package com.yunho.king.presentation.constant
 
 object Const {
     const val CHANNEL_NAME = "king_channel_1"

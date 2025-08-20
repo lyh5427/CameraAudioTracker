@@ -3,14 +3,12 @@ package com.yunho.king.presentation.service
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
-import android.app.Service
 import android.content.Intent
 import android.os.Build
-import android.os.IBinder
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.lifecycle.LifecycleService
-import com.yunho.king.Const
+import com.yunho.king.presentation.constant.Const
 import com.yunho.king.GlobalApplication
 import com.yunho.king.R
 import com.yunho.king.domain.di.RepositorySource

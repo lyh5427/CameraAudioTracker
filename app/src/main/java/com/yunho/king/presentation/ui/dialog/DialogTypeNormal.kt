@@ -7,9 +7,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
-import com.yunho.king.Const
-import com.yunho.king.Utils.singleClickListener
-import com.yunho.king.Utils.toVisible
+import com.yunho.king.presentation.constant.Const
+import com.yunho.king.presentation.Utils.singleClickListener
+import com.yunho.king.presentation.Utils.toVisible
 import com.yunho.king.databinding.FragmentDialogTypeNormalBinding
 import com.yunho.king.domain.listener.DialogNormalType1Listener
 import com.yunho.king.domain.listener.DialogNormalType2Listener
