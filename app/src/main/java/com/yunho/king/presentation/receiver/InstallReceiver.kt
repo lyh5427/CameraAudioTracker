@@ -6,6 +6,8 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
+import android.util.Log
+import com.yunho.king.GlobalApplication
 import com.yunho.king.domain.di.RepositorySource
 import com.yunho.king.domain.dto.AudioAppData
 import com.yunho.king.domain.dto.CameraAppData
@@ -18,10 +20,10 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class InstallReceiver: BroadcastReceiver() {
-    @Inject
-    lateinit var repo: RepositorySource
+    @Inject lateinit var repo: RepositorySource
 
     override fun onReceive(context: Context?, intent: Intent?) {
+        Log.i(GlobalApplication.TagName, "Receiver Event ${intent?.action}")
 
         when (intent?.action) {
             Intent.ACTION_PACKAGE_ADDED -> {
