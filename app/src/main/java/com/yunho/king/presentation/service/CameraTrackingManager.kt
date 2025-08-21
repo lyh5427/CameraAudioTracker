@@ -27,22 +27,19 @@ class CameraTrackingManager @Inject constructor(
     context: Context,
     private val repo: RepositorySource
 ) {
-    var mContext: Context = context
+    private var mContext: Context = context
 
-    lateinit var cameraManager: CameraManager
-    lateinit var cameraIds: Array<String>
-    lateinit var cameraProviderFuture: ListenableFuture<ProcessCameraProvider>
-    lateinit var stateManager: UsageStatsManager
-    lateinit var packageManager: PackageManager
-    lateinit var appName: String
-    var exceptCameraAppList: List<CameraAppData>? = null
-    var packageName: String = ""
+    private lateinit var cameraManager: CameraManager
+    private lateinit var cameraIds: Array<String>
+    private lateinit var stateManager: UsageStatsManager
+    private lateinit var packageManager: PackageManager
+    private var exceptCameraAppList: List<CameraAppData>? = null
+    private var packageName: String = ""
 
     /**
      * 카메라 상태 콜백 등록
      * */
     fun setCameraTracker() {
-        cameraProviderFuture = ProcessCameraProvider.getInstance(mContext)
         cameraManager = mContext.getSystemService(Context.CAMERA_SERVICE) as CameraManager
         stateManager = mContext.getSystemService(Context.USAGE_STATS_SERVICE) as UsageStatsManager
         packageManager = mContext.packageManager
