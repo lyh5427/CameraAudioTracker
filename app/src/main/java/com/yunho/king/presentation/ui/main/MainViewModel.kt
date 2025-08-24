@@ -58,10 +58,6 @@ class MainViewModel @Inject constructor(
         val startIndex = ((page - 1) * 10)
         val endIndex = (page * 10)
 
-        cameraAppList!!.subList(startIndex, endIndex).forEach {
-            Log.d("???", "${ it.appName}")
-        }
-
         _cameraList.emit(cameraAppList!!.subList(startIndex, endIndex))
     }
 
@@ -84,5 +80,9 @@ class MainViewModel @Inject constructor(
 
     suspend fun updateCameraAppFlag(pkgName: String, flag: Boolean) {
         repo.updateCameraNotiFlag(pkgName, flag, System.currentTimeMillis())
+    }
+
+    suspend fun updateAudioAppFlag(pkgName: String, flag: Boolean) {
+        repo.updateAudioNotiFlag(pkgName, flag, System.currentTimeMillis())
     }
 }

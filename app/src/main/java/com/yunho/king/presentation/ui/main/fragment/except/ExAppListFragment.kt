@@ -108,8 +108,6 @@ class ExAppListFragment : Fragment() {
 
     @SuppressLint("UseCompatLoadingForDrawables")
     private fun makeCameraAppList(caList: List<CameraAppData>) {
-        Log.d(GlobalApplication.TagName, "aaaaaaaaaaaa")
-
         camera.clear()
         caList.forEach {
             camera.add(
@@ -132,9 +130,8 @@ class ExAppListFragment : Fragment() {
     private fun makeAudioAppList(adList: List<AudioAppData>) {
         audio.clear()
         adList.forEach {
-            if (it.notiFlag) {
-                audio.add(
-                    ExAppList(
+            audio.add(
+                ExAppList(
                     appName = it.appName,
                     appIcon = Util.getAppIcon(
                         it.appPackageName,
@@ -143,9 +140,8 @@ class ExAppListFragment : Fragment() {
                     permUseCount = it.permUseCount,
                     lastUseDateTime = it.lastUseDateTime,
                     exceptionDate = it.exceptionDate
-                    )
                 )
-            }
+            )
         }
         setRecyclerView()
     }
@@ -157,10 +153,16 @@ class ExAppListFragment : Fragment() {
             object: ExAdapterListener {
                 override fun deletePackage(pkgName: String) {
                     CoroutineScope(Dispatchers.IO).launch {
-                        model.updateCameraAppFlag(pkgName, true)
+                        when (type) {
+                            Const.TYPE_CAMERA -> model.updateCameraAppFlag(pkgName, true)
+                            Const.TYPE_AUDIO -> model.updateAudioAppFlag(pkgName, true)
+                            else -> {}
+                        }
+
                     }
                 }
-            })
+            }
+        )
     }
 
     companion object {
