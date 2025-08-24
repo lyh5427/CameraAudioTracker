@@ -14,3 +14,9 @@
 .cxx
 local.properties
 *.json
+
+app/src/main/java/com/yunho/king/presentation/service/AudioTrackingManager.kt
+app/src/main/java/com/yunho/king/presentation/service/CameraTrackingManager.kt
+
+*.json
+*.jks

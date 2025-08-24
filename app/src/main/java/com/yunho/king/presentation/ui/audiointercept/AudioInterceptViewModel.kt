@@ -1,4 +1,4 @@
-package com.yunho.king.presentation.ui.cameraintercept
+package com.yunho.king.presentation.ui.audiointercept
 
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
@@ -6,10 +6,11 @@ import android.graphics.drawable.Drawable
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.yunho.king.presentation.constant.Status
 import com.yunho.king.domain.di.RepositorySource
+import com.yunho.king.domain.dto.AudioAppData
 import com.yunho.king.domain.dto.CameraAppData
 import com.yunho.king.domain.dto.State
+import com.yunho.king.presentation.constant.Status
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -21,10 +22,9 @@ import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 @HiltViewModel
-class CameraInterceptViewModel @Inject constructor(
+class AudioInterceptViewModel @Inject constructor(
     private val repo: RepositorySource
 ): ViewModel() {
-
     private var _appName: MutableSharedFlow<State> =
         MutableSharedFlow(0,1, BufferOverflow.DROP_LATEST)
     val appName = _appName.asSharedFlow()
@@ -38,30 +38,29 @@ class CameraInterceptViewModel @Inject constructor(
     val action = _action.asSharedFlow()
 
     var packageName = ""
-    lateinit var appData: CameraAppData
+    lateinit var appData: AudioAppData
     lateinit var appInfo: ApplicationInfo
-
 
     suspend fun updateUseCount() {
         if (::appData.isInitialized) {
-            repo.updateCameraAppPermUseCount(packageName, appData.permUseCount + 1)
+            repo.updateAudioAppPermUseCount(packageName, appData.permUseCount + 1)
         }
     }
 
     suspend fun updateUseDate() {
-        repo.updateLastUseDate(packageName, System.currentTimeMillis())
+        repo.updateAudioLastUseDate(packageName, System.currentTimeMillis())
     }
 
     fun updateNotiFlag() {
         CoroutineScope(Dispatchers.IO).launch {
-            repo.updateCameraNotiFlag(appData.appPackageName, false, System.currentTimeMillis())
+            repo.updateAudioNotiFlag(appData.appPackageName, false, System.currentTimeMillis())
         }
     }
 
-    fun getCameraAppData() {
+    fun getAudioAppData() {
         viewModelScope.launch {
             runBlocking(Dispatchers.IO) {
-                appData = repo.getCameraAppData(packageName)
+                appData = repo.getAudioAppData(packageName)
             }
         }
     }

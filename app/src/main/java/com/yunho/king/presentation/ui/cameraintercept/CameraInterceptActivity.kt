@@ -40,7 +40,6 @@ class CameraInterceptActivity : AppCompatActivity() {
     lateinit var binding: ActivityCameraInterceptBinding
     val viewModel: CameraInterceptViewModel by viewModels()
 
-
     lateinit var cameraManager: CameraManager
     lateinit var cameraIds: Array<String>
     lateinit var cameraProviderFuture: ListenableFuture<ProcessCameraProvider>
@@ -60,7 +59,7 @@ class CameraInterceptActivity : AppCompatActivity() {
         viewModel.packageName = intent.getStringExtra(Const.PKG_NAME)?: ""
         viewModel.getCameraAppData()
         lifecycleScope.launch { setObserver() }
-        setAdmobview()
+        setAdmobView()
     }
 
     override fun onResume() {
@@ -81,7 +80,7 @@ class CameraInterceptActivity : AppCompatActivity() {
         super.onDestroy()
     }
 
-    private fun setAdmobview() = with(binding) {
+    private fun setAdmobView() = with(binding) {
         admobView.adListener = object : AdListener() {
             override fun onAdFailedToLoad(error: LoadAdError) {
                 Log.e(GlobalApplication.TagName, error.message)

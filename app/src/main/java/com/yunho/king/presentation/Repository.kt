@@ -101,6 +101,10 @@ class Repository @Inject constructor(
         return adDb.getExceptionPackage(false)
     }
 
+    override fun updateAudioLastUseDate(pkgName: String, lastUse: Long) {
+        adDb.updateLastUseDate(pkgName, lastUse)
+    }
+
     override fun deleteAllAudio() {
         adDb.deleteAll()
     }

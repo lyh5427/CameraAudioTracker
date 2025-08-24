@@ -78,6 +78,10 @@ class CameraTrackingManager @Inject constructor(
         var lastForegroundApp: String? = null
         var beforeTheLastApp: String? = null
 
+        runBlocking(Dispatchers.IO) {
+            exceptCameraAppList = repo.getExceptionCameraAppData()
+        }
+
         for (pkg in getLastUsagesPackages()) {
             if (checkPackage(pkg.packageName) && pkg.lastTimeUsed > lastPackageRunTime) {
                 if (lastForegroundApp == null) {
@@ -99,10 +103,6 @@ class CameraTrackingManager @Inject constructor(
             beforeTheLastApp?: ""
         } else {
             lastForegroundApp?: ""
-        }
-
-        runBlocking(Dispatchers.IO) {
-            exceptCameraAppList = repo.getExceptionCameraAppData()
         }
 
         exceptCameraAppList?.forEach {

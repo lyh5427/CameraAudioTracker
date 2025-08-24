@@ -70,6 +70,9 @@ interface RepositorySource {
     /** 알림에서 제외된 모든 카메라 앱 데이터를 리스트로 가져 온다. */
     fun getExceptionAudioAppData(): List<AudioAppData>?
 
+    /** 매개 변수 패키지명을 가진 앱의 마지막 오디오 사용 날짜를 업데이트 한다.*/
+    fun updateAudioLastUseDate(pkgName: String, lastUse: Long)
+
     /** 모든 카메라 앱 데이터를 삭제 한다.*/
     fun deleteAllAudio()
 }

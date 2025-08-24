@@ -4,7 +4,7 @@
     <!--Secret String-->
     <string name="admob_id">ca-app-pub-7304776672885578~4887867420</string>
     <!--Test ID-->
-<!--    <string name="admob_unit_id_main_banner">ca-app-pub-3940256099942544~3347511713</string>-->
+    <!--    <string name="admob_unit_id_main_banner">ca-app-pub-3940256099942544~3347511713</string>-->
     <!--Release ID-->
     <string name="admob_unit_id_main_banner">ca-app-pub-7304776672885578/2497038616</string>
 
@@ -30,6 +30,7 @@
     <string name="suspicion_popup_camera_title">카메라 사용이 감지되었습니다</string>
     <string name="suspicion_popup_audio_title">마이크 사용이 감지되었습니다</string>
     <string name="suspocion_content">현재 CAD에서 카메라를 탈취중입니다.\n본인이 사용한게 아니라면 설정으로 이동하여 \n강제 종료해주세요.</string>
+    <string name="suspocion_content_audio">현재 CAD에서 마이크를 탈취중입니다.\n본인이 사용한게 아니라면 설정으로 이동하여 \n강제 종료해주세요.</string>
 
     <!--perm-->
     <string name="perm_start_text">설정 시작</string>

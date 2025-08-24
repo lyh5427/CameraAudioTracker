@@ -19,8 +19,10 @@ import javax.inject.Inject
 class MainService: LifecycleService() {
 
     @Inject lateinit var repo: RepositorySource
-    lateinit var cameraService: CameraTrackingManager
-    lateinit var channel: NotificationChannel
+
+    private lateinit var cameraService: CameraTrackingManager
+    private lateinit var audioService: AudioTrackingManager
+    private lateinit var channel: NotificationChannel
 
     override fun onCreate() {
         super.onCreate()
@@ -32,6 +34,9 @@ class MainService: LifecycleService() {
 
         cameraService = CameraTrackingManager(this, repo)
         cameraService.setCameraTracker()
+
+        audioService = AudioTrackingManager(this, repo)
+        audioService.setAudioTracker()
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -55,8 +60,12 @@ class MainService: LifecycleService() {
         val builder = NotificationCompat.Builder(this, Const.CAMERA_CHANNEL_ID)
         builder.setContentTitle(StringBuilder(resources.getString(R.string.app_name))
             .append(getString(R.string.service_is_running)).toString())
-            .setTicker(StringBuilder(resources.getString(R.string.app_name)).append("service is running").toString())
-            .setContentText("") //                    , swipe down for more options.
+            .setTicker(
+                StringBuilder(resources.getString(R.string.app_name))
+                    .append("service is running")
+                    .toString()
+            )
+            .setContentText("")
             .setSmallIcon(R.mipmap.app_icon)
             .setPriority(NotificationCompat.PRIORITY_LOW)
             .setWhen(0)

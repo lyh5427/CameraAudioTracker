@@ -28,6 +28,9 @@ interface AudioDao {
     @Query("SELECT * FROM AudioAppData WHERE appPackageName = :packageName")
     fun isExistAppData(packageName: String): AudioAppData?
 
+    @Query("UPDATE AudioAppData set lastUseDateTime = :lastUseDate WHERE appPackageName = :appPackageName")
+    fun updateLastUseDate(appPackageName: String, lastUseDate: Long)
+
     @Query("UPDATE AudioAppData set notiFlag = :notiFlag WHERE appPackageName = :pkgName")
     fun updateNotiFlag(pkgName: String, notiFlag: Boolean)
 
