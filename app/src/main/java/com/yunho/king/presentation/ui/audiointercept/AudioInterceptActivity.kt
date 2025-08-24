@@ -53,7 +53,6 @@ class AudioInterceptActivity : AppCompatActivity() {
         lifecycleScope.launch { setObserver() }
         setAdmobView()
         setListener()
-
     }
 
     override fun onResume() {
