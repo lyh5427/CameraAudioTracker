@@ -65,5 +65,8 @@ class ExAdapter(
 }
 
 interface ExAdapterListener{
+    /**
+     * 제외 앱 리스트에서 삭제하는 함수
+     * */
     fun deletePackage(pkgName: String)
 }
