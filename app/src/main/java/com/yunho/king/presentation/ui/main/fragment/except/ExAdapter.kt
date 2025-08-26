@@ -42,14 +42,10 @@ class ExAdapter(
             Util.getDate(item[position].lastUseDateTime))
 
         holder.binding.moveAppDetail.singleClickListener {
-            listener.deletePackage(appList[position].appPackageName)
-            appList.forEachIndexed { index, exAppList ->
-                if (exAppList.appPackageName == appList[position].appPackageName) {
-                    appList.removeAt(index)
-                    return@forEachIndexed
-                }
-            }
-            notifyDataSetChanged()
+            val app = appList[position]
+            listener.deletePackage(app.appPackageName)
+            appList.removeAt(position)
+            notifyItemRemoved(position)
         }
     }
 
