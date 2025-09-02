@@ -25,6 +25,7 @@ import com.yunho.king.GlobalApplication
 import com.yunho.king.presentation.constant.Status.TEXT
 import com.yunho.king.presentation.Utils.singleClickListener
 import com.yunho.king.databinding.ActivityCameraInterceptBinding
+import com.yunho.king.presentation.service.CameraTrackingManager
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -74,6 +75,7 @@ class CameraInterceptActivity : AppCompatActivity() {
         super.onStop()
 
         isRunning = false
+        CameraTrackingManager.saveCameraId = null
     }
 
     override fun onDestroy() {
