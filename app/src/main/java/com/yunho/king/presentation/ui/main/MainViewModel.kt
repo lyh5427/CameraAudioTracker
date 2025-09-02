@@ -1,19 +1,13 @@
 package com.yunho.king.presentation.ui.main
 
-import android.provider.Settings.Global
-import android.util.Log
-import androidx.lifecycle.viewModelScope
-import com.yunho.king.GlobalApplication
 import com.yunho.king.domain.di.RepositorySource
 import com.yunho.king.domain.dto.AudioAppData
 import com.yunho.king.domain.dto.CameraAppData
 import com.yunho.king.presentation.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.BufferOverflow
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
@@ -40,11 +34,17 @@ class MainViewModel @Inject constructor(
         MutableSharedFlow(1, 1, BufferOverflow.DROP_OLDEST)
     val exAudioList = _exAudioList.asSharedFlow()
 
-    private var _pageAdapter: MutableSharedFlow<Int> =
+    /** 카메라 앱 페이지 어댑터 적용 */
+    private var _cameraPageAdapter: MutableSharedFlow<Int> =
         MutableSharedFlow(1, 1, BufferOverflow.SUSPEND)
-    val pageAdapter = _pageAdapter.asSharedFlow()
+    val cameraPageAdapter = _cameraPageAdapter.asSharedFlow()
+
+    private var _audioPageAdapter: MutableSharedFlow<Int> =
+        MutableSharedFlow(1, 1, BufferOverflow.SUSPEND)
+    val audioPageAdapter = _audioPageAdapter.asSharedFlow()
 
     var cameraAppList: List<CameraAppData>? = null
+    var audioAppList: List<AudioAppData>? = null
 
     //AppListFragment
     suspend fun getCameraData(page: Int) {
@@ -52,7 +52,7 @@ class MainViewModel @Inject constructor(
             runBlocking {
                 cameraAppList = repo.getAllCameraAppList()
             }
-            getPageList()
+            getCameraPageCount()
         }
 
         val startIndex = ((page - 1) * 10)
@@ -61,12 +61,32 @@ class MainViewModel @Inject constructor(
         _cameraList.emit(cameraAppList!!.subList(startIndex, endIndex))
     }
 
-    suspend fun getPageList() {
-        _pageAdapter.emit((cameraAppList?.count()?: 0)/10)
+    /**
+     * 카메라 앱 전체 페이지 인텍스 반환
+     * */
+    suspend fun getCameraPageCount() {
+        _cameraPageAdapter.emit((cameraAppList?.count()?: 0)/10)
     }
 
-    suspend fun getAudioData() {
-        _audioList.emit(repo.getAllAudioAppList())
+    suspend fun getAudioData(page: Int) {
+        if (audioAppList == null) {
+            runBlocking {
+                audioAppList = repo.getAllAudioAppList()
+            }
+            getAudioPageCount()
+        }
+
+        val startIndex = ((page - 1) * 10)
+        val endIndex = (page * 10)
+
+        _audioList.emit(audioAppList!!.subList(startIndex, endIndex))
+    }
+
+    /**
+     * 오디오 앱 전체 페이지 인텍스 반환
+     * */
+    suspend fun getAudioPageCount() {
+        _audioPageAdapter.emit((audioAppList?.count()?: 0)/10)
     }
 
     //ExAppListFragment

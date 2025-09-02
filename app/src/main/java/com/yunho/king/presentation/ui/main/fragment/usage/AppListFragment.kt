@@ -3,22 +3,21 @@ package com.yunho.king.presentation.ui.main.fragment.usage
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import com.yunho.king.presentation.constant.Const
 import com.yunho.king.R
-import com.yunho.king.presentation.Utils.Util
 import com.yunho.king.databinding.FragmentAppListBinding
 import com.yunho.king.domain.dto.AppList
 import com.yunho.king.domain.dto.AudioAppData
 import com.yunho.king.domain.dto.CameraAppData
+import com.yunho.king.presentation.Utils.Util
+import com.yunho.king.presentation.constant.Const
 import com.yunho.king.presentation.ui.appdetail.AppDetailActivity
 import com.yunho.king.presentation.ui.main.MainViewModel
 import com.yunho.king.presentation.ui.main.fragment.usage.adapter.PageAdapter
@@ -70,7 +69,8 @@ class AppListFragment : Fragment() {
                         viewModel.getCameraData(1)
                     }
 
-                    Const.TYPE_AUDIO -> viewModel.getAudioData()
+                    Const.TYPE_AUDIO -> viewModel.getAudioData(1)
+
                     else -> {}
                 }
             }
@@ -100,9 +100,18 @@ class AppListFragment : Fragment() {
 
         lifecycleScope.launch {
             lifecycle.repeatOnLifecycle(Lifecycle.State.CREATED) {
-                viewModel.pageAdapter.collect {
-                    Log.d("Tag", "????")
-                    setPageAdapter(it)
+                when (type) {
+                    Const.TYPE_CAMERA -> {
+                        viewModel.cameraPageAdapter.collect {
+                            setPageAdapter(it)
+                        }
+                    }
+
+                    Const.TYPE_AUDIO -> {
+                        viewModel.audioPageAdapter.collect {
+                            setPageAdapter(it)
+                        }
+                    }
                 }
             }
         }
@@ -167,7 +176,11 @@ class AppListFragment : Fragment() {
             listener = object : PageAdapterListener {
                 override fun loadPage(pageIndex: Int) {
                     lifecycleScope.launch {
-                        viewModel.getCameraData(pageIndex)
+                        when (type) {
+                            Const.TYPE_CAMERA -> viewModel.getCameraData(pageIndex)
+
+                            Const.TYPE_AUDIO -> viewModel.getAudioData(pageIndex)
+                        }
                     }
                 }
             }
