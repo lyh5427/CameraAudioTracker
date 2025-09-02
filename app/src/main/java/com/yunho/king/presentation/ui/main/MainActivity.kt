@@ -63,11 +63,10 @@ class MainActivity : BaseActivity() {
                     return@OnItemSelectedListener true
                 }
 
-                R.id.hole -> {
-                    moveToHole()
-                    return@OnItemSelectedListener true
-                }
-
+//                R.id.hole -> {
+//                    moveToHole()
+//                    return@OnItemSelectedListener true
+//                }
                 else -> return@OnItemSelectedListener false
             }
         })

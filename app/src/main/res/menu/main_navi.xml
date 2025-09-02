@@ -11,8 +11,8 @@
         android:title="@string/navi_except"
         android:icon="@mipmap/icon_exception"/>
 
-    <item
-        android:id="@+id/hole"
-        android:title="@string/navi_hole"
-        android:icon="@mipmap/icon_hole"/>
+<!--    <item-->
+<!--        android:id="@+id/hole"-->
+<!--        android:title="@string/navi_hole"-->
+<!--        android:icon="@mipmap/icon_hole"/>-->
 </menu>
