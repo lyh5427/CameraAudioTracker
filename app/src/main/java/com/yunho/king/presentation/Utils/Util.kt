@@ -7,6 +7,12 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
 import android.graphics.drawable.Drawable
+import android.os.Build
+import android.view.View
+import android.view.ViewGroup
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updateLayoutParams
 import com.yunho.king.R
 import java.text.SimpleDateFormat
 
@@ -85,5 +91,27 @@ object Util {
     fun getDate(time: Long): String {
         val myDate = SimpleDateFormat("MM월 dd일 hh:mm:ss")
         return myDate.format(time)
+    }
+    fun setWindowInset(
+        view: View,
+        bottom: Boolean = false,
+        top: Boolean = false,
+        start: Boolean = false,
+        end: Boolean = false
+    ) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
+            ViewCompat.setOnApplyWindowInsetsListener(view) { v, windowInsets ->
+                val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
+
+                v.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                    if (top) topMargin = insets.top
+                    if (bottom) bottomMargin = insets.bottom
+                    if (start) leftMargin = insets.left
+                    if (end) rightMargin = insets.right
+                }
+
+                windowInsets
+            }
+        }
     }
 }

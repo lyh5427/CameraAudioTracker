@@ -12,6 +12,7 @@ import com.google.android.material.navigation.NavigationBarView
 import com.yunho.king.GlobalApplication
 import com.yunho.king.R
 import com.yunho.king.databinding.ActivityMainBinding
+import com.yunho.king.presentation.Utils.Util
 import com.yunho.king.presentation.service.MainService
 import com.yunho.king.presentation.ui.base.BaseActivity
 import com.yunho.king.presentation.ui.main.fragment.except.ExceptFragment
@@ -28,7 +29,11 @@ class MainActivity : BaseActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater, null, false)
 
         setContentView(binding.root)
-
+        Util.setWindowInset(
+            binding.root,
+            bottom = true,
+            top = true
+        )
         setBottomNavi()
         setAdmobView()
 

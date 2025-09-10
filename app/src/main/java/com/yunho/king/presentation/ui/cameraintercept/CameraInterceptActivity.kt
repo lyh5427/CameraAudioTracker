@@ -25,6 +25,7 @@ import com.yunho.king.GlobalApplication
 import com.yunho.king.presentation.constant.Status.TEXT
 import com.yunho.king.presentation.Utils.singleClickListener
 import com.yunho.king.databinding.ActivityCameraInterceptBinding
+import com.yunho.king.presentation.Utils.Util
 import com.yunho.king.presentation.service.CameraTrackingManager
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -32,12 +33,6 @@ import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class CameraInterceptActivity : AppCompatActivity() {
-
-    companion object {
-        // onCameraUnavailable이 여러번 호출되어 Activity 중복 방지를 위한 최후의 수단
-        var isRunning = false
-    }
-
     lateinit var binding: ActivityCameraInterceptBinding
     val viewModel: CameraInterceptViewModel by viewModels()
 
@@ -55,6 +50,12 @@ class CameraInterceptActivity : AppCompatActivity() {
         binding = ActivityCameraInterceptBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        Util.setWindowInset(
+            binding.root,
+            bottom = true,
+            top = true
+        )
+
         cameraManager = getSystemService(Context.CAMERA_SERVICE) as CameraManager
         cameraProviderFuture = ProcessCameraProvider.getInstance(this)
         viewModel.packageName = intent.getStringExtra(Const.PKG_NAME)?: ""
@@ -71,11 +72,12 @@ class CameraInterceptActivity : AppCompatActivity() {
         openCamera2()
     }
 
+    override fun onPause() {
+        super.onPause()
+    }
+
     override fun onStop() {
         super.onStop()
-
-        isRunning = false
-        CameraTrackingManager.saveCameraId = null
     }
 
     override fun onDestroy() {
@@ -102,7 +104,6 @@ class CameraInterceptActivity : AppCompatActivity() {
         }
 
         cancel.singleClickListener {
-            isRunning = false
             setAppAlim()
             closeCamera()
         }
@@ -163,7 +164,7 @@ class CameraInterceptActivity : AppCompatActivity() {
         } catch (e: Exception) {
             Log.d(GlobalApplication.TagName, "${e.message}")
         }
-        finish()
+        finishAndRemoveTask()
     }
 
     private fun setAppAlim() = with(binding) {

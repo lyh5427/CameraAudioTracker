@@ -17,6 +17,7 @@ import com.yunho.king.presentation.Utils.singleClickListener
 import com.yunho.king.databinding.ActivityPermBinding
 import com.yunho.king.domain.listener.DialogNormalType1Listener
 import com.yunho.king.domain.listener.DialogNormalType2Listener
+import com.yunho.king.presentation.Utils.Util
 import com.yunho.king.presentation.ui.base.BaseActivity
 import com.yunho.king.presentation.ui.dialog.DialogTypeNormal
 import com.yunho.king.presentation.ui.intro.IntroActivity
@@ -40,6 +41,12 @@ class PermActivity : BaseActivity(), DialogNormalType1Listener, DialogNormalType
         binding = ActivityPermBinding.inflate(layoutInflater)
 
         permManager = PermManager(this)
+
+        Util.setWindowInset(
+            binding.root,
+            bottom = true,
+            top = true
+        )
 
         setLauncher()
         registOnclickListener()

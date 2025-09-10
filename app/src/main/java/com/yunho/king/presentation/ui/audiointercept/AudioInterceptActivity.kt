@@ -22,6 +22,7 @@ import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.LoadAdError
 import com.yunho.king.GlobalApplication
 import com.yunho.king.databinding.ActivityAudioInterceptBinding
+import com.yunho.king.presentation.Utils.Util
 import com.yunho.king.presentation.Utils.singleClickListener
 import com.yunho.king.presentation.constant.Const
 import com.yunho.king.presentation.constant.Status
@@ -45,6 +46,11 @@ class AudioInterceptActivity : AppCompatActivity() {
 
         binding = ActivityAudioInterceptBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        Util.setWindowInset(
+            binding.root,
+            bottom = true,
+            top = true
+        )
 
         audioManager = getSystemService(AUDIO_SERVICE) as AudioManager
 

@@ -28,9 +28,13 @@ class AppDetailActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
 
         binding = ActivityAppDetailBinding.inflate(layoutInflater)
-
         pkgName = intent.getStringExtra((Const.PKG_NAME))?: ""
 
+        Util.setWindowInset(
+            binding.root,
+            bottom = true,
+            top = true
+        )
         lifecycleScope.launch { setObserver() }
 
         setContentView(binding.root)
