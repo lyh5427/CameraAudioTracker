@@ -10,7 +10,7 @@ import com.yunho.king.domain.dto.CameraAppData
 @Dao
 interface AudioDao {
 
-    @Query("SELECT * FROM AudioAppData ORDER BY appName DESC")
+    @Query("SELECT * FROM AudioAppData ORDER BY permUseCount DESC")
     fun getAll(): List<AudioAppData>
 
     @Query("SELECT * FROM AudioAppData WHERE appPackageName = :appPackageName")
