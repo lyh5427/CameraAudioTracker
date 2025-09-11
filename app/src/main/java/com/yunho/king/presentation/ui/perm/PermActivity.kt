@@ -39,6 +39,7 @@ class PermActivity : BaseActivity(), DialogNormalType1Listener, DialogNormalType
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPermBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         permManager = PermManager(this)
 
@@ -50,7 +51,6 @@ class PermActivity : BaseActivity(), DialogNormalType1Listener, DialogNormalType
 
         setLauncher()
         registOnclickListener()
-        setContentView(binding.root)
     }
 
     private fun registOnclickListener() = with(binding) {

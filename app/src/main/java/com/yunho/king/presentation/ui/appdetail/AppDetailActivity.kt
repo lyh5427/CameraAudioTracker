@@ -28,8 +28,9 @@ class AppDetailActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
 
         binding = ActivityAppDetailBinding.inflate(layoutInflater)
-        pkgName = intent.getStringExtra((Const.PKG_NAME))?: ""
+        setContentView(binding.root)
 
+        pkgName = intent.getStringExtra((Const.PKG_NAME))?: ""
         Util.setWindowInset(
             binding.root,
             bottom = true,
@@ -37,7 +38,6 @@ class AppDetailActivity : BaseActivity() {
         )
         lifecycleScope.launch { setObserver() }
 
-        setContentView(binding.root)
     }
 
     override fun onResume() {
