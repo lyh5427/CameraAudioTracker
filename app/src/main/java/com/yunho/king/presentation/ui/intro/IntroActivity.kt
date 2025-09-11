@@ -54,10 +54,12 @@ class IntroActivity : BaseActivity() {
     }
 
     private fun startIntro() {
+
         if (permManager.isAllPermAllow()) {
             insertCameraPackage()
             insertAudioPackage()
-            checkEnableUpdate()
+            navigateToMain()
+//            checkEnableUpdate()
         } else {
             navigateToPerm()
         }
@@ -65,7 +67,6 @@ class IntroActivity : BaseActivity() {
 
     private fun checkEnableUpdate() {
         val appUpdateManager = AppUpdateManagerFactory.create(this)
-
         val appUpdateInfoTask = appUpdateManager.appUpdateInfo
 
         appUpdateInfoTask.addOnSuccessListener { appUpdateInfo ->
