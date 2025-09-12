@@ -35,7 +35,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.King"
-        tools:targetApi="33">
+        tools:targetApi="35">
         <activity
             android:name=".presentation.ui.audiointercept.AudioInterceptActivity"
             android:exported="false" />
