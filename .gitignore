@@ -1,22 +1,36 @@
-*.iml
-*.gradle
-/local.properties
-/.idea/caches
-/.idea/libraries
-/.idea/modules.xml
-/.idea/workspace.xml
-/.idea/navEditor.xml
-/.idea/assetWizardSettings.xml
-.DS_Store
-/build
+# Build outputs
+**/build/
 /captures
-.externalNativeBuild
-.cxx
+
+# Gradle
+*.gradle
+.gradle/
+gradle/wrapper/gradle-wrapper.jar
+
+# Local configuration
 local.properties
+
+# Android Studio / IntelliJ IDEA
+*.iml
+.DS_Store
+.idea/caches/
+.idea/libraries/
+.idea/modules.xml
+.idea/workspace.xml
+.idea/navEditor.xml
+.idea/assetWizardSettings.xml
+.idea/deploymentTargetDropDown.xml
+.idea/gradle.xml
+
+# NDK
+.externalNativeBuild/
+.cxx/
+
+# Signing & secrets
+*.jks
+*.keystore
 *.json
 
+# Security - tracking manager sources
 app/src/main/java/com/yunho/king/presentation/service/AudioTrackingManager.kt
 app/src/main/java/com/yunho/king/presentation/service/CameraTrackingManager.kt
-
-*.json
-*.jks

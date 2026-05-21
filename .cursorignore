@@ -1,0 +1,21 @@
+﻿# ============================
+# Android Build Output
+# ============================
+**/build/
+**/.cxx/
+**/captures/
+**/.externalNativeBuild/
+
+# ============================
+# Sensitive / Local Settings
+# ============================
+local.properties
+*.jks
+*.keystore
+google-services.json
+
+# ============================
+# OS Files
+# ============================
+.DS_Store
+Thumbs.db

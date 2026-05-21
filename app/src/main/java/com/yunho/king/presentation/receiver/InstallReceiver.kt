@@ -8,9 +8,9 @@ import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.util.Log
 import com.yunho.king.GlobalApplication
-import com.yunho.king.domain.di.RepositorySource
-import com.yunho.king.domain.dto.AudioAppData
-import com.yunho.king.domain.dto.CameraAppData
+import com.yunho.king.domain.repository.RepositorySource
+import com.yunho.king.core.model.AudioAppData
+import com.yunho.king.core.model.CameraAppData
 import com.yunho.king.presentation.Utils.Util
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope

@@ -10,15 +10,13 @@ import dagger.hilt.android.HiltAndroidApp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.io.File
 
 @HiltAndroidApp
 class GlobalApplication: Application() {
     lateinit var installReceiver: InstallReceiver
     override fun onCreate() {
         super.onCreate()
-            prefs = Prefs(this)
-            regReceiver()
+        regReceiver()
 
 //        val dexOutputDir: File = codeCacheDir
 //        dexOutputDir.setReadOnly()
@@ -50,9 +48,6 @@ class GlobalApplication: Application() {
     }
 
     companion object {
-        @Volatile
-        var prefs: Prefs? = null
-
         val TagName = "King"
     }
 }

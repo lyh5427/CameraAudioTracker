@@ -1,179 +1,28 @@
 package com.yunho.king.presentation.ui.cameraintercept
 
-import android.content.Context
-import android.content.Intent
-import android.hardware.camera2.CameraManager
-import android.net.Uri
 import android.os.Bundle
-import android.provider.Settings
-import android.util.Log
-import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
-import androidx.camera.core.CameraSelector
-import androidx.camera.core.Preview
-import androidx.camera.lifecycle.ProcessCameraProvider
-import androidx.core.content.ContextCompat
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
-import com.google.android.gms.ads.AdListener
-import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.LoadAdError
-import com.google.common.util.concurrent.ListenableFuture
-import com.yunho.king.presentation.constant.Const
-import com.yunho.king.GlobalApplication
-import com.yunho.king.presentation.constant.Status.TEXT
-import com.yunho.king.presentation.Utils.singleClickListener
-import com.yunho.king.databinding.ActivityCameraInterceptBinding
-import com.yunho.king.presentation.Utils.Util
-import com.yunho.king.presentation.service.CameraTrackingManager
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import com.yunho.king.core.common.Const
+import com.yunho.king.core.designsystem.theme.KingTheme
+import com.yunho.king.feature.intercept.camera.CameraInterceptScreen
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class CameraInterceptActivity : AppCompatActivity() {
-    lateinit var binding: ActivityCameraInterceptBinding
-    val viewModel: CameraInterceptViewModel by viewModels()
-
-    lateinit var cameraManager: CameraManager
-    lateinit var cameraIds: Array<String>
-    lateinit var cameraProviderFuture: ListenableFuture<ProcessCameraProvider>
-    lateinit var cameraProvider: ProcessCameraProvider
-    lateinit var appName: String
-
-    var isCameraAlimCheckBox = false
-    var isAppAlimCheckBox = false
-
+class CameraInterceptActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityCameraInterceptBinding.inflate(layoutInflater)
-        setContentView(binding.root)
 
-        Util.setWindowInset(
-            binding.root,
-            bottom = true,
-            top = true
-        )
+        val pkgName = intent?.getStringExtra(Const.PKG_NAME).orEmpty()
 
-        cameraManager = getSystemService(Context.CAMERA_SERVICE) as CameraManager
-        cameraProviderFuture = ProcessCameraProvider.getInstance(this)
-        viewModel.packageName = intent.getStringExtra(Const.PKG_NAME)?: ""
-        viewModel.getCameraAppData()
-        lifecycleScope.launch { setObserver() }
-        setAdmobView()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        viewModel.setAppInfo(packageManager)
-        cameraIds = cameraManager.cameraIdList
-        setListener()
-        openCamera2()
-    }
-
-    override fun onPause() {
-        super.onPause()
-    }
-
-    override fun onStop() {
-        super.onStop()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-    }
-
-    private fun setAdmobView() = with(binding) {
-        admobView.adListener = object : AdListener() {
-            override fun onAdFailedToLoad(error: LoadAdError) {
-                Log.e(GlobalApplication.TagName, error.message)
+        setContent {
+            KingTheme {
+                CameraInterceptScreen(
+                    pkgName = pkgName,
+                    onDismiss = { finish() }
+                )
             }
-        }
-        val adRequest = AdRequest.Builder().build()
-        admobView.loadAd(adRequest)
-    }
-
-    private fun setListener() = with(binding) {
-        cameraAlimCheckBox.singleClickListener {
-            cameraAlimCheckBox.isChecked = !isCameraAlimCheckBox
-        }
-
-        appAlimCheckBox.singleClickListener {
-            appAlimCheckBox.isChecked = !isAppAlimCheckBox
-        }
-
-        cancel.singleClickListener {
-            setAppAlim()
-            closeCamera()
-        }
-
-        btnPopupOk.singleClickListener {
-            startActivity(
-                Intent(
-                    Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
-                    Uri.parse("package:${viewModel.packageName}"))
-            )
-            closeCamera()
-        }
-    }
-
-    private suspend fun setObserver() = with(binding){
-        lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-            viewModel.appIcon.collectLatest {
-                appImg.setImageDrawable(it)
-            }
-        }
-        lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-            viewModel.appName.collectLatest {
-                when (it.status) {
-                    TEXT -> appName.text = it.toString()
-                }
-            }
-        }
-    }
-
-    private fun openCamera2() {
-        try {
-            cameraProviderFuture.addListener(
-                {
-                    cameraProvider = cameraProviderFuture.get()
-                    val preview = Preview.Builder()
-                        .build()
-
-                    preview.setSurfaceProvider(binding.cameraPreview.surfaceProvider)
-
-                    val cameraSelector = CameraSelector.DEFAULT_FRONT_CAMERA
-
-                    try {
-                        cameraProvider.unbindAll()
-                        cameraProvider.bindToLifecycle(this, cameraSelector, preview)
-                    } catch (e: Exception) {
-
-                    }
-                },
-                ContextCompat.getMainExecutor(this))
-        } catch (e: Exception) {
-            Log.d(GlobalApplication.TagName, "aaa ${e.message}")
-        }
-    }
-
-    private fun closeCamera() {
-        try {
-            cameraProvider.unbindAll()
-        } catch (e: Exception) {
-            Log.d(GlobalApplication.TagName, "${e.message}")
-        }
-        finishAndRemoveTask()
-    }
-
-    private fun setAppAlim() = with(binding) {
-        if (appAlimCheckBox.isChecked) {
-            GlobalApplication.prefs!!.appAlim = false
-        }
-
-        if (cameraAlimCheckBox.isChecked) {
-            viewModel.updateNotiFlag()
         }
     }
 }
+

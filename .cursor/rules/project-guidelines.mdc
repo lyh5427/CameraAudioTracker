@@ -1,0 +1,94 @@
+---
+description: CameraAudioTracker 프로젝트 전체 AI 지침서 (proxima-aos 스타일 멀티모듈)
+alwaysApply: true
+---
+
+# CameraAudioTracker 프로젝트 지침서
+
+## 프로젝트 개요
+Android 앱으로, 기기에서 카메라/마이크 권한을 사용하는 앱을 실시간으로 감지하고 사용 이력을 추적하는 보안 앱입니다. 포그라운드 서비스 기반으로 동작하며, Room DB에 감지 이력을 저장합니다.
+
+- **패키지명**: `com.yunho.king`
+- **앱 이름**: King
+- **minSdk**: 26 / **targetSdk**: 35 / **compileSdk**: 35
+- **versionCode**: 14 / **versionName**: 1.0.0.0
+- **JDK**: 17
+
+## 모듈 구조 (proxima-aos 스타일)
+
+```
+CameraAudioTracker/
+├── app/                    # 진입점, HiltAndroidApp, 기존 Activity/서비스
+├── build-logic/            # Convention Plugins (king.android.*, king.hilt)
+├── core/
+│   ├── model/              # CameraAppData, AudioAppData, AppList, ExAppList, State
+│   ├── common/             # MviIntentStore, BaseViewModel, Const, Status, Prefs
+│   └── designsystem/       # KingTheme, Color, Typography (Compose)
+├── data/                   # Room DB, DAO, RepositoryImpl, RoomModule, RepositoryModule
+├── domain/                 # RepositorySource, UseCase 클래스들
+└── feature/
+    ├── launch/             # IntroScreen, PermScreen (Compose + MVI)
+    ├── navigator/          # MainActivity (Compose), CameraAudioTrackerNavHost
+    └── main/               # UsageScreen, ExceptScreen (Compose)
+```
+
+## 기술 스택
+
+| 분류 | 내용 |
+|------|------|
+| Build | Kotlin DSL, Version Catalog (gradle/libs.versions.toml), Convention Plugins |
+| Language | Kotlin 2.1.0 |
+| UI | View Binding (기존) + Jetpack Compose (신규 화면) |
+| DI | Hilt 2.51.1, KSP |
+| DB | Room 2.6.1 (data 모듈) |
+| Async | Coroutines + Flow |
+| 아키텍처 | Clean Architecture, MVI (State / Intent / Effect) |
+| Camera | CameraX 1.3.4 |
+| Navigation | Navigation Compose (feature), 기존 Fragment Navigation (app) |
+| Firebase / Ads | BOM 33.2.0, AdMob, Crashlytics |
+
+## 아키텍처 규칙
+
+- **Clean Architecture**: domain ← data, feature → domain/core
+- **MVI**: 신규 Compose 화면은 Contract (State, Intent, Effect) + ViewModel (mviIntentStore) + Screen Composable
+- **Repository**: 인터페이스는 `domain.repository.RepositorySource`, 구현은 `data.repository.RepositoryImpl`, Hilt는 `data.di.RepositoryModule`에서 바인딩
+- **BaseViewModel**: `core.common.BaseViewModel` (repo 주입), 기존 ViewModel은 상속 유지
+- **Convention Plugins**: `king.android.application`, `king.android.application.compose`, `king.android.library`, `king.android.library.compose`, `king.android.feature`, `king.hilt`
+
+## 코딩 컨벤션
+
+- 함수명: camelCase / 클래스명: PascalCase
+- 기존 UI: ViewBinding 사용 (`findViewById` 금지)
+- 신규 UI: Compose, `core.designsystem.theme.KingTheme` 사용
+- 상수: `core.common.Const`, `core.common.Status`
+- 전역: `GlobalApplication`, `core.common.Prefs`
+- 로그 태그: `GlobalApplication.TagName` ("King")
+
+## 금지 사항
+
+- AsyncTask, Thread.sleep() → Coroutines / delay()
+- findViewById → ViewBinding 또는 Compose
+- ViewModel에서 Context 직접 참조 금지
+- 보안 파일: `AudioTrackingManager.kt`, `CameraTrackingManager.kt`는 gitignore/cursorignore 대상 (위치만 app 서비스 유지)
+
+## 주요 파일 역할
+
+| 위치 | 역할 |
+|------|------|
+| app/GlobalApplication | HiltAndroidApp, Prefs 초기화, InstallReceiver |
+| app/.../MainService | 포그라운드 서비스 (foregroundServiceType: camera) |
+| app/.../AudioTrackingManager*, CameraTrackingManager* | 감지 로직 (보안) |
+| core:model | Room Entity, AppList, ExAppList, State |
+| core:common | MviIntentStore, BaseViewModel, Const, Status, Prefs |
+| core:designsystem | KingTheme, Color, Type |
+| data | Room DB/DAO, RepositoryImpl, RoomModule, RepositoryModule |
+| domain | RepositorySource, UseCase들 |
+| feature:launch | IntroScreen, PermScreen (MVI) |
+| feature:navigator | **진입점(LAUNCHER)** MainActivity (Compose), NavHost |
+| feature:main | UsageScreen, ExceptScreen |
+
+## 빌드 / 환경
+
+- 버전/라이브러리: `gradle/libs.versions.toml`
+- Convention Plugins: `build-logic/` (includeBuild)
+- 민감 정보: `local.properties` (gitignore), `google-services.json` 별도 배치

@@ -8,10 +8,10 @@ import android.os.Build
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.lifecycle.LifecycleService
-import com.yunho.king.presentation.constant.Const
+import com.yunho.king.core.common.Const
 import com.yunho.king.GlobalApplication
 import com.yunho.king.R
-import com.yunho.king.domain.di.RepositorySource
+import com.yunho.king.domain.repository.RepositorySource
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
