@@ -5,13 +5,15 @@ import androidx.lifecycle.ViewModel
 import com.yunho.king.core.common.PermManager
 import com.yunho.king.core.common.mvi.MviIntentStore
 import com.yunho.king.core.common.mvi.mviIntentStore
+import com.yunho.king.domain.usecase.SeedAppDatabaseUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
 @HiltViewModel
 class IntroViewModel @Inject constructor(
-    @ApplicationContext private val context: Context
+    @ApplicationContext private val context: Context,
+    private val seedAppDatabaseUseCase: SeedAppDatabaseUseCase
 ) : ViewModel() {
 
     private val permManager = PermManager(context)
@@ -20,6 +22,7 @@ class IntroViewModel @Inject constructor(
         mviIntentStore(IntroContract.State()) { intent, state, reduce, postEffect ->
             when (intent) {
                 is IntroContract.Intent.OnStart -> {
+                    seedAppDatabaseUseCase()
                     reduce { copy(isLoading = false) }
                     val effect = if (permManager.isAllPermAllow()) {
                         IntroContract.Effect.NavigateToMain

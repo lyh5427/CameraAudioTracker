@@ -13,11 +13,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -26,10 +23,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.yunho.king.core.common.PermManager
+import com.yunho.king.core.designsystem.R as DesignR
+import com.yunho.king.core.designsystem.component.KingPrimaryButton
+import com.yunho.king.core.designsystem.component.KingSecondaryButton
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable
@@ -89,13 +90,13 @@ fun PermScreen(
                     horizontalAlignment = Alignment.Start
                 ) {
                     Text(
-                        text = "권한 허용이 필요합니다",
+                        text = stringResource(DesignR.string.perm_required_title),
                         style = MaterialTheme.typography.titleLarge,
                         color = MaterialTheme.colorScheme.onSurface
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(
-                        text = "카메라, 마이크, 사용량 접근 권한을 허용해야\n앱이 제대로 동작합니다.",
+                        text = stringResource(DesignR.string.perm_required_desc),
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurface,
                         textAlign = TextAlign.Start
@@ -103,33 +104,21 @@ fun PermScreen(
                 }
             }
             Spacer(modifier = Modifier.height(24.dp))
-            Button(
+            KingPrimaryButton(
+                text = stringResource(DesignR.string.perm_request_required),
                 onClick = {
                     if (permissions.isNotEmpty()) {
                         permissionLauncher.launch(permissions.toTypedArray())
                     } else {
                         viewModel.onIntent(PermContract.Intent.PermissionsResult(emptyMap()))
                     }
-                },
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = MaterialTheme.colorScheme.primary,
-                    contentColor = MaterialTheme.colorScheme.onPrimary
-                ),
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text("필수 권한 요청")
-            }
+                }
+            )
             Spacer(modifier = Modifier.height(12.dp))
-            Button(
-                onClick = { viewModel.onIntent(PermContract.Intent.SkipToMain) },
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = MaterialTheme.colorScheme.surface,
-                    contentColor = MaterialTheme.colorScheme.onSurface
-                ),
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text("나중에 설정")
-            }
+            KingSecondaryButton(
+                text = stringResource(DesignR.string.perm_skip),
+                onClick = { viewModel.onIntent(PermContract.Intent.SkipToMain) }
+            )
         }
     }
 }

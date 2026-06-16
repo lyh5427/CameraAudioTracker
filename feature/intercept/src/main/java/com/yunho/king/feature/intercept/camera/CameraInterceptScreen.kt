@@ -19,8 +19,6 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -40,7 +38,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
+import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.yunho.king.core.designsystem.R as DesignR
+import com.yunho.king.core.designsystem.component.KingPrimaryButton
+import com.yunho.king.core.designsystem.component.KingSecondaryButton
 
 @Composable
 fun CameraInterceptScreen(
@@ -56,7 +58,7 @@ fun CameraInterceptScreen(
         viewModel.onIntent(CameraInterceptContract.Intent.SetPackageName(pkgName))
     }
     LaunchedEffect(Unit) {
-        viewModel.setAppInfo(context.packageManager)
+        viewModel.loadAppInfo(context.packageManager)
     }
 
     var cameraAlim by remember { mutableStateOf(false) }
@@ -112,14 +114,17 @@ fun CameraInterceptScreen(
 
             // 타이틀 / 설명
             Text(
-                text = "카메라 사용을 감지했어요",
+                text = stringResource(DesignR.string.suspicion_popup_camera_title),
                 style = MaterialTheme.typography.headlineLarge,
                 color = MaterialTheme.colorScheme.onBackground,
                 textAlign = TextAlign.Center
             )
             Spacer(modifier = Modifier.height(8.dp))
             Text(
-                text = "${state.appName.ifEmpty { pkgName }} 에서 카메라를 사용 중입니다.\n의심스러운 사용이라면 즉시 앱을 확인해 주세요.",
+                text = stringResource(
+                    DesignR.string.intercept_camera_desc,
+                    state.appName.ifEmpty { pkgName }
+                ),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurface,
                 textAlign = TextAlign.Center
@@ -135,7 +140,7 @@ fun CameraInterceptScreen(
                     .padding(bottom = 4.dp)
             ) {
                 Checkbox(checked = cameraAlim, onCheckedChange = { cameraAlim = it })
-                Text("이 앱의 카메라 감지 알림 끄기", style = MaterialTheme.typography.bodyMedium)
+                Text(stringResource(DesignR.string.now_app_alim_off), style = MaterialTheme.typography.bodyMedium)
             }
             Row(
                 verticalAlignment = Alignment.CenterVertically,
@@ -144,7 +149,7 @@ fun CameraInterceptScreen(
                     .padding(bottom = 12.dp)
             ) {
                 Checkbox(checked = appAlim, onCheckedChange = { appAlim = it })
-                Text("King 앱 전체 알림 끄기", style = MaterialTheme.typography.bodyMedium)
+                Text(stringResource(DesignR.string.today_off_alim), style = MaterialTheme.typography.bodyMedium)
             }
 
             // 하단 버튼 2개 (시스템 UI에 가려지지 않도록 navigationBarsPadding 사용)
@@ -153,20 +158,16 @@ fun CameraInterceptScreen(
                     .fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-                Button(
+                KingPrimaryButton(
+                    text = stringResource(DesignR.string.ok),
                     modifier = Modifier.weight(1f),
                     onClick = {
                         viewModel.onIntent(CameraInterceptContract.Intent.SetAlim(cameraAlim, appAlim))
                         onDismiss()
-                    },
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = MaterialTheme.colorScheme.primary,
-                        contentColor = MaterialTheme.colorScheme.onPrimary
-                    )
-                ) {
-                    Text("확인")
-                }
-                Button(
+                    }
+                )
+                KingSecondaryButton(
+                    text = stringResource(DesignR.string.setting),
                     modifier = Modifier.weight(1f),
                     onClick = {
                         context.startActivity(
@@ -177,9 +178,7 @@ fun CameraInterceptScreen(
                         )
                         onDismiss()
                     }
-                ) {
-                    Text("앱 설정")
-                }
+                )
             }
         }
     }

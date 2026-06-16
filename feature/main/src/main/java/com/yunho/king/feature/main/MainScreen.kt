@@ -1,6 +1,7 @@
 package com.yunho.king.feature.main
 
 import android.util.Log
+import com.yunho.king.core.common.AdMobUtil
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -28,11 +29,10 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.List
-import androidx.compose.material.icons.filled.Star
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import com.yunho.king.core.designsystem.R as DesignR
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -42,6 +42,7 @@ import kotlinx.coroutines.flow.collectLatest
 @Composable
 fun MainScreen(
     onNavigateToAppDetail: (String) -> Unit,
+    onNavigateToSettings: () -> Unit,
     viewModel: MainViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsState()
@@ -61,6 +62,7 @@ fun MainScreen(
         viewModel.sideEffects.collectLatest { effect ->
             when (effect) {
                 is MainContract.Effect.NavigateToAppDetail -> onNavigateToAppDetail(effect.pkgName)
+                is MainContract.Effect.NavigateToSettings -> onNavigateToSettings()
             }
         }
     }
@@ -71,15 +73,15 @@ fun MainScreen(
             TopAppBar(
                 title = {
                     Text(
-                        text = "King 보안 모니터링",
+                        text = stringResource(DesignR.string.main_title),
                         style = androidx.compose.material3.MaterialTheme.typography.titleLarge
                     )
                 },
                 actions = {
-                    IconButton(onClick = { /* TODO: 설정 진입 등 확장 가능 */ }) {
+                    IconButton(onClick = { viewModel.onIntent(MainContract.Intent.OpenSettings) }) {
                         Icon(
-                            imageVector = Icons.Filled.Star,
-                            contentDescription = null
+                            painter = painterResource(DesignR.drawable.icon_detail),
+                            contentDescription = stringResource(DesignR.string.setting)
                         )
                     }
                 },
@@ -92,7 +94,7 @@ fun MainScreen(
                     factory = { ctx ->
                         AdView(ctx).apply {
                             setAdSize(com.google.android.gms.ads.AdSize.BANNER)
-                            adUnitId = "ca-app-pub-3940256099942544/6300978111"
+                            adUnitId = AdMobUtil.getMainBannerUnitId(ctx)
                             adListener = object : com.google.android.gms.ads.AdListener() {
                                 override fun onAdFailedToLoad(error: LoadAdError) {
                                     Log.e("King", error.message)
@@ -105,13 +107,15 @@ fun MainScreen(
                 )
                 NavigationBar {
                     listOf(
-                        Triple(MainContract.MainTab.Usage, "사용 현황", Icons.Filled.List),
-                        Triple(MainContract.MainTab.Except, "제외 앱", Icons.Filled.Star)
-                    ).forEach { (tab, label, icon) ->
+                        Triple(MainContract.MainTab.Usage, DesignR.string.navi_usages, DesignR.drawable.icon_usage),
+                        Triple(MainContract.MainTab.Except, DesignR.string.navi_except, DesignR.drawable.icon_exception),
+                        Triple(MainContract.MainTab.Hole, DesignR.string.navi_hole, DesignR.drawable.icon_hole)
+                    ).forEach { (tab, labelRes, iconRes) ->
+                        val label = stringResource(labelRes)
                         NavigationBarItem(
                             selected = state.selectedMainTab == tab,
                             onClick = { viewModel.onIntent(MainContract.Intent.SelectMainTab(tab)) },
-                            icon = { Icon(icon, contentDescription = label) },
+                            icon = { Icon(painterResource(iconRes), contentDescription = label) },
                             label = { Text(label) },
                             colors = NavigationBarItemDefaults.colors()
                         )
@@ -133,6 +137,10 @@ fun MainScreen(
                         onIntent = viewModel::onIntent
                     )
                     MainContract.MainTab.Except -> ExceptScreen(
+                        state = state,
+                        onIntent = viewModel::onIntent
+                    )
+                    MainContract.MainTab.Hole -> HoleScreen(
                         state = state,
                         onIntent = viewModel::onIntent
                     )

@@ -17,6 +17,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -27,11 +28,13 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.yunho.king.core.common.DateFormatUtil
+import com.yunho.king.core.designsystem.R as DesignR
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -48,12 +51,12 @@ fun AppDetailScreen(
 
     Column(Modifier.fillMaxSize()) {
         TopAppBar(
-            title = { Text("앱 상세") },
+            title = { Text(stringResource(DesignR.string.app_detail_title)) },
             navigationIcon = {
                 IconButton(onClick = onBack) {
-                    androidx.compose.material3.Icon(
+                    Icon(
                         Icons.AutoMirrored.Filled.ArrowBack,
-                        contentDescription = "뒤로"
+                        contentDescription = stringResource(DesignR.string.back)
                     )
                 }
             }
@@ -117,20 +120,33 @@ fun AppDetailScreen(
                     ) {
                         Column(modifier = Modifier.padding(16.dp)) {
                             Text(
-                                text = "카메라 권한",
+                                text = stringResource(DesignR.string.app_detail_camera_title),
                                 style = MaterialTheme.typography.titleMedium
                             )
                             Spacer(modifier = Modifier.height(8.dp))
                             Text(
-                                text = "상태: ${if (camera.permState) "허용" else "거부"}",
+                                text = stringResource(
+                                    DesignR.string.perm_usage_state_title,
+                                    if (camera.permState) {
+                                        stringResource(DesignR.string.status_allow)
+                                    } else {
+                                        stringResource(DesignR.string.status_denied)
+                                    }
+                                ),
                                 style = MaterialTheme.typography.bodyMedium
                             )
                             Text(
-                                text = "사용 횟수: ${camera.permUseCount}",
+                                text = stringResource(
+                                    DesignR.string.perm_usage_count_title,
+                                    camera.permUseCount.toString()
+                                ),
                                 style = MaterialTheme.typography.bodyMedium
                             )
                             Text(
-                                text = "최근 사용: ${DateFormatUtil.format(camera.lastUseDateTime)}",
+                                text = stringResource(
+                                    DesignR.string.perm_usage_last_date_title,
+                                    DateFormatUtil.format(camera.lastUseDateTime)
+                                ),
                                 style = MaterialTheme.typography.bodyMedium
                             )
                         }
@@ -150,20 +166,33 @@ fun AppDetailScreen(
                     ) {
                         Column(modifier = Modifier.padding(16.dp)) {
                             Text(
-                                text = "오디오 권한",
+                                text = stringResource(DesignR.string.app_detail_audio_title),
                                 style = MaterialTheme.typography.titleMedium
                             )
                             Spacer(modifier = Modifier.height(8.dp))
                             Text(
-                                text = "상태: ${if (audio.permState) "허용" else "거부"}",
+                                text = stringResource(
+                                    DesignR.string.perm_usage_state_title,
+                                    if (audio.permState) {
+                                        stringResource(DesignR.string.status_allow)
+                                    } else {
+                                        stringResource(DesignR.string.status_denied)
+                                    }
+                                ),
                                 style = MaterialTheme.typography.bodyMedium
                             )
                             Text(
-                                text = "사용 횟수: ${audio.permUseCount}",
+                                text = stringResource(
+                                    DesignR.string.perm_usage_count_title,
+                                    audio.permUseCount.toString()
+                                ),
                                 style = MaterialTheme.typography.bodyMedium
                             )
                             Text(
-                                text = "최근 사용: ${DateFormatUtil.format(audio.lastUseDateTime)}",
+                                text = stringResource(
+                                    DesignR.string.perm_usage_last_date_title,
+                                    DateFormatUtil.format(audio.lastUseDateTime)
+                                ),
                                 style = MaterialTheme.typography.bodyMedium
                             )
                         }
@@ -172,7 +201,7 @@ fun AppDetailScreen(
 
                 if (state.cameraData == null && state.audioData == null) {
                     Text(
-                        "표시할 데이터가 없습니다.",
+                        stringResource(DesignR.string.no_data),
                         style = MaterialTheme.typography.bodyMedium,
                         modifier = Modifier.padding(top = 16.dp)
                     )

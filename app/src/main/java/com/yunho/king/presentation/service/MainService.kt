@@ -4,6 +4,7 @@ import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Intent
+import android.content.pm.ServiceInfo
 import android.os.Build
 import android.util.Log
 import androidx.core.app.NotificationCompat
@@ -11,6 +12,7 @@ import androidx.lifecycle.LifecycleService
 import com.yunho.king.core.common.Const
 import com.yunho.king.GlobalApplication
 import com.yunho.king.R
+import com.yunho.king.core.designsystem.R as DesignR
 import com.yunho.king.domain.repository.RepositorySource
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -44,7 +46,17 @@ class MainService: LifecycleService() {
         return START_STICKY
     }
 
-    fun showForegroundService(){
+    override fun onDestroy() {
+        if (::cameraService.isInitialized) {
+            cameraService.clearCameraTracker()
+        }
+        if (::audioService.isInitialized) {
+            audioService.clearAudioTracker()
+        }
+        super.onDestroy()
+    }
+
+    fun showForegroundService() {
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
             val manager = getSystemService(NotificationManager::class.java)
             channel = NotificationChannel(
@@ -58,10 +70,10 @@ class MainService: LifecycleService() {
         }
 
         val builder = NotificationCompat.Builder(this, Const.CAMERA_CHANNEL_ID)
-        builder.setContentTitle(StringBuilder(resources.getString(R.string.app_name))
-            .append(getString(R.string.service_is_running)).toString())
+        builder.setContentTitle(StringBuilder(resources.getString(DesignR.string.app_name))
+            .append(getString(DesignR.string.service_is_running)).toString())
             .setTicker(
-                StringBuilder(resources.getString(R.string.app_name))
+                StringBuilder(resources.getString(DesignR.string.app_name))
                     .append("service is running")
                     .toString()
             )
@@ -72,6 +84,15 @@ class MainService: LifecycleService() {
             .setOnlyAlertOnce(true)
             .setOngoing(true)
 
-        startForeground(123, builder.build())
+        val notification = builder.build()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+            startForeground(
+                123,
+                notification,
+                ServiceInfo.FOREGROUND_SERVICE_TYPE_CAMERA or ServiceInfo.FOREGROUND_SERVICE_TYPE_MICROPHONE
+            )
+        } else {
+            startForeground(123, notification)
+        }
     }
 }

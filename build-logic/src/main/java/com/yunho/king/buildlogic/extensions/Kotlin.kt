@@ -3,8 +3,9 @@ package com.yunho.king.buildlogic.extensions
 import com.yunho.king.buildlogic.const.BuildConst
 import com.android.build.api.dsl.CommonExtension
 import org.gradle.api.Project
-import org.gradle.api.plugins.ExtensionAware
-import org.jetbrains.kotlin.gradle.dsl.KotlinJvmOptions
+import org.gradle.kotlin.dsl.configure
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.dsl.KotlinAndroidProjectExtension
 
 internal fun Project.configureKotlin(
     commonExtension: CommonExtension<*, *, *, *, *, *>
@@ -17,10 +18,6 @@ internal fun Project.configureKotlin(
             targetCompatibility = BuildConst.JAVA_VERSION
         }
 
-        configureKotlinOptions {
-            jvmTarget = BuildConst.JDK_VERSION.toString()
-        }
-
         buildTypes {
             getByName("release") {
                 isMinifyEnabled = false
@@ -31,10 +28,10 @@ internal fun Project.configureKotlin(
             }
         }
     }
-}
 
-internal fun CommonExtension<*, *, *, *, *, *>.configureKotlinOptions(
-    block: KotlinJvmOptions.() -> Unit,
-) {
-    (this as ExtensionAware).extensions.configure("kotlinOptions", block)
+    extensions.configure<KotlinAndroidProjectExtension> {
+        compilerOptions {
+            jvmTarget.set(JvmTarget.JVM_17)
+        }
+    }
 }

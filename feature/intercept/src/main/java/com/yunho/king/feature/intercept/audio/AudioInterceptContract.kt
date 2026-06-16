@@ -14,5 +14,8 @@ object AudioInterceptContract {
         data object Dismiss : Intent
         data object OpenAppSettings : Intent
         data class SetAlim(val audioAlim: Boolean, val appAlim: Boolean) : Intent
+        data class SetAppInfo(val appName: String, val appIcon: Drawable?) : Intent
     }
+
+    sealed interface Effect
 }

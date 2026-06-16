@@ -1,18 +1,13 @@
 package com.yunho.king.feature.intercept.camera
 
 import android.content.pm.PackageManager
-import android.graphics.drawable.Drawable
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import com.yunho.king.core.common.mvi.MviIntentStore
+import com.yunho.king.core.common.mvi.mviIntentStore
 import com.yunho.king.domain.repository.RepositorySource
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -20,62 +15,61 @@ class CameraInterceptViewModel @Inject constructor(
     private val repo: RepositorySource
 ) : ViewModel() {
 
-    private val _state = MutableStateFlow(CameraInterceptContract.State())
-    val state: StateFlow<CameraInterceptContract.State> = _state.asStateFlow()
-
-    fun onIntent(intent: CameraInterceptContract.Intent) {
-        when (intent) {
-            is CameraInterceptContract.Intent.SetPackageName -> {
-                _state.update { it.copy(packageName = intent.pkg) }
-                loadAppData(intent.pkg)
-            }
-            is CameraInterceptContract.Intent.SetAlim -> {
-                if (intent.appAlim) {
-                    viewModelScope.launch(Dispatchers.IO) { repo.setAppAlim(false) }
+    private val store: MviIntentStore<CameraInterceptContract.State, CameraInterceptContract.Intent, CameraInterceptContract.Effect> =
+        mviIntentStore(CameraInterceptContract.State()) { intent, state, reduce, _ ->
+            when (intent) {
+                is CameraInterceptContract.Intent.SetPackageName -> {
+                    reduce { copy(packageName = intent.pkg) }
+                    loadAppData(intent.pkg, reduce)
                 }
-                if (intent.cameraAlim) updateNotiFlag()
-            }
-            else -> { }
-        }
-    }
-
-    private fun loadAppData(pkgName: String) {
-        viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                try {
-                    val data = repo.getCameraAppData(pkgName)
-                    repo.updateCameraAppPermUseCount(pkgName, data.permUseCount + 1)
-                    repo.updateLastUseDate(pkgName, System.currentTimeMillis())
-                    _state.update { it.copy(appName = data.appName) }
-                } catch (_: Exception) { }
+                is CameraInterceptContract.Intent.SetAppInfo -> {
+                    reduce { copy(appName = intent.appName, appIcon = intent.appIcon) }
+                }
+                is CameraInterceptContract.Intent.SetAlim -> {
+                    withContext(Dispatchers.IO) {
+                        if (intent.appAlim) runCatching { repo.setAppAlim(false) }
+                        if (intent.cameraAlim) updateNotiFlag(state.packageName)
+                    }
+                }
+                else -> Unit
             }
         }
-    }
 
-    fun setAppInfo(pm: PackageManager) {
-        val pkg = _state.value.packageName
+    val state = store.uiState
+    val sideEffects = store.sideEffects
+
+    fun onIntent(intent: CameraInterceptContract.Intent) = store.onIntent(intent)
+
+    fun loadAppInfo(pm: PackageManager) {
+        val pkg = state.value.packageName
         if (pkg.isEmpty()) return
-        viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                try {
-                    val appInfo = pm.getApplicationInfo(pkg, PackageManager.GET_META_DATA)
-                    val name = pm.getApplicationLabel(appInfo).toString()
-                    val icon: Drawable = pm.getApplicationIcon(appInfo)
-                    _state.update { it.copy(appName = name, appIcon = icon) }
-                } catch (_: Exception) { }
-            }
+        store.onIntent(
+            CameraInterceptContract.Intent.SetAppInfo(
+                appName = runCatching {
+                    val info = pm.getApplicationInfo(pkg, PackageManager.GET_META_DATA)
+                    pm.getApplicationLabel(info).toString()
+                }.getOrDefault(""),
+                appIcon = runCatching { pm.getApplicationIcon(pkg) }.getOrNull()
+            )
+        )
+    }
+
+    private suspend fun loadAppData(
+        pkgName: String,
+        reduce: (CameraInterceptContract.State.() -> CameraInterceptContract.State) -> Unit
+    ) = withContext(Dispatchers.IO) {
+        runCatching {
+            val data = repo.getCameraAppData(pkgName)
+            repo.updateCameraAppPermUseCount(pkgName, data.permUseCount + 1)
+            repo.updateLastUseDate(pkgName, System.currentTimeMillis())
+            reduce { copy(appName = data.appName) }
         }
     }
 
-    private fun updateNotiFlag() {
-        viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                val pkg = _state.value.packageName
-                try {
-                    val data = repo.getCameraAppData(pkg)
-                    repo.updateCameraNotiFlag(data.appPackageName, false, System.currentTimeMillis())
-                } catch (_: Exception) { }
-            }
+    private suspend fun updateNotiFlag(pkgName: String) {
+        runCatching {
+            val data = repo.getCameraAppData(pkgName)
+            repo.updateCameraNotiFlag(data.appPackageName, false, System.currentTimeMillis())
         }
     }
 }

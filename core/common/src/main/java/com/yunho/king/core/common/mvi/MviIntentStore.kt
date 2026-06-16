@@ -21,7 +21,7 @@ interface MviIntentStore<STATE, INTENT, EFFECT> {
 class MviIntentStoreImpl<STATE, INTENT, EFFECT>(
     initialState: STATE,
     private val coroutineScope: CoroutineScope,
-    private val onIntent: (
+    private val onIntent: suspend (
         intent: INTENT,
         state: STATE,
         reduce: (STATE.() -> STATE) -> Unit,
@@ -42,18 +42,20 @@ class MviIntentStoreImpl<STATE, INTENT, EFFECT>(
     }
 
     override fun onIntent(intent: INTENT) {
-        onIntent(
-            intent,
-            _uiState.value,
-            { reduce -> setState { reduce() } },
-            { effect -> postSideEffect(effect) }
-        )
+        coroutineScope.launch {
+            onIntent(
+                intent,
+                _uiState.value,
+                { reduce -> setState { reduce() } },
+                { effect -> postSideEffect(effect) }
+            )
+        }
     }
 }
 
 fun <STATE, INTENT, EFFECT> ViewModel.mviIntentStore(
     initialState: STATE,
-    onIntent: (INTENT, STATE, (STATE.() -> STATE) -> Unit, (EFFECT) -> Unit) -> Unit
+    onIntent: suspend (INTENT, STATE, (STATE.() -> STATE) -> Unit, (EFFECT) -> Unit) -> Unit
 ): MviIntentStore<STATE, INTENT, EFFECT> = MviIntentStoreImpl(
     initialState = initialState,
     coroutineScope = viewModelScope,

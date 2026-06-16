@@ -12,8 +12,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -30,7 +28,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.yunho.king.core.designsystem.R as DesignR
+import com.yunho.king.core.designsystem.component.KingPrimaryButton
+import com.yunho.king.core.designsystem.component.KingSecondaryButton
 
 @Composable
 fun AudioInterceptScreen(
@@ -45,7 +47,7 @@ fun AudioInterceptScreen(
         viewModel.onIntent(AudioInterceptContract.Intent.SetPackageName(pkgName))
     }
     LaunchedEffect(Unit) {
-        viewModel.setAppInfo(context.packageManager)
+        viewModel.loadAppInfo(context.packageManager)
     }
 
     var audioAlim by remember { mutableStateOf(false) }
@@ -71,7 +73,7 @@ fun AudioInterceptScreen(
                     .padding(horizontal = 20.dp, vertical = 16.dp)
             ) {
                 Text(
-                    text = "오디오 사용 감지",
+                    text = stringResource(DesignR.string.suspicion_popup_audio_title),
                     style = MaterialTheme.typography.titleLarge,
                     modifier = Modifier.padding(bottom = 8.dp)
                 )
@@ -86,7 +88,10 @@ fun AudioInterceptScreen(
                     )
                 }
                 Text(
-                    text = state.appName.ifEmpty { pkgName },
+                    text = stringResource(
+                        DesignR.string.intercept_audio_desc,
+                        state.appName.ifEmpty { pkgName }
+                    ),
                     style = MaterialTheme.typography.titleMedium,
                     modifier = Modifier.padding(top = 8.dp)
                 )
@@ -96,11 +101,11 @@ fun AudioInterceptScreen(
                     modifier = Modifier.padding(top = 16.dp)
                 ) {
                     Checkbox(checked = audioAlim, onCheckedChange = { audioAlim = it })
-                    Text("이 앱 알림 끄기", style = MaterialTheme.typography.bodyMedium)
+                    Text(stringResource(DesignR.string.now_app_alim_off), style = MaterialTheme.typography.bodyMedium)
                 }
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Checkbox(checked = appAlim, onCheckedChange = { appAlim = it })
-                    Text("앱 전체 알림 끄기", style = MaterialTheme.typography.bodyMedium)
+                    Text(stringResource(DesignR.string.today_off_alim), style = MaterialTheme.typography.bodyMedium)
                 }
 
                 Row(
@@ -109,20 +114,16 @@ fun AudioInterceptScreen(
                         .padding(top = 16.dp),
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    Button(
+                    KingPrimaryButton(
+                        text = stringResource(DesignR.string.cancel),
                         modifier = Modifier.weight(1f),
                         onClick = {
                             viewModel.onIntent(AudioInterceptContract.Intent.SetAlim(audioAlim, appAlim))
                             onDismiss()
-                        },
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = MaterialTheme.colorScheme.primary,
-                            contentColor = MaterialTheme.colorScheme.onPrimary
-                        )
-                    ) {
-                        Text("닫기")
-                    }
-                    Button(
+                        }
+                    )
+                    KingSecondaryButton(
+                        text = stringResource(DesignR.string.setting),
                         modifier = Modifier.weight(1f),
                         onClick = {
                             context.startActivity(
@@ -133,9 +134,7 @@ fun AudioInterceptScreen(
                             )
                             onDismiss()
                         }
-                    ) {
-                        Text("앱 설정")
-                    }
+                    )
                 }
             }
         }

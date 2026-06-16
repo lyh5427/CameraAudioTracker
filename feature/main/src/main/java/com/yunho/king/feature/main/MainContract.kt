@@ -17,28 +17,33 @@ object MainContract {
         val currentAudioUsagePage: Int = 1,
         val exCameraList: List<CameraAppData> = emptyList(),
         val exAudioList: List<AudioAppData> = emptyList(),
+        val allCameraList: List<CameraAppData> = emptyList(),
+        val allAudioList: List<AudioAppData> = emptyList(),
         val isLoading: Boolean = false
     ) {
         val cameraUsageFiltered: List<CameraAppData> get() = cameraUsageList.filter { it.notiFlag }
         val audioUsageFiltered: List<AudioAppData> get() = audioUsageList.filter { it.notiFlag }
     }
 
-    enum class MainTab { Usage, Except }
+    enum class MainTab { Usage, Except, Hole }
 
     enum class UsageTab { Camera, Audio }
 
     sealed interface Intent {
         data object LoadUsageData : Intent
         data object LoadExceptionData : Intent
+        data object LoadAllApps : Intent
         data class SelectMainTab(val tab: MainTab) : Intent
         data class SelectUsageTab(val tab: UsageTab) : Intent
         data class LoadCameraPage(val page: Int) : Intent
         data class LoadAudioPage(val page: Int) : Intent
         data class NavigateToDetail(val pkgName: String) : Intent
         data class RemoveFromException(val pkgName: String, val isCamera: Boolean) : Intent
+        data object OpenSettings : Intent
     }
 
     sealed interface Effect {
         data class NavigateToAppDetail(val pkgName: String) : Effect
+        data object NavigateToSettings : Effect
     }
 }

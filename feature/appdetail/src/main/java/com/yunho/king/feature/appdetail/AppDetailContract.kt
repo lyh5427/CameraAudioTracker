@@ -15,4 +15,6 @@ object AppDetailContract {
     sealed interface Intent {
         data class Load(val pkgName: String) : Intent
     }
+
+    sealed interface Effect
 }

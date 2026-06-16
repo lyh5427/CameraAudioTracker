@@ -13,6 +13,7 @@ import com.yunho.king.feature.intercept.camera.CameraInterceptScreen
 import com.yunho.king.feature.launch.intro.IntroScreen
 import com.yunho.king.feature.launch.perm.PermScreen
 import com.yunho.king.feature.main.MainScreen
+import com.yunho.king.feature.main.settings.SettingsScreen
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable
@@ -43,8 +44,14 @@ fun CameraAudioTrackerNavHost(
             MainScreen(
                 onNavigateToAppDetail = { pkgName ->
                     navController.navigate("appdetail/$pkgName")
+                },
+                onNavigateToSettings = {
+                    navController.navigate("settings")
                 }
             )
+        }
+        composable("settings") {
+            SettingsScreen(onBack = { navController.popBackStack() })
         }
         composable(
             route = "appdetail/{pkgName}",

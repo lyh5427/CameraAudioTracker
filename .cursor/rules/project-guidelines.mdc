@@ -18,77 +18,76 @@ Android 앱으로, 기기에서 카메라/마이크 권한을 사용하는 앱�
 
 ```
 CameraAudioTracker/
-├── app/                    # 진입점, HiltAndroidApp, 기존 Activity/서비스
+├── app/                    # HiltAndroidApp, MainService, InstallReceiver, InterceptNavigation
 ├── build-logic/            # Convention Plugins (king.android.*, king.hilt)
 ├── core/
-│   ├── model/              # CameraAppData, AudioAppData, AppList, ExAppList, State
-│   ├── common/             # MviIntentStore, BaseViewModel, Const, Status, Prefs
-│   └── designsystem/       # KingTheme, Color, Typography (Compose)
-├── data/                   # Room DB, DAO, RepositoryImpl, RoomModule, RepositoryModule
-├── domain/                 # RepositorySource, UseCase 클래스들
+│   ├── model/              # Entity, ScannedApp, AppList, State
+│   ├── common/             # MviIntentStore, PermManager, Const, AdMobUtil
+│   └── designsystem/       # KingTheme, KingButton, KingAppListItem, 리소스
+├── data/                   # Room, RepositoryImpl, InstalledAppScannerImpl
+├── domain/                 # RepositorySource, UseCase, InstalledAppScannerSource
 └── feature/
     ├── launch/             # IntroScreen, PermScreen (Compose + MVI)
-    ├── navigator/          # MainActivity (Compose), CameraAudioTrackerNavHost
-    └── main/               # UsageScreen, ExceptScreen (Compose)
+    ├── navigator/          # MainActivity, CameraAudioTrackerNavHost
+    ├── main/               # MainScreen, Usage, Except, Hole, Settings
+    ├── intercept/          # Camera/Audio InterceptScreen
+    └── appdetail/          # AppDetailScreen
 ```
 
 ## 기술 스택
 
 | 분류 | 내용 |
 |------|------|
-| Build | Kotlin DSL, Version Catalog (gradle/libs.versions.toml), Convention Plugins |
+| Build | Kotlin DSL, Version Catalog, Convention Plugins |
 | Language | Kotlin 2.1.0 |
-| UI | View Binding (기존) + Jetpack Compose (신규 화면) |
+| UI | Jetpack Compose (전 화면) |
 | DI | Hilt 2.51.1, KSP |
-| DB | Room 2.6.1 (data 모듈) |
+| DB | Room 2.6.1 (data 모듈) + DataStore |
 | Async | Coroutines + Flow |
 | 아키텍처 | Clean Architecture, MVI (State / Intent / Effect) |
-| Camera | CameraX 1.3.4 |
-| Navigation | Navigation Compose (feature), 기존 Fragment Navigation (app) |
+| Camera | CameraX 1.3.4 (인터셉트 프리뷰) |
+| Navigation | Navigation Compose |
 | Firebase / Ads | BOM 33.2.0, AdMob, Crashlytics |
 
 ## 아키텍처 규칙
 
 - **Clean Architecture**: domain ← data, feature → domain/core
-- **MVI**: 신규 Compose 화면은 Contract (State, Intent, Effect) + ViewModel (mviIntentStore) + Screen Composable
-- **Repository**: 인터페이스는 `domain.repository.RepositorySource`, 구현은 `data.repository.RepositoryImpl`, Hilt는 `data.di.RepositoryModule`에서 바인딩
-- **BaseViewModel**: `core.common.BaseViewModel` (repo 주입), 기존 ViewModel은 상속 유지
-- **Convention Plugins**: `king.android.application`, `king.android.application.compose`, `king.android.library`, `king.android.library.compose`, `king.android.feature`, `king.hilt`
+- **MVI**: Compose 화면은 Contract + ViewModel (mviIntentStore) + Screen
+- **Repository**: `domain.repository.RepositorySource` ← `data.repository.RepositoryImpl`
+- **인터셉트 진입**: `InterceptNavigation` → `MainActivity` Intent → `NavigatorViewModel` → NavHost
+- **DB 시드**: `IntroViewModel` → `SeedAppDatabaseUseCase` (최초 1회)
+- **Convention Plugins**: `king.android.application`, `king.android.feature`, `king.hilt` 등
 
 ## 코딩 컨벤션
 
-- 함수명: camelCase / 클래스명: PascalCase
-- 기존 UI: ViewBinding 사용 (`findViewById` 금지)
-- 신규 UI: Compose, `core.designsystem.theme.KingTheme` 사용
-- 상수: `core.common.Const`, `core.common.Status`
-- 전역: `GlobalApplication`, `core.common.Prefs`
+- 신규 UI: Compose + `KingTheme` + `core.designsystem` 리소스/컴포넌트
+- 문자열: `core.designsystem` `strings.xml` + `stringResource`
+- 상수: `core.common.Const`
 - 로그 태그: `GlobalApplication.TagName` ("King")
+- AdMob 배너 ID: `AdMobUtil.getMainBannerUnitId(context)` (local.properties → resValue)
 
 ## 금지 사항
 
-- AsyncTask, Thread.sleep() → Coroutines / delay()
-- findViewById → ViewBinding 또는 Compose
-- ViewModel에서 Context 직접 참조 금지
-- 보안 파일: `AudioTrackingManager.kt`, `CameraTrackingManager.kt`는 gitignore/cursorignore 대상 (위치만 app 서비스 유지)
+- AsyncTask, Thread.sleep() → Coroutines
+- findViewById / ViewBinding (레거시 제거 완료)
+- ViewModel에서 Context 직접 참조 금지 (`@ApplicationContext` 또는 UseCase 사용)
+- 보안 파일: `AudioTrackingManager.kt`, `CameraTrackingManager.kt`는 gitignore 대상
 
 ## 주요 파일 역할
 
 | 위치 | 역할 |
 |------|------|
-| app/GlobalApplication | HiltAndroidApp, Prefs 초기화, InstallReceiver |
-| app/.../MainService | 포그라운드 서비스 (foregroundServiceType: camera) |
-| app/.../AudioTrackingManager*, CameraTrackingManager* | 감지 로직 (보안) |
-| core:model | Room Entity, AppList, ExAppList, State |
-| core:common | MviIntentStore, BaseViewModel, Const, Status, Prefs |
-| core:designsystem | KingTheme, Color, Type |
-| data | Room DB/DAO, RepositoryImpl, RoomModule, RepositoryModule |
-| domain | RepositorySource, UseCase들 |
-| feature:launch | IntroScreen, PermScreen (MVI) |
-| feature:navigator | **진입점(LAUNCHER)** MainActivity (Compose), NavHost |
-| feature:main | UsageScreen, ExceptScreen |
+| app/GlobalApplication | HiltAndroidApp, AdMob 초기화 |
+| app/.../MainService | FGS (camera\|microphone), 트래킹 매니저 구동 |
+| app/.../InterceptNavigation | 감지 → Compose 인터셉트 브릿지 |
+| app/.../InstallReceiver | PACKAGE_ADDED/REMOVED → Room 시드 |
+| feature:navigator | LAUNCHER MainActivity, NavHost |
+| feature:main | Usage / Except / Hole 탭, Settings |
+| feature:intercept | Camera/Audio 인터셉트 UI |
+| domain/.../SeedAppDatabaseUseCase | 최초 설치 앱 DB 시드 |
 
 ## 빌드 / 환경
 
-- 버전/라이브러리: `gradle/libs.versions.toml`
-- Convention Plugins: `build-logic/` (includeBuild)
-- 민감 정보: `local.properties` (gitignore), `google-services.json` 별도 배치
+- JDK 17 필수 (Gradle/Kotlin 호환)
+- `local.properties`: `ADMOB_ID`, `ADMOB_UNIT_ID_MAIN_BANNER`, 서명 키
+- `google-services.json` 별도 배치

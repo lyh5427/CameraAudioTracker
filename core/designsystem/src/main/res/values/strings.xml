@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">King</string>
+
+    <!--Intro-->
+    <string name="intro_title">Camera &amp; Audio Tracker</string>
+    <string name="intro_description">카메라와 마이크 사용을 실시간으로 감지하고,\n의심스러운 사용 이력을 한 눈에 확인하세요.</string>
+    <string name="intro_start">시작하기</string>
+
+    <!--Main-->
+    <string name="main_title">King 보안 모니터링</string>
+    <string name="empty_list">목록 없음</string>
+    <string name="remove_exception">제외 해제</string>
+    <string name="no_data">표시할 데이터가 없습니다.</string>
+    <string name="status_allow">허용</string>
+    <string name="status_denied">거부</string>
+    <string name="back">뒤로</string>
+
+    <!--Settings-->
+    <string name="settings_title">설정</string>
+    <string name="settings_app_alim_title">전체 알림</string>
+    <string name="settings_app_alim_desc">카메라·마이크 사용 감지 알림을 켜거나 끕니다.</string>
+
+    <!--Bottom Navi-->
+    <string name="navi_usages">사용 정보</string>
+    <string name="navi_except">제외 목록</string>
+    <string name="navi_hole">전체</string>
+
+    <!--Service-->
+    <string name="service_is_running">King이 동작중입니다.</string>
+    <string name="now_app_alim_off">현재 앱 알림 끄기</string>
+    <string name="today_off_alim">오늘 하루 알림 끄기</string>
+
+    <!--Base-->
+    <string name="not_fount_app_name">앱 이름 추출 불가</string>
+
+    <!--popup-->
+    <string name="ok">확인</string>
+    <string name="setting">설정하기</string>
+    <string name="move">이동하기</string>
+    <string name="cancel">닫기</string>
+    <string name="suspicion_popup_camera_title">카메라 사용이 감지되었습니다</string>
+    <string name="suspicion_popup_audio_title">마이크 사용이 감지되었습니다</string>
+    <string name="suspocion_content">현재 King에서 카메라를 탈취중입니다.\n본인이 사용한게 아니라면 설정으로 이동하여 \n강제 종료해주세요.</string>
+    <string name="suspocion_content_audio">현재 King에서 마이크를 탈취중입니다.\n본인이 사용한게 아니라면 설정으로 이동하여 \n강제 종료해주세요.</string>
+    <string name="intercept_camera_desc">%1$s 에서 카메라를 사용 중입니다.\n의심스러운 사용이라면 즉시 앱을 확인해 주세요.</string>
+    <string name="intercept_audio_desc">%1$s 에서 마이크를 사용 중입니다.\n의심스러운 사용이라면 즉시 앱을 확인해 주세요.</string>
+
+    <!--perm-->
+    <string name="perm_start_text">설정 시작</string>
+    <string name="perm_title">권한 설정</string>
+    <string name="perm_required_title">권한 허용이 필요합니다</string>
+    <string name="perm_required_desc">카메라, 마이크, 사용량 접근 권한을 허용해야\n앱이 제대로 동작합니다.</string>
+    <string name="perm_request_required">필수 권한 요청</string>
+    <string name="perm_skip">나중에 설정</string>
+    <string name="alim_title">알림</string>
+    <string name="alim_content">각종 알림을 보내기 위해 필요합니다.</string>
+    <string name="camera_title">카메라</string>
+    <string name="camera_content">타 앱의 카메라 사용을 감지하기 위해 필요합니다.</string>
+    <string name="mic_title">마이크</string>
+    <string name="mic_content">타 앱의 마이크 사용을 감지하기 위해 필요합니다.</string>
+    <string name="overlay_title">다른 앱 위에 그리기</string>
+    <string name="overlay_content">앱이 사용중이 아니어도 팝업을 띄우기 위해 필요합니다.</string>
+    <string name="usage_title">사용 정보</string>
+    <string name="usage_content">다른 앱의 사용정보를 가져오기 위해 필요합니다.</string>
+
+    <string name="perm_denied_title">권한 설정 필요</string>
+    <string name="perm_denied_content">권한 설정이 완료되지 않았습니다.\n \"설정->권한\"목록의 모든 권한을 허용해주세요.</string>
+
+    <string name="perm_denied_overlay_title">다른 앱 위에 그리기 필요</string>
+    <string name="perm_denied_overlay_content">앱이 사용중이 아닐 때에도 팝업을 띄우기 위해 해당 권한이 필요합니다.\n 설정으로 이동하여 권한을 허용해주세요.</string>
+
+    <string name="perm_usage_title">사용 정보 권한 필요</string>
+    <string name="perm_usage_content">앱이 사용중이 아닐 때에도 디바이스의 카메라, 마이크를 사용하는 어플리케이션을 특정하기 위해 필요합니다.\n 설정으로 이동하여 권한을 허용해주세요.</string>
+
+    <string name="perm_denied_usage_title">사용 정보 권한 미설정</string>
+    <string name="perm_denied_usage_content">사용 정보 권한 설정을 하지 않으셨습니다. 어플리케이션 기능 사용에 제한이 됩니다.</string>
+
+    <!--usagefragment-->
+    <string name="camera_tab">카메라 앱</string>
+    <string name="audio_tab">오디오 앱</string>
+    <string name="app_list_name">앱 이름 : %1$s</string>
+    <string name="app_list_count">사용 횟수 : %1$s</string>
+    <string name="app_list_last_use">마지막 사용 날짜 : %1$s</string>
+
+    <!--AppDetail-->
+    <string name="app_detail_title">상세 페이지</string>
+    <string name="app_detail_download">다운로드 경로 : %1$s</string>
+    <string name="app_detail_camera_title">카메라 권한 정보</string>
+    <string name="app_detail_audio_title">오디오 권한 정보</string>
+    <string name="perm_usage_state_title">권한 허용 여부 : %1$s</string>
+    <string name="perm_usage_count_title">권한 사용 횟수 : %1$s회</string>
+    <string name="perm_usage_last_date_title">마지막 사용 일자 : %1$s</string>
+    <string name="btn_app_detail">앱 상세 페이지 이동</string>
+
+    <string name="state_allow">권한이 허용되어 있습니다.</string>
+    <string name="state_denied">권한이 허용되어 있지 않습니다.</string>
+
+    <!--Util-->
+    <string name="un_known">알 수 없음</string>
+
+    <!--ExceptionFragment-->
+    <string name="non_list">제외 앱 리스트가 없습니다.</string>
+</resources>
