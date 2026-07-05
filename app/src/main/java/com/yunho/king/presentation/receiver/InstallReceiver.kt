@@ -15,6 +15,7 @@ import com.yunho.king.presentation.Utils.Util
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -22,64 +23,93 @@ import javax.inject.Inject
 class InstallReceiver: BroadcastReceiver() {
     @Inject lateinit var repo: RepositorySource
 
+    private val receiverScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
+
     override fun onReceive(context: Context?, intent: Intent?) {
         Log.i(GlobalApplication.TagName, "Receiver Event ${intent?.action}")
 
+        val ctx = context ?: return
+        val pendingResult = goAsync()
+
         when (intent?.action) {
             Intent.ACTION_PACKAGE_ADDED -> {
-                addedProcess(context, intent)
+                if (intent.getBooleanExtra(Intent.EXTRA_REPLACING, false)) {
+                    pendingResult.finish()
+                    return
+                }
+                addedProcess(ctx, intent, pendingResult)
             }
 
             Intent.ACTION_PACKAGE_REMOVED -> {
-                removeProcess(context, intent)
+                removeProcess(intent, pendingResult)
+            }
+
+            else -> pendingResult.finish()
+        }
+    }
+
+    private fun addedProcess(context: Context, intent: Intent?, pendingResult: PendingResult) {
+        val packageName = intent?.data?.schemeSpecificPart ?: run {
+            pendingResult.finish()
+            return
+        }
+
+        receiverScope.launch {
+            try {
+                val appName = Util.getAppName(packageName, context)
+                val packageInfo = runCatching {
+                    context.packageManager.getPackageInfo(
+                        packageName,
+                        PackageManager.GET_PERMISSIONS
+                    )
+                }.getOrNull() ?: return@launch
+
+                if (checkCameraPerm(packageInfo)) {
+                    runCatching {
+                        repo.insertCameraApp(
+                            CameraAppData(
+                                appPackageName = packageName,
+                                appName = appName,
+                                permState = false
+                            )
+                        )
+                    }.onFailure {
+                        Log.w(GlobalApplication.TagName, "Failed to insert camera app: $packageName", it)
+                    }
+                }
+
+                if (checkAudioPerm(packageInfo)) {
+                    runCatching {
+                        repo.insertAudioApp(
+                            AudioAppData(
+                                appPackageName = packageName,
+                                appName = appName,
+                                permState = false
+                            )
+                        )
+                    }.onFailure {
+                        Log.w(GlobalApplication.TagName, "Failed to insert audio app: $packageName", it)
+                    }
+                }
+            } finally {
+                pendingResult.finish()
             }
         }
     }
 
-    private fun addedProcess(context: Context?, intent: Intent?) {
-        val packageName = intent?.data?.schemeSpecificPart
-
-        if (packageName != null) {
-            val appName = Util.getAppName(packageName, context!!)
-            val packageInfo = context
-                .packageManager
-                .getPackageInfo(
-                    packageName,
-                    PackageManager.GET_PERMISSIONS
-                )
-
-            if (checkCameraPerm(packageInfo)) {
-                val appData = CameraAppData(
-                    appPackageName = packageName,
-                    appName = appName,
-                    permState = false
-                )
-
-                CoroutineScope(Dispatchers.IO).launch {
-                    repo.insertCameraApp(appData)
-                }
-            }
-
-            if (checkAudioPerm(packageInfo)) {
-                val appData = AudioAppData(
-                    appPackageName = packageName,
-                    appName = appName,
-                    permState = false
-                )
-
-                CoroutineScope(Dispatchers.IO).launch {
-                    repo.insertAudioApp(appData)
-                }
-            }
+    private fun removeProcess(intent: Intent?, pendingResult: PendingResult) {
+        val packageName = intent?.data?.schemeSpecificPart ?: run {
+            pendingResult.finish()
+            return
         }
-    }
 
-    private fun removeProcess(context: Context?, intent: Intent?) {
-        val packageName = intent?.data?.schemeSpecificPart
-
-        CoroutineScope(Dispatchers.IO).launch {
-            repo.deleteAudioApp(packageName?: "")
-            repo.deleteCameraApp(packageName?: "")
+        receiverScope.launch {
+            try {
+                repo.deleteAudioApp(packageName)
+                repo.deleteCameraApp(packageName)
+            } finally {
+                pendingResult.finish()
+            }
         }
     }
 

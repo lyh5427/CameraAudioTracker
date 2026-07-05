@@ -10,4 +10,6 @@ object SettingsContract {
         data object Load : Intent
         data class SetAppAlim(val enabled: Boolean) : Intent
     }
+
+    sealed interface Effect
 }

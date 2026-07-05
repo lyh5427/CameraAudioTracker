@@ -2,6 +2,7 @@ package com.yunho.king.feature.main
 
 import android.util.Log
 import com.yunho.king.core.common.AdMobUtil
+import com.yunho.king.core.common.PermManager
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -23,11 +24,11 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.IconButton
 import android.content.Intent
-import android.os.Build
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -48,14 +49,16 @@ fun MainScreen(
     val state by viewModel.state.collectAsState()
 
     val context = LocalContext.current
+    val permManager = remember { PermManager(context) }
     LaunchedEffect(Unit) {
         viewModel.onIntent(MainContract.Intent.LoadUsageData)
         viewModel.onIntent(MainContract.Intent.LoadExceptionData)
+        if (!permManager.isRuntimePermAllow()) return@LaunchedEffect
         val serviceIntent = Intent().setClassName(context, "com.yunho.king.presentation.service.MainService")
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        try {
             context.startForegroundService(serviceIntent)
-        } else {
-            context.startService(serviceIntent)
+        } catch (e: SecurityException) {
+            Log.e("King", "Failed to start MainService", e)
         }
     }
     LaunchedEffect(Unit) {

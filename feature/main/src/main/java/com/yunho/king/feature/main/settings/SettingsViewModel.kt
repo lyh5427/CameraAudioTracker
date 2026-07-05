@@ -13,7 +13,9 @@ class SettingsViewModel @Inject constructor(
     private val repo: RepositorySource
 ) : ViewModel() {
 
-    private val store = mviIntentStore(SettingsContract.State()) { intent, _, reduce, _ ->
+    private val store = mviIntentStore<SettingsContract.State, SettingsContract.Intent, SettingsContract.Effect>(
+        SettingsContract.State()
+    ) { intent, _, reduce, _ ->
         when (intent) {
             is SettingsContract.Intent.Load -> load(reduce)
             is SettingsContract.Intent.SetAppAlim -> setAppAlim(intent.enabled, reduce)

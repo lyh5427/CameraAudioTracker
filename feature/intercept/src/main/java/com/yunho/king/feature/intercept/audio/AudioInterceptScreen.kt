@@ -46,8 +46,10 @@ fun AudioInterceptScreen(
     LaunchedEffect(pkgName) {
         viewModel.onIntent(AudioInterceptContract.Intent.SetPackageName(pkgName))
     }
-    LaunchedEffect(Unit) {
-        viewModel.loadAppInfo(context.packageManager)
+    LaunchedEffect(state.packageName) {
+        if (state.packageName.isNotEmpty()) {
+            viewModel.loadAppInfo(context.packageManager)
+        }
     }
 
     var audioAlim by remember { mutableStateOf(false) }

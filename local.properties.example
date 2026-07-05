@@ -1,0 +1,19 @@
+## Copy to local.properties and fill in your paths.
+## local.properties is gitignored.
+
+sdk.dir=/Users/YOUR_USER/Library/Android/sdk
+
+# Optional: force Gradle to use JDK 17 (recommended if system default is JDK 26+)
+# java.home=/Applications/Android Studio.app/Contents/jbr/Contents/Home
+
+# AdMob
+ADMOB_ID=ca-app-pub-xxxxxxxxxxxxxxxx~xxxxxxxxxx
+ADMOB_UNIT_ID_MAIN_BANNER=ca-app-pub-xxxxxxxxxxxxxxxx/xxxxxxxxxx
+
+# Signing (debug/release)
+RELEASE_KEY_PATH=../keystore/release.jks
+RELEASE_KEY_ALIAS=your_alias
+RELEASE_KEY_PW=your_password
+DEBUG_KEY_PATH=../keystore/debug.jks
+DEBUG_KEY_ALIAS=your_alias
+DEBUG_KEY_PW=your_password

@@ -82,6 +82,47 @@ esac
 
 CLASSPATH=$APP_HOME/gradle/wrapper/gradle-wrapper.jar
 
+# Prefer JDK 17 for Gradle runtime (Kotlin DSL is incompatible with JDK 26+).
+if [ -z "$JAVA_HOME" ] && [ -f "$APP_HOME/local.properties" ]; then
+    JAVA_HOME_FROM_LOCAL=`grep '^java.home=' "$APP_HOME/local.properties" | cut -d= -f2- | tr -d '\r'`
+    if [ -n "$JAVA_HOME_FROM_LOCAL" ] && [ -x "$JAVA_HOME_FROM_LOCAL/bin/java" ]; then
+        export JAVA_HOME="$JAVA_HOME_FROM_LOCAL"
+    fi
+fi
+
+if [ -z "$JAVA_HOME" ] && [ "$darwin" = "true" ]; then
+  for candidate in \
+    "/Applications/Android Studio.app/Contents/jbr/Contents/Home" \
+    "/Applications/Android Studio.app/Contents/jbr"
+  do
+    if [ -x "$candidate/bin/java" ]; then
+      export JAVA_HOME="$candidate"
+      break
+    fi
+  done
+fi
+
+if [ -z "$JAVA_HOME" ] && [ "$darwin" = "true" ]; then
+  JAVA_17_HOME=`/usr/libexec/java_home -v 17 2>/dev/null`
+  if [ -n "$JAVA_17_HOME" ] && [ -x "$JAVA_17_HOME/bin/java" ]; then
+    export JAVA_HOME="$JAVA_17_HOME"
+  fi
+fi
+
+if [ -n "$JAVA_HOME" ] && [ -x "$JAVA_HOME/bin/java" ]; then
+  JAVA_MAJOR=`"$JAVA_HOME/bin/java" -version 2>&1 | sed -n 's/.* version "\([0-9][0-9]*\).*/\1/p' | head -1`
+  if [ -n "$JAVA_MAJOR" ] && [ "$JAVA_MAJOR" -ge 26 ] 2>/dev/null; then
+    if [ "$darwin" = "true" ]; then
+      JAVA_17_HOME=`/usr/libexec/java_home -v 17 2>/dev/null`
+      if [ -n "$JAVA_17_HOME" ] && [ -x "$JAVA_17_HOME/bin/java" ]; then
+        export JAVA_HOME="$JAVA_17_HOME"
+      elif [ -x "/Applications/Android Studio.app/Contents/jbr/Contents/Home/bin/java" ]; then
+        export JAVA_HOME="/Applications/Android Studio.app/Contents/jbr/Contents/Home"
+      fi
+    fi
+  fi
+fi
+
 
 # Determine the Java command to use to start the JVM.
 if [ -n "$JAVA_HOME" ] ; then

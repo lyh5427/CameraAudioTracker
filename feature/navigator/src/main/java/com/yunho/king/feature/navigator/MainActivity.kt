@@ -15,12 +15,12 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        navigatorViewModel.setIntent(intent)
         setContent {
             KingTheme {
                 CameraAudioTrackerNavHost(navigatorViewModel = navigatorViewModel)
             }
         }
-        navigatorViewModel.setIntent(intent)
     }
 
     override fun onNewIntent(intent: Intent) {

@@ -37,10 +37,12 @@ class InstalledAppScannerImpl @Inject constructor(
 
     private fun hasPermission(resolveInfo: ResolveInfo, permission: String): Boolean {
         val packageName = resolveInfo.activityInfo.packageName
-        val packageInfo = context.packageManager.getPackageInfo(
-            packageName,
-            PackageManager.GET_PERMISSIONS
-        )
+        val packageInfo = runCatching {
+            context.packageManager.getPackageInfo(
+                packageName,
+                PackageManager.GET_PERMISSIONS
+            )
+        }.getOrNull() ?: return false
         return packageInfo.requestedPermissions?.contains(permission) == true
     }
 

@@ -30,7 +30,7 @@ class MainService: LifecycleService() {
         super.onCreate()
         Log.d(GlobalApplication.TagName, "Checking Service Create")
 
-        showForegroundService()
+        if (!showForegroundService()) return
 
         Log.d(GlobalApplication.TagName, "Checking Service StartCommand")
 
@@ -56,7 +56,7 @@ class MainService: LifecycleService() {
         super.onDestroy()
     }
 
-    fun showForegroundService() {
+    private fun showForegroundService(): Boolean {
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
             val manager = getSystemService(NotificationManager::class.java)
             channel = NotificationChannel(
@@ -85,14 +85,21 @@ class MainService: LifecycleService() {
             .setOngoing(true)
 
         val notification = builder.build()
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
-            startForeground(
-                123,
-                notification,
-                ServiceInfo.FOREGROUND_SERVICE_TYPE_CAMERA or ServiceInfo.FOREGROUND_SERVICE_TYPE_MICROPHONE
-            )
-        } else {
-            startForeground(123, notification)
+        return try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+                startForeground(
+                    123,
+                    notification,
+                    ServiceInfo.FOREGROUND_SERVICE_TYPE_CAMERA or ServiceInfo.FOREGROUND_SERVICE_TYPE_MICROPHONE
+                )
+            } else {
+                startForeground(123, notification)
+            }
+            true
+        } catch (e: SecurityException) {
+            Log.e(GlobalApplication.TagName, "Failed to start foreground service", e)
+            stopSelf()
+            false
         }
     }
 }

@@ -8,4 +8,6 @@ android {
 
 dependencies {
     implementation(project(":core:model"))
+    implementation(platform(libs.androidx.compose.bom))
+    implementation("androidx.compose.material:material-icons-extended")
 }

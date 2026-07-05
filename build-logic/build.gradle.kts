@@ -3,6 +3,10 @@ plugins {
     `kotlin-dsl-precompiled-script-plugins`
 }
 
+kotlin {
+    jvmToolchain(17)
+}
+
 dependencies {
     compileOnly(libs.android.gradle.plugin)
     compileOnly(libs.kotlin.gradle.plugin)

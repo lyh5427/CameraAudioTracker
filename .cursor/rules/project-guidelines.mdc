@@ -10,7 +10,7 @@ Android 앱으로, 기기에서 카메라/마이크 권한을 사용하는 앱�
 
 - **패키지명**: `com.yunho.king`
 - **앱 이름**: King
-- **minSdk**: 26 / **targetSdk**: 35 / **compileSdk**: 35
+- **minSdk**: 26 / **targetSdk**: 35 / **compileSdk**: 36
 - **versionCode**: 14 / **versionName**: 1.0.0.0
 - **JDK**: 17
 

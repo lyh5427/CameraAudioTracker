@@ -13,6 +13,10 @@ internal fun Project.configureKotlin(
     commonExtension.apply {
         compileSdk = BuildConst.COMPILE_SDK
 
+        defaultConfig {
+            minSdk = BuildConst.MIN_SDK
+        }
+
         compileOptions {
             sourceCompatibility = BuildConst.JAVA_VERSION
             targetCompatibility = BuildConst.JAVA_VERSION
@@ -30,6 +34,7 @@ internal fun Project.configureKotlin(
     }
 
     extensions.configure<KotlinAndroidProjectExtension> {
+        jvmToolchain(BuildConst.JDK_VERSION)
         compilerOptions {
             jvmTarget.set(JvmTarget.JVM_17)
         }

@@ -2,6 +2,8 @@ package com.yunho.king.feature.navigator
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -14,31 +16,41 @@ import com.yunho.king.feature.launch.intro.IntroScreen
 import com.yunho.king.feature.launch.perm.PermScreen
 import com.yunho.king.feature.main.MainScreen
 import com.yunho.king.feature.main.settings.SettingsScreen
-import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun CameraAudioTrackerNavHost(
     navigatorViewModel: NavigatorViewModel
 ) {
     val navController = rememberNavController()
+    val pendingRoute by navigatorViewModel.pendingRoute.collectAsState()
 
-    LaunchedEffect(Unit) {
-        navigatorViewModel.pendingRoute.collectLatest { route ->
-            navController.navigate(route) {
-                launchSingleTop = true
-            }
+    LaunchedEffect(pendingRoute) {
+        val route = pendingRoute ?: return@LaunchedEffect
+        navController.navigate(route) {
+            launchSingleTop = true
         }
+        navigatorViewModel.consumePendingRoute()
     }
 
     NavHost(navController = navController, startDestination = "intro") {
         composable("intro") {
             IntroScreen(
                 onNavigateToPerm = { navController.navigate("perm") },
-                onNavigateToMain = { navController.navigate("main") }
+                onNavigateToMain = {
+                    navController.navigate("main") {
+                        popUpTo("intro") { inclusive = true }
+                        launchSingleTop = true
+                    }
+                }
             )
         }
         composable("perm") {
-            PermScreen(onNavigateToMain = { navController.navigate("main") })
+            PermScreen(onNavigateToMain = {
+                navController.navigate("main") {
+                    popUpTo("intro") { inclusive = true }
+                    launchSingleTop = true
+                }
+            })
         }
         composable("main") {
             MainScreen(

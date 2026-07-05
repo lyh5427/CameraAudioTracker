@@ -7,7 +7,7 @@ plugins {
 
 android {
     namespace = "com.yunho.king.domain"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         minSdk = 26
@@ -23,6 +23,7 @@ kotlin {
     compilerOptions {
         jvmTarget.set(JvmTarget.JVM_17)
     }
+    jvmToolchain(17)
 }
 
 dependencies {

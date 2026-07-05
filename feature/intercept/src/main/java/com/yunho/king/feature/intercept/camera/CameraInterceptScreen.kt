@@ -57,8 +57,10 @@ fun CameraInterceptScreen(
     LaunchedEffect(pkgName) {
         viewModel.onIntent(CameraInterceptContract.Intent.SetPackageName(pkgName))
     }
-    LaunchedEffect(Unit) {
-        viewModel.loadAppInfo(context.packageManager)
+    LaunchedEffect(state.packageName) {
+        if (state.packageName.isNotEmpty()) {
+            viewModel.loadAppInfo(context.packageManager)
+        }
     }
 
     var cameraAlim by remember { mutableStateOf(false) }
